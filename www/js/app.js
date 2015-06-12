@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -23,11 +23,34 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+  .state('intro', {
+    url: '/intro',
+    templateUrl: "templates/intro.html"
+  })
+
   .state('app', {
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
     controller: 'AppCtrl'
+  })
+
+  .state('app.lobby', {
+    url: '/lobby',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/lobby.html"
+      }
+    }
+  })
+
+  .state('app.room', {
+    url: '/room',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/room.html"
+      }
+    }
   })
 
   .state('app.search', {
@@ -47,15 +70,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   })
-    .state('app.playlists', {
-      url: "/playlists",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
-        }
+
+  .state('app.playlists', {
+    url: "/playlists",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/playlists.html",
+        controller: 'PlaylistsCtrl'
       }
-    })
+    }
+  })
 
   .state('app.single', {
     url: "/playlists/:playlistId",
@@ -66,6 +90,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   });
+  
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/intro');
 });
