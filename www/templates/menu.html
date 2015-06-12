@@ -8,6 +8,11 @@
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
       </ion-nav-buttons>
+
+      <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()">
+        </button>
+      </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
@@ -18,7 +23,10 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ng-click="login()">
+        <ion-item menu-close href="#/app/lobby">
+          방 목록
+        </ion-item>
+        <!-- <ion-item menu-close ng-click="login()">
           Login
         </ion-item>
         <ion-item menu-close href="#/app/search">
@@ -29,6 +37,9 @@
         </ion-item>
         <ion-item menu-close href="#/app/playlists">
           Playlists
+        </ion-item> -->
+        <ion-item menu-close href="#/intro">
+          나가기
         </ion-item>
       </ion-list>
     </ion-content>
