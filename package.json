@@ -2,9 +2,6 @@
   "name": "rollingpaint",
   "version": "0.0.1",
   "description": "rollingpaint: An Ionic project",
-  "scripts": {
-    "start": "ionic serve -c -s -p 80 -b -a"
-  },
   "dependencies": {
     "express": "~4.4.3",
     "gulp": "^3.5.6",
