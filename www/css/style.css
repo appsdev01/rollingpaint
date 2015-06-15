@@ -32,16 +32,32 @@ body {
 .messages li {
 	display:block;
 	clear:both;
-	max-width:50%;
+	/*max-width:50%;*/
 	margin:0 0 1rem 0;
 	padding:0;
 }
 
-.messages li:nth-child(even) {
+/*.messages li:nth-child(even) {
 	float:right;
 }
 
 .messages li:nth-child(even) img {
+	float:right;
+}*/
+
+.messages li.message-others {
+  max-width:50%;
+}
+
+.messages li.message-others img {
+  max-width:50%;
+}
+
+.messages li.message-self {
+	float:right;
+}
+
+.messages li.message-self img {
 	float:right;
 }
 
@@ -54,7 +70,12 @@ body {
 	font-size:.875rem;
 }
 
-.messages li:nth-child(even) p {
+/*.messages li:nth-child(even) p {
+	background:#158ffe;
+	color:#fff;
+}*/
+
+.messages li.message-self p {
 	background:#158ffe;
 	color:#fff;
 }
