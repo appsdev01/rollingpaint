@@ -77,6 +77,9 @@ angular.module('starter.controllers', [])
   var messageIter = 0;
   $scope.messages = messageOptions.slice(0, messageOptions.length);
 
+  $scope.input_message = { content: '', self: true };
+
+
   $scope.add = function() {
     var nextMessage = messageOptions[messageIter++ % messageOptions.length];
     $scope.messages.push(angular.extend({}, nextMessage));
@@ -87,9 +90,11 @@ angular.module('starter.controllers', [])
   };
 
   $scope.send = function() {
-    var nextMessage = { content: '<p>' + $scope.room.message + '</p>' };
+    console.log($scope);
+    var nextMessage = { content: '<p>' + $scope.input_message.content + '</p>', self: true };
+    console.log(nextMessage);
     $scope.messages.push(angular.extend({}, nextMessage));
-    $scope.room.message = '';
+    $scope.input_message.content = '';
 
     // Update the scroll area and tell the frosted glass to redraw itself
     $ionicFrostedDelegate.update();
