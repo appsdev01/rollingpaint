@@ -7,18 +7,31 @@
 
   <ion-content class="padding" start-y="120">
     <ol class="messages">
-      <li ng-repeat="message in messages" ng-bind-html="message.content"></li>
+      <li ng-repeat="message in messages" ng-bind-html="message.content" class="{{message.self ? 'message-self' : 'message-others'}}"></li>
+
+      <li>
+        <!-- <div class="list"> -->
+          <div class="item item-input-inset">
+            <label class="item-input-wrapper">
+              <input type="search" placeholder="" ng-model="input_message.content">
+            </label>
+            <button class="button button-clear button-positive" ng-click="send()">
+              전송
+            </button>
+          </div>
+        <!-- </div> -->
+      </li>
+
     </ol>
   </ion-content>
+<!--
   <ion-footer-bar class="bar-frosted item-input-inset" keyboard-attach>
-    <!-- <button class="button button-clear button-positive" ng-click="add()">Add Message</button> -->
-
     <label class="item-input-wrapper">
       <input type="search" placeholder="" ng-model="room.message">
     </label>
     <button class="button button-clear button-positive" ng-click="send()">
       전송
     </button>
+  </ion-footer-bar> -->
 
-  </ion-footer-bar>
 </ion-view>
