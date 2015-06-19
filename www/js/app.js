@@ -91,7 +91,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   })
-  
+  //hyona
   .state('app.ranking', {
     url: "/ranking",
     views: {
