@@ -98,6 +98,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     templateUrl: "templates/chat.html"
   })
 
+  //hyona
   .state('app.ranking', {
     url: "/ranking",
     views: {
