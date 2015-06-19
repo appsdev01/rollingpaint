@@ -90,6 +90,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
         controller: 'PlaylistCtrl'
       }
     }
+  })
+
+  .state('chat', {
+    url: '/chat',
+    templateUrl: "templates/chat.html"
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/intro');
