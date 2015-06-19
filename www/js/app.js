@@ -90,6 +90,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
         controller: 'PlaylistCtrl'
       }
     }
+  })
+
+  // ddangddnag 
+  .state('chat', {
+    url: '/chat',
+    templateUrl: "templates/chat.html"
+  })
+
+  .state('app.ranking', {
+    url: "/ranking",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/ranking.html",
+        controller: 'RankingCtrl'
+      }
+    }
   });
   
   // if none of the above states are matched, use this as the fallback
