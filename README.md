@@ -16,3 +16,8 @@
       templateUrl: "templates/myscreen.html" // 템플릿 경로
     })
 ```
+# Git
+
+```sh
+$ git remote add --track master upstream https://github.com/appsdev01/rollingpaint.git
+```
