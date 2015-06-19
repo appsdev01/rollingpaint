@@ -120,9 +120,9 @@ angular.module('starter.controllers', [])
 .controller('RankingCtrl', function($scope, $ionicModal) {
 
   $scope.contacts = [
-    { name: 'Gordon Freeman' },
-    { name: 'Barney Calhoun' },
-    { name: 'Lamarr the Headcrab' },
+    { name: 'Berry' },
+    { name: 'Chansu' },
+    { name: 'Kitty' },
   ];
 
 });
