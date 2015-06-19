@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "0.12"
+deploy:
+  provider: heroku
+  api_key: "0446bc8a-afaf-4ebc-ae53-1e1e5d14eebf"
+  app: "rollingpaint"
