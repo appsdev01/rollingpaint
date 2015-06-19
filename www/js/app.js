@@ -91,7 +91,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   })
-  
+
+  .state('chat', {
+    url: '/chat',
+    templateUrl: "templates/chat.html"
+  })
+
   .state('app.ranking', {
     url: "/ranking",
     views: {
