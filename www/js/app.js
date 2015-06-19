@@ -91,13 +91,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   })
-<<<<<<< HEAD
 
   .state('chat', {
     url: '/chat',
     templateUrl: "templates/chat.html"
-=======
-  
+  })
+
   .state('app.ranking', {
     url: "/ranking",
     views: {
@@ -106,7 +105,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
         controller: 'RankingCtrl'
       }
     }
->>>>>>> upstream/master
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/intro');
