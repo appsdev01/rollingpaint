@@ -72,6 +72,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+  .state('canvas', {
+    url: "/canvas",
+    templateUrl: "templates/canvas.html",
+    controller: 'CanvasCtrl'
+  })
+
   .state('app.playlists', {
     url: "/playlists",
     views: {
@@ -91,6 +97,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/intro');
 });
