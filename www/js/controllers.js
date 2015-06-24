@@ -199,4 +199,13 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
+})
+
+.controller('RankingCtrl', function($scope, $ionicModal) {
+
+  $scope.contacts = [
+    { name: 'Berry' },
+    { name: 'Chansu' },
+    { name: 'Kitty' },
+  ];
 });
