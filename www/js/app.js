@@ -72,6 +72,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+  .state('canvas', {
+    url: "/canvas",
+    templateUrl: "templates/canvas.html",
+    controller: 'CanvasCtrl'
+  })
+
   .state('app.playlists', {
     url: "/playlists",
     views: {
