@@ -45,6 +45,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+
+  .state('app.search-test', {
+    url: '/search-test',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/search-test.html"
+      }
+    }
+  })
+
   .state('app.room', {
     url: '/room',
     views: {
@@ -102,6 +112,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     url: '/chat',
     templateUrl: "templates/chat.html"
   })
+
 
   //hyona
   .state('app.ranking', {
