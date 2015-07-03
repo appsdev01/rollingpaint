@@ -45,6 +45,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+  .state('login', {
+    url: '/login',
+    templateUrl: "templates/login.html"
+  })
+
   .state('app.room', {
     url: '/room',
     views: {
