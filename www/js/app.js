@@ -45,6 +45,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+  .state('login', {
+    url: '/login',
+    templateUrl: "templates/login.html"
+  })
+
+  .state('app.search-test', {
+    url: '/search-test',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/search-test.html"
+      }
+    }
+  })
+
   .state('app.room', {
     url: '/room',
     views: {
@@ -72,6 +86,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
+  .state('canvas', {
+    url: "/canvas",
+    templateUrl: "templates/canvas.html",
+    controller: 'CanvasCtrl'
+  })
+
   .state('app.playlists', {
     url: "/playlists",
     views: {
@@ -92,11 +112,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
-  // ddangddnag 
+  // ddangddnag
   .state('chat', {
     url: '/chat',
     templateUrl: "templates/chat.html"
   })
+
 
   //hyona
   .state('app.ranking', {
@@ -108,6 +129,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   });
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/intro');
 });
