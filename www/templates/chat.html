@@ -1,8 +1,14 @@
 <ion-pane view-title="chat">
   <ion-content id="chat-content">
     <ul id="messages"></ul>
-    <form action="" class="chatForm">
-      <input id="messages" class="messageJYJ" autocomplete="off" value="send Message"/><button>Send</button>
-    </form>
+<!--    <form action="" class="chatForm">
+      <input type="text-align" id="messages" class="messageJYJ" autocomplete="off" value="send Message"/><button>Send</button>
+    </form>-->
+<div class="item item-input-inset">
+  <label class="item-input-wrapper">
+    <input type="text" placeholder="message" ng-model="input_message.content">
+  </label>
+  <button class="button button-positive button-positive ion-chatbox-working" ng-click="send()"></button>
+</div>
   </ion-content>
 </ion-pane>

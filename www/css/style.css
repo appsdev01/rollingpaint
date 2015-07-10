@@ -85,10 +85,12 @@ body {
 	max-width:65%;
 	border-radius:.75rem;
 }
-
+/*
 .chatForm { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-.chatForm input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-.chatForm button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-.messagesJYJ { list-style-type: none; margin: 0; padding: 0; }
+.chatForm input { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+.chatForm button { width: 19%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+*/
+.messagesJYJ input { border: 0; padding: 10px; width: 80%; margin-right: .5%; /*list-style-type: none; margin: 0; padding: 0;*/ }
+.messageJYJ button { width: 19%; background: rgb(130, 224, 255); border: none; padding: 10px; }
 .messagesJYJ li { padding: 5px 10px; }
 .messagesJYJ li:nth-child(odd) { background: #eee; }
