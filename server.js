@@ -1,11 +1,13 @@
 var express = require('express'),
     app = express();
 
+var score = require('./routes/score');
 var users = require('./routes/users');
 var chats = require('./routes/chats');
 var bodyParser = require('body-parser');
 
 app.use(express.static('www'));
+app.use('/score', score);
 app.use('/users', users);
 app.use('/chats', chats);
 app.use(bodyParser.json()); // for parsing application/json
