@@ -2,9 +2,14 @@ var express = require('express'),
     app = express();
 
 var users = require('./routes/users');
+var chats = require('./routes/chats');
+var bodyParser = require('body-parser');
 
 app.use(express.static('www'));
 app.use('/users', users);
+app.use('/chats', chats);
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
