@@ -1,14 +1,14 @@
 var express = require('express'),
     app = express();
 
-var scores = require('./routes/scores');
+var score = require('./routes/score');
 var users = require('./routes/users');
 var chats = require('./routes/chats');
 var rooms = require('./routes/rooms');
 var bodyParser = require('body-parser');
 
 app.use(express.static('www'));
-app.use('/scores', scores);
+app.use('/score', score);
 app.use('/users', users);
 app.use('/chats', chats);
 app.use('/rooms', rooms);
