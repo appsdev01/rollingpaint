@@ -1,11 +1,14 @@
 var express = require('express'),
     app = express();
-var scores = require('./routes/scores');
-var users = require('./routes/users');
-var chats = require('./routes/chats');
-var rooms = require('./routes/rooms');
-var paints = require('./routes/pictures');
+var scores = require('./server/routes/scores');
+var users = require('./server/routes/users');
+var chats = require('./server/routes/chats');
+var rooms = require('./server/routes/rooms');
+var paints = require('./server/routes/pictures');
 var bodyParser = require('body-parser');
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/rollingpaint');
 
 app.use(express.static('www'));
 app.use(bodyParser.json()); // for parsing application/json
