@@ -8,7 +8,7 @@ var paints = require('./server/routes/pictures');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/rollingpaint');
+mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
 
 app.use(express.static('www'));
 app.use(bodyParser.json()); // for parsing application/json
