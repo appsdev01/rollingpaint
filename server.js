@@ -10,6 +10,16 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
 
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+// broadcasting
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+  io.emit('chat message', msg);
+  });
+});
+
 app.use(express.static('www'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
