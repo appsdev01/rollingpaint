@@ -8,11 +8,7 @@ var users = require('./server/routes/users');
 var chats = require('./server/routes/chats');
 var rooms = require('./server/routes/rooms');
 var paints = require('./server/routes/pictures');
-<<<<<<< HEAD
-=======
 var words = require('./server/routes/words');
-var bodyParser = require('body-parser');
->>>>>>> a0b282e5fa62d3857eb2e65a279c953e5e7f6b94
 
 var User = require('./server/models/user.js');
 
