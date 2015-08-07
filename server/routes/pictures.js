@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var Picture = require('../models/picture.js');
+var Picture = require('../models/picture');
 
 // Create a picture
 router.post('/', function(req, res, next) {
