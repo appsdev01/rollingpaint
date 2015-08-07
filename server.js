@@ -5,6 +5,7 @@ var users = require('./server/routes/users');
 var chats = require('./server/routes/chats');
 var rooms = require('./server/routes/rooms');
 var paints = require('./server/routes/pictures');
+var words = require('./server/routes/words');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
@@ -19,6 +20,7 @@ app.use('/users', users);
 app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/pictures', paints);
+app.use('/words', words);
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
