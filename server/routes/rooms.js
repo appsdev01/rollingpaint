@@ -1,29 +1,35 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+var router = require('express').Router();
+var Room = require('../models/room.js');
 
-var url = 'mongodb://70.30.14.125:27017/rollingpaint';
-//var url = 'mongodb://localhost:27017/rollingpaint';
+//var url = 'mongodb://70.30.14.125:27017/rollingpaint';
+var url = 'mongodb://localhost:27017/rollingpaint';
 
-// 방 생성
-router.post('/:title', function(req, res, next) {
-  MongoClient.connect(url, function(err, db) {
-    console.log("Connected correctly to server with ham");
+  // Create a room
+  router.post('', function(req, res, next) {
+    if (!req.body) {
+      return res.sendStatus(400);
+    }
 
-    db.collection('rooms').insert([{
-        title: req.params.title,
-        owner: 'ham',
-        capacity: 8,
-        status: 'ready'
-      }], function(err, result) {
-        console.log('error occured');
-    });
-    db.close();
+
+
   });
-  res.send('Make room : ' + req.params.title);
-});
+
+// router.post('/:title', function(req, res, next) {
+//   MongoClient.connect(url, function(err, db) {
+//     console.log("Connected correctly to server with ham");
+//
+//     db.collection('rooms').insert([{
+//         title: req.params.title,
+//         owner: 'ham',
+//         capacity: 8,
+//         status: 'ready'
+//       }], function(err, result) {
+//         console.log('error occured');
+//     });
+//     db.close();
+//   });
+//   res.send('Make room : ' + req.params.title);
+// });
 
 // 방 조회
 router.get('/', function(req, res, next) {
