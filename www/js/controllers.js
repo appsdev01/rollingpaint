@@ -233,7 +233,7 @@ angular.module('starter.controllers', ['ionic'])
 })
 
 .controller('InputwordCtrl', function($scope, $interval) {
-  $scope.timeCount =100;
+  $scope.timeCount =30;
   $interval(function(){
     $scope.timeCount--;
   }, 1000,$scope.timeCount);
@@ -252,8 +252,7 @@ angular.module('starter.controllers', ['ionic'])
     { rank: 6, name: 'Chansu', popularityscore: 70, gamescore: 5 }
   ];
 
-});
-angular.module('ionic.example', ['ionic'])
+})
 
  .controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
      $scope.showPopup = function() {
