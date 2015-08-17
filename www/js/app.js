@@ -103,7 +103,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
     }
   })
 
-  // ddangddnag 
+  // ddangddnag
   .state('chat', {
     url: '/chat',
     templateUrl: "templates/chat.html"
@@ -118,8 +118,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
         controller: 'RankingCtrl'
       }
     }
-  });
-  
+  })
+
+  //sehee
+
+  .state('app.word', {
+    url: "/word",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/word.html",
+        controller: 'WordCtrl'
+      }
+    }
+  })
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/intro');
 });

@@ -7,6 +7,7 @@ var rooms = require('./server/routes/rooms');
 var paints = require('./server/routes/pictures');
 var words = require('./server/routes/words');
 var bodyParser = require('body-parser');
+//var async = require('async');
 
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
