@@ -16,7 +16,7 @@ router.post('/', function(req, res, next) {
     Picture.findById(picture, function (err, doc) {
       if (err) return handleError(err);
       res.send(doc);
-    })
+    });
   });
 });
 
