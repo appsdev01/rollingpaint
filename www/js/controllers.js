@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ionic'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -33,11 +33,18 @@ angular.module('starter.controllers', ['ionic'])
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+    $http({
+      method: 'POST',
+      url: 'login',
+      data: {
+        "email": $scope.loginData.email,
+        "password": $scope.loginData.password
+      }
+    }).success(function(response) {
+        if (response) {
+        }
+      }
+    );
   };
 
   // Create the login modal that we will use later
@@ -103,6 +110,30 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
+.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
+
+  $scope.add = function() {
+    //var nextMessage = messageOptions[messageIter++ % messageOptions.length];
+    //$scope.messages.push(angular.extend({}, nextMessage));
+
+    // Update the scroll area and tell the frosted glass to redraw itself
+    $ionicFrostedDelegate.update();
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+
+  $scope.send = function() {
+    console.log($scope);
+    var sendMessage = { content: '<p>' + $scope.input_message.content + '</p>', self: true };
+    console.log(sendMessage);
+    $scope.messages.push(angular.extend({}, sendMessage));
+    $scope.input_message.content = '';
+
+    // Update the scroll area and tell the frosted glass to redraw itself
+    $ionicFrostedDelegate.update();
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+})
+
 .controller('CanvasCtrl', function($scope) {
   var canvas = document.getElementById('myCanvas');
   var ratio =  Math.max(window.devicePixelRatio || 1, 1);
@@ -133,7 +164,7 @@ angular.module('starter.controllers', ['ionic'])
   canvas.addEventListener("mousemove", function(event) {
     if (mouseButtonDown) {
       var rect = canvas.getBoundingClientRect();
-      var x = event.clientX - rect.left
+      var x = event.clientX - rect.left;
       var y = event.clientY - rect.top;
       consolo.log('x = ' + x + ', y = ' + y);
     }
@@ -165,7 +196,7 @@ angular.module('starter.controllers', ['ionic'])
     if (mouseButtonDown) {
       var rect = canvas.getBoundingClientRect();
       //console.log(rect);
-      var x = touch.clientX - rect.left
+      var x = touch.clientX - rect.left;
       var y = touch.clientY - rect.top;
       //console.log('(' + startX + ', ' + startY + ') -> (' + x + ', ' + y + ')');
 
@@ -201,7 +232,11 @@ angular.module('starter.controllers', ['ionic'])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('InputwordCtrl', function($scope, $stateParams) {
+.controller('InputwordCtrl', function($scope, $interval) {
+  $scope.timeCount =100;
+  $interval(function(){
+    $scope.timeCount--;
+  }, 1000,$scope.timeCount);
 })
 
 

@@ -26,7 +26,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
 
   .state('intro', {
     url: '/intro',
-    templateUrl: "templates/intro.html"
+    templateUrl: "templates/intro.html",
+    controller: 'AppCtrl'
   })
 
   .state('app', {
@@ -104,9 +105,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
   })
 
   // ddangddnag
-  .state('chat', {
-    url: '/chat',
-    templateUrl: "templates/chat.html"
+  .state('app.chat', {
+    url: '/chatting',
+    views: {
+      'menuContent' : {
+        templateUrl: "templates/chat.html",
+        controller: 'ChatCtrl'
+      }
+    }
   })
 
   //hyona
