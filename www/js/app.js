@@ -105,12 +105,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
   })
 
   // ddangddnag
-  .state('app.chat', {
-    url: '/chatting',
+  .state('chat', {
+    url: '/chat',
+    templateUrl: "templates/chat.html"
+  })
+
+  //sehee
+  .state('app.word', {
+    url: "/word",
     views: {
-      'menuContent' : {
-        templateUrl: "templates/chat.html",
-        controller: 'ChatCtrl'
+      'menuContent': {
+        templateUrl: "templates/word.html",
+        controller: 'WordCtrl'
       }
     }
   })
@@ -125,6 +131,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   })
+
   .state('app.inputword', {
     url: "/inputword",
     views: {
@@ -134,6 +141,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
       }
     }
   })
+
   .state('app.popup', {
     url: "/popup",
     views: {

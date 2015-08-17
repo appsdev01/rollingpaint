@@ -1,6 +1,7 @@
 angular.module('starter.controllers', ['ionic'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -254,10 +255,17 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
+.controller('WordCtrl', function($scope) {
+  $scope.words = [
+    { value: 'dog' },
+    { value: 'cat' },
+    { value: 'superman' }
+  ];
+})
+
  .controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
      $scope.showPopup = function() {
-       $scope.data = {}
-
+       $scope.data = {};
        $ionicPopup.show({
          templateUrl: 'popup-template.html',
          title: 'Enter Wi-Fi Password',
