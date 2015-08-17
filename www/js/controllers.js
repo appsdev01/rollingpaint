@@ -2,6 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
+
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -33,11 +34,18 @@ angular.module('starter.controllers', [])
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+    $http({
+      method: 'POST',
+      url: 'login',
+      data: {
+        "email": $scope.loginData.email,
+        "password": $scope.loginData.password
+      }
+    }).success(function(response) {
+        if (response) {
+        }
+      }
+    );
   };
 
   // Create the login modal that we will use later
@@ -101,6 +109,30 @@ angular.module('starter.controllers', [])
     $ionicScrollDelegate.scrollBottom(true);
   };
 
+})
+
+.controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
+
+  $scope.add = function() {
+    //var nextMessage = messageOptions[messageIter++ % messageOptions.length];
+    //$scope.messages.push(angular.extend({}, nextMessage));
+
+    // Update the scroll area and tell the frosted glass to redraw itself
+    $ionicFrostedDelegate.update();
+    $ionicScrollDelegate.scrollBottom(true);
+  };
+
+  $scope.send = function() {
+    console.log($scope);
+    var sendMessage = { content: '<p>' + $scope.input_message.content + '</p>', self: true };
+    console.log(sendMessage);
+    $scope.messages.push(angular.extend({}, sendMessage));
+    $scope.input_message.content = '';
+
+    // Update the scroll area and tell the frosted glass to redraw itself
+    $ionicFrostedDelegate.update();
+    $ionicScrollDelegate.scrollBottom(true);
+  };
 })
 
 .controller('CanvasCtrl', function($scope) {
