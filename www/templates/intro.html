@@ -10,13 +10,18 @@
     <p>
       함께 감상하며 빵 터지고!
     </p>
+      <form action="/login" method="post">
     <div class="list list-inset">
       <label class="item item-input">
-        <input type="text" placeholder="사용자 이름">
+        <input type="text" name="email" ng-model="loginData.email" placeholder="이메일">
+      </label>
+      <label class="item item-input">
+        <input type="text" name="password" ng-model="loginData.password" placeholder="패스워드">
       </label>
     </div>
     <div class="padding">
-      <a class="button button-block button-positive" href="#/app/lobby">시작하기</a>
+      <button class="button button-block button-positive" type="submit">로그인</button>
     </div>
+  </form>
   </ion-content>
 </ion-pane>
