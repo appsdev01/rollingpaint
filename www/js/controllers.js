@@ -233,14 +233,23 @@ angular.module('starter.controllers', ['ionic'])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('InputwordCtrl', function($scope, $interval) {
-  $scope.timeCount =30;
-  $interval(function(){
+.controller('InputwordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout) {
+  $scope.timeCount = 5;
+  $interval(function() {
     $scope.timeCount--;
-  }, 1000,$scope.timeCount);
+    if ($scope.timeCount === 0) {
+      console.log("hello");
+      $ionicBackdrop.retain();
+      $ionicPopup.show({
+        title: '시간 종료',
+        subTitle: '다음 단계로 이동합니다',
+      });
+      $timeout(function() {
+        //게임 다음 단계 페이지 호출!
+      }, 3000);
+    }
+  }, 1000, $scope.timeCount);
 })
-
-
 
 .controller('RankingCtrl', function($scope, $ionicModal) {
 
@@ -311,7 +320,7 @@ angular.module('starter.controllers', ['ionic'])
        });
      };
      $scope.showPrompt = function() {
-       $scope.data = {}
+       $scope.data = {};
 
        $ionicPopup.show({
          templateUrl: '좋아요 채점!',
