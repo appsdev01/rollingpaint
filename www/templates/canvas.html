@@ -1,5 +1,17 @@
-<ion-pane view-title="canvas">
-  <ion-content scroll="false">
-    <canvas id="myCanvas"></canvas>
+<ion-pane view-title="Sketchbook">
+  <ion-header-bar class="bar bar-header bar-stable" frosted-bar>
+    <h1 class="title">Sketchbook</h1>
+    <button class="button button-clear button-positive">완료</button>
+  </ion-header-bar>
+  <ion-content class="padding" scroll="false">
+    <h3 class="title">{{timeCount}}초</h3>
+    <div class="button-bar">
+      <a class="button button-positive icon ion-paintbrush"></a>
+      <a class="button icon ion-ios-undo"></a>
+      <a class="button icon ion-ios-redo"></a>
+      <a class="button icon ion-ios-trash-outline" ng-click="clearSketchbook()"></a>
+    </div>
+    <br>
+    <canvas id="myCanvas" style="border: 1px solid grey; box-shadow: 5px 5px 5px #888888;"></canvas>
   </ion-content>
 </ion-pane>
