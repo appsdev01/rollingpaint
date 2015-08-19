@@ -1,0 +1,10 @@
+<ion-view view-title="PictureList">
+  <ion-content>
+    <h1>Pictures</h1>
+    <ion-list>
+      <ion-item ng-repeat="picture in pictures">
+        <img ng-src="{{picture.url}}" alt="picture description" />
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

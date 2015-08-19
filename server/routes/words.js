@@ -1,5 +1,8 @@
 var router = require('express').Router();
 var Word = require('../models/word.js');
+var async = require('async');
+
+//var url = 'mongodb://70.30.14.125:27017/rollingpaint';
 
 // Create a Word
 router.post('/', function(req, res, next) {
@@ -48,6 +51,41 @@ router.get('/:seq', function(req, res, next) {
 
   var flag = 0;
   var arrays = [];
+  var randomNo;
+
+  async.series([
+    function(callback){
+
+    /*  while(){
+        arrays
+        randomNo = Math.floor(Math.random()*10)+1;
+      }
+      */
+      Word.findOne( {seq : randomNo}, function(err, result) {
+        //res.send(result);
+        console.log("value : " + result.value);
+        arrays[0] = result.value;
+      });
+      // do some stuff ...
+      callback(null, 'one');
+    },
+    function(callback){
+      var randomNo = Math.floor(Math.random()*10)+1;
+      Word.findOne( {seq : randomNo}, function(err, result) {
+        //res.send(result);
+        console.log("value : " + result.value);
+        arrays[1] = result.value;
+      });
+      // do some more stuff ...
+      callback(null, 'two');
+    }
+  ],
+  // optional callback
+  function(err, results){
+    // results is now equal to ['one', 'two']
+  });
+
+/*
   while(flag < 6){
     var randomNo = Math.floor(Math.random()*10)+1;
     Word.findOne( {seq : randomNo}, function(err, result) {
@@ -57,6 +95,7 @@ router.get('/:seq', function(req, res, next) {
     });
     flag++;
   }
+  */
   console.log(arrays.length);
   console.log(arrays);
   res.send(arrays);

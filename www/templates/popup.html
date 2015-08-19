@@ -1,0 +1,15 @@
+<ion-view view-title="팝업 연습">
+  <ion-pane view-title="ranking">
+          <ion-content>
+            <br/><br/><br/><br/>
+            <button class="button button-balanced" ng-click="showPrompt()">좋아요 채점 팝업</button>
+            <button class="button button-dark" ng-click="showPopup()">Multiple</button>
+            <button class="button button-primary" ng-click="showConfirm()">Confirm</button>
+
+            <script id="popup-template.html" type="text/ng-template">
+              <input ng-model="data.wifi" type="text" placeholder="Password">
+            </script>
+          </ion-content>
+  </ion-pane>
+
+</ion-view>
