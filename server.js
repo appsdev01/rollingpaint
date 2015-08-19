@@ -3,11 +3,12 @@ var express = require('express'),
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
+var chats = require('./server/routes/chats');
+var guesswords = require('./server/routes/guesswords');
+var paints = require('./server/routes/pictures');
+var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
 var users = require('./server/routes/users');
-var chats = require('./server/routes/chats');
-var rooms = require('./server/routes/rooms');
-var paints = require('./server/routes/pictures');
 var words = require('./server/routes/words');
 
 var User = require('./server/models/user.js');
