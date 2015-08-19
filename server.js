@@ -16,10 +16,16 @@ var bodyParser = require('body-parser');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
-
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
+mongoose.connection.on('connected', function() {
+  console.log('MongoDB connected');
+});
+mongoose.connection.on('error', function() {
+  console.log('[ERROR] Failed connecting to MongoDB');
+});
 
 // broadcasting
 io.on('connection', function(socket) {
