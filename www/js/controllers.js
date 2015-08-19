@@ -30,18 +30,32 @@ angular.module('starter.controllers', [])
   };
 
   // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+  $scope.createRoom = function() {
+    //console.log('Doing login', $scope.loginData);
+    console.log('Create a Room', $scope.roomData);
 
     $http({
       method: 'POST',
-      url: 'login',
+      url: 'rooms',
       data: {
-        "email": $scope.loginData.email,
-        "password": $scope.loginData.password
+        // "email": $scope.loginData.email,
+        // "password": $scope.loginData.password
+        "title": $scope.roomData.title,
+        "password": $scope.roomData.password,
+        "capaticy": $scope.roomData.capaticy.selected,
+        "owner": "wBd9fbo", // 하드코딩 추후에 로그인 데이터 받아올 예정
+        "status": "01",
+        "step": 0,
+        "users": [{
+          "_id": "wBd9fbo",
+          "word": "",
+          "score": 0,
+          "profileImage": ""
+        }]
       }
     }).success(function(response) {
         if (response) {
+          console.log('Create a Room Success !!!');
         }
       }
     );
@@ -164,7 +178,7 @@ angular.module('starter.controllers', [])
   canvas.addEventListener("mousemove", function(event) {
     if (mouseButtonDown) {
       var rect = canvas.getBoundingClientRect();
-      var x = event.clientX - rect.left
+      var x = event.clientX - rect.left;
       var y = event.clientY - rect.top;
       consolo.log('x = ' + x + ', y = ' + y);
     }
@@ -196,7 +210,7 @@ angular.module('starter.controllers', [])
     if (mouseButtonDown) {
       var rect = canvas.getBoundingClientRect();
       //console.log(rect);
-      var x = touch.clientX - rect.left
+      var x = touch.clientX - rect.left;
       var y = touch.clientY - rect.top;
       //console.log('(' + startX + ', ' + startY + ') -> (' + x + ', ' + y + ')');
 

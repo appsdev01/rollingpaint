@@ -12,6 +12,7 @@ var gameUserSchema = new Schema({
 var roomSchema = new Schema({
   _id: ShortId,
   title: String,
+  password: String,
   capacity: Number,
   owner: {
     _id : ShortId
@@ -19,7 +20,7 @@ var roomSchema = new Schema({
   status: String, // 01: opened, 02: playing, 03: ended
   step: Number,
   users: [gameUserSchema],
-  date: Date
+  date: { type: Date, default: Date.now }
 });
 
 var Room = mongoose.model('Room', roomSchema);

@@ -4,15 +4,25 @@ var Room = require('../models/room.js');
 //var url = 'mongodb://70.30.14.125:27017/rollingpaint';
 var url = 'mongodb://localhost:27017/rollingpaint';
 
-  // Create a room
-  router.post('', function(req, res, next) {
-    if (!req.body) {
-      return res.sendStatus(400);
+// Create a room
+router.post('/', function(req, res, next) {
+  console.log("Connected correctly to server :: Create room");
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+
+  var room = new Room({ title: req.body.title });
+  room.save(function (err) {
+    if (err) {
+      return res.sendStatus(500);
     }
 
-
-
+    Room.findById(room, function (err, doc) {
+      if (err) return handleError(err);
+      res.send(doc);
+    });
   });
+});
 
 // router.post('/:title', function(req, res, next) {
 //   MongoClient.connect(url, function(err, db) {
