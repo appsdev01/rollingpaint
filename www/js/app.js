@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -105,23 +105,29 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic.contrib.froste
   })
 
   // ddangddnag
-  .state('app.chat', {
-    url: '/chatting',
+  .state('chat', {
+    url: '/chat',
+    templateUrl: "templates/chat.html"
+  })
+
+  //sehee
+  .state('app.word', {
+    url: "/word",
     views: {
-      'menuContent' : {
-        templateUrl: "templates/chat.html",
-        controller: 'ChatCtrl'
+      'menuContent': {
+        templateUrl: "templates/word.html",
+        controller: 'WordCtrl'
       }
     }
   })
 
   //hyona
-  .state('app.ranking', {
-    url: "/ranking",
+  .state('app.popup', {
+    url: "/popup",
     views: {
       'menuContent': {
-        templateUrl: "templates/ranking.html",
-        controller: 'RankingCtrl'
+        templateUrl: "templates/popup.html",
+        controller: 'PopupCtrl'
       }
     }
   });

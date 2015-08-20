@@ -1,0 +1,25 @@
+<ion-view view-title="랭킹">
+  <ion-pane view-title="ranking">
+          <ion-content>
+            <br/>
+
+              <div style="text-align: center"><i class="icon ion-happy-outline"></i>&nbsp;이번 게임 랭킹을 확인해 볼까요?!&nbsp;<i class="icon ion-happy-outline"></i></div>
+
+            <ion-list>
+              <ion-item ng-repeat="userlist in userlists">
+                {{userlist.rank}}위&nbsp;&nbsp;&nbsp;{{userlist.name}}
+                <span class="item-note"> <i class="icon ion-checkmark"></i>&nbsp;맞춘단어 {{userlist.gamescore}}개 </span>
+                <span class="item-note"> </span>
+                <span class="item-note"> <i class="icon ion-thumbsup"></i>&nbsp;인기도 {{userlist.popularityscore}}점 &nbsp;&nbsp;</span>
+              </ion-item>
+            </ion-list>
+
+            <button class="button button-block button-royal">
+              게임 한판 더하기!
+            </button>
+            <br/>
+            <div style="text-align: center">랭킹은 "좋아요" 점수 순으로 나열됩니다.</div>
+            <div style="text-align: center">15초 후에 자동으로 게임 시작 채팅으로 이동합니다.</div>
+          </ion-content>
+  </ion-pane>
+</ion-view>
