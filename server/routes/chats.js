@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
-
+/*
 var path = require('path');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -21,7 +21,7 @@ io.on('connection', function(socket){
     });
 });
 
-/*
+
 // broadcasting
 io.on('connection', function(socket){
 socket.on('chat message', function(msg){
