@@ -128,6 +128,14 @@ angular.module('starter.controllers', [])
     $scope.messages.push(angular.extend({}, sendMessage));
     $scope.input_message.content = '';
 
+    var socket = io();
+		socket.emit('chat message', $scope.input_message.content);
+		$scope.input_message.content = '';
+
+		socket.on('chat message', function(msg) {
+			$('#messages').append($('<li>').text(msg));
+		});
+
     // Update the scroll area and tell the frosted glass to redraw itself
     $ionicFrostedDelegate.update();
     $ionicScrollDelegate.scrollBottom(true);

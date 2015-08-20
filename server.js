@@ -18,16 +18,6 @@ var passport = require('passport')
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-// broadcasting
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-  io.emit('chat message', msg);
-  });
-});
-
 app.use(express.static('www'));
 app.use(cookieParser('your secret here'));
 app.use(session());
