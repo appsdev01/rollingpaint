@@ -33,7 +33,7 @@ router.post('/', function(req, res, next) {
     Word.findById(word, function (err, doc) {
       if (err) return handleError(err);
       res.send(doc);
-    })
+    });
   });
 
 });

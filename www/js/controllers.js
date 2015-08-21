@@ -1,7 +1,6 @@
 angular.module('starter.controllers', ['ionic'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $location) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -12,6 +11,7 @@ angular.module('starter.controllers', ['ionic'])
 
   // Form data for the login modal
   $scope.loginData = {};
+  $scope.signUpData = {};
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -19,6 +19,7 @@ angular.module('starter.controllers', ['ionic'])
   }).then(function(modal) {
     $scope.modal = modal;
   });
+
 
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
@@ -44,6 +45,45 @@ angular.module('starter.controllers', ['ionic'])
     }).success(function(response) {
       if (response) {}
     });
+  };
+
+  // Create the Sign Up modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/register.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modalSignUp = modal;
+  });
+
+
+  // Triggered in the Sign Up modal to close it
+  $scope.closeSignUp = function() {
+    $scope.modalSignUp.hide();
+  };
+
+  // Open the Sign Up modal
+  $scope.signUp = function() {
+    $scope.modalSignUp.show();
+  };
+
+  // Perform the login action when the user submits the login form
+  $scope.doSignUp = function() {
+    console.log('Doing sign up', $scope.signUpData);
+
+    $http({
+      method: 'POST',
+      url: 'register',
+      data: {
+        "username": $scope.signUpData.username,
+        "email": $scope.signUpData.email,
+        "password": $scope.signUpData.password
+      }
+    }).success(function(response) {
+        if (response) {
+          $scope.closeSignUp();
+          window.location.href = '#/app/lobby';
+        }
+      }
+    );
   };
 
   // Create the login modal that we will use later
