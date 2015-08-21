@@ -3,12 +3,14 @@ var express = require('express'),
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
+var chats = require('./server/routes/chats');
+var guesswords = require('./server/routes/guesswords');
+var paints = require('./server/routes/pictures');
+var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
 var users = require('./server/routes/users');
-var chats = require('./server/routes/chats');
-var rooms = require('./server/routes/rooms');
-var paints = require('./server/routes/pictures');
 var words = require('./server/routes/words');
+var wordsSet = require('./server/routes/wordsSet');
 
 var User = require('./server/models/user.js');
 
@@ -16,10 +18,16 @@ var bodyParser = require('body-parser');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
-
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
+mongoose.connection.on('connected', function() {
+  console.log('MongoDB connected');
+});
+mongoose.connection.on('error', function() {
+  console.log('[ERROR] Failed connecting to MongoDB');
+});
 
 // broadcasting
 io.on('connection', function(socket) {
@@ -42,6 +50,7 @@ app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/pictures', paints);
 app.use('/words', words);
+app.use('/wordsSet', wordsSet);
 
 app.use(passport.initialize());
 app.use(passport.session());

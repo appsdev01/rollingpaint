@@ -1,0 +1,46 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">방 만들기</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeNewRoom()">닫기</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="createRoom()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">제목</span>
+          <input type="text" ng-model="roomData.title">
+        </label>
+        <div class="item item-toggle">
+          비밀방
+          <label class="toggle">
+            <input type="checkbox" ng-model="roomData.lock">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+        </div>
+        <label class="item item-input" ng-show="roomData.lock">
+          <span class="input-label">비밀번호</span>
+          <input type="password" ng-model="roomData.password">
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            인원
+          </div>
+          <select ng-model="roomData.capacity">
+            <option>5</option>
+            <option selected>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select>
+        </label>
+
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">만들기</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

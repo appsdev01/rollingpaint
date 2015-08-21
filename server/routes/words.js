@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var Word = require('../models/word.js');
+var WordSet = require('../models/wordSet.js');
 var async = require('async');
 
 //var url = 'mongodb://70.30.14.125:27017/rollingpaint';
@@ -33,7 +34,7 @@ router.post('/', function(req, res, next) {
     Word.findById(word, function (err, doc) {
       if (err) return handleError(err);
       res.send(doc);
-    })
+    });
   });
 
 });
@@ -46,59 +47,100 @@ router.get('/', function(req, res, next) {
   });
 });
 
-// Find a Words
-router.get('/:seq', function(req, res, next) {
-
-  var flag = 0;
-  var arrays = [];
-  var randomNo;
-
+// Find WordSets by roomNum
+router.get('/:roomNo', function(req, res, next) {
+  var cardSet = "";
   async.series([
     function(callback){
+      WordSet.findOne({roomNo : req.params.roomNo, useYn : "N"}, function(err, result1) {
+        if(result1 === null){
+          res.send("No results !!!!!!!");
+          return;
+        }
+        cardSet = result1.value.split('/');
 
-    /*  while(){
-        arrays
-        randomNo = Math.floor(Math.random()*10)+1;
-      }
-      */
-      Word.findOne( {seq : randomNo}, function(err, result) {
-        //res.send(result);
-        console.log("value : " + result.value);
-        arrays[0] = result.value;
+        console.log("cardSet : " + cardSet);
+        WordSet.update(result1, {useYn: "Y"}, function(err, result2) {
+          if (err) return handleError(err);
+        });
+        callback(null, cardSet);
       });
-      // do some stuff ...
-      callback(null, 'one');
+    }
+  ],
+  function(err, results){
+    if(!err){
+      res.send(results);
+    }
+  });
+});
+
+// Create WordSets
+router.post('/:roomNo', function(req, res, next) {
+
+  var random_array = [];
+  var result_array = [];
+  var size = 100;
+  var random_number;
+  var temp_value;
+  var roomNum = req.params.roomNo;
+
+  async.series([
+
+    function(callback){
+      Word.find(function(err, results) {
+        size = results.length;
+        console.log("size : " + size);
+
+        for(var j=0; j< results.length; j ++){
+          random_array[j] = results[j].value;
+        }
+        console.log("before swapping : " + random_array);
+        callback(null, null);
+      });
+    },
+
+    function(callback){
+      for( i = size - 1; i > 0; i-- ){
+        random_number = (Math.floor(Math.random()*size)+1) % i;
+        // swap
+        temp_value = random_array[i];
+        random_array[i] = random_array[random_number];
+        random_array[random_number] = temp_value;
+      }
+      console.log("after swapping : " + random_array);
+      callback(null, null);
+
     },
     function(callback){
-      var randomNo = Math.floor(Math.random()*10)+1;
-      Word.findOne( {seq : randomNo}, function(err, result) {
-        //res.send(result);
-        console.log("value : " + result.value);
-        arrays[1] = result.value;
-      });
-      // do some more stuff ...
-      callback(null, 'two');
+      var personNum = 4;  // 사람 수
+      var cardNum = 3;  // 카드 수
+      var startPoint = 0;
+
+      for(var j=0; j<personNum; j++){ // 사람 수
+        var cardSet = "";
+        var seq = 0;
+        for(var i = startPoint; i< startPoint + cardNum; i++){ // 카드 수
+          cardSet +=  random_array[i] + "/";
+        }
+        startPoint = startPoint +  cardNum;
+
+        var wordSet = new WordSet({ value : cardSet, useYn : "N", roomNo : roomNum });
+        wordSet.save(function (err, results) {
+          if (err) {
+            return res.sendStatus(500);
+          }
+          console.log("results : " + results.value);
+          callback(null, results.value);
+        });
+      }
     }
   ],
   // optional callback
   function(err, results){
-    // results is now equal to ['one', 'two']
+    if( !err){
+      res.send("successed!!!!!!");
+    }
   });
-
-/*
-  while(flag < 6){
-    var randomNo = Math.floor(Math.random()*10)+1;
-    Word.findOne( {seq : randomNo}, function(err, result) {
-      //res.send(result);
-      console.log("value : " + result.value);
-      arrays[flag] = result.value;
-    });
-    flag++;
-  }
-  */
-  console.log(arrays.length);
-  console.log(arrays);
-  res.send(arrays);
 });
 
 
