@@ -9,6 +9,7 @@ var chats = require('./server/routes/chats');
 var rooms = require('./server/routes/rooms');
 var paints = require('./server/routes/pictures');
 var words = require('./server/routes/words');
+var wordsSet = require('./server/routes/wordsSet');
 
 var User = require('./server/models/user.js');
 
@@ -40,6 +41,7 @@ app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/pictures', paints);
 app.use('/words', words);
+app.use('/wordsSet', wordsSet);
 
 app.use(passport.initialize());
 app.use(passport.session());
