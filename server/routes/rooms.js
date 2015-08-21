@@ -4,6 +4,35 @@ var Room = require('../models/room.js');
 //var url = 'mongodb://70.30.14.125:27017/rollingpaint';
 var url = 'mongodb://localhost:27017/rollingpaint';
 
+// REST API Naming Rule
+// 1번방에 A 유저 추가하기 (body에 json으로)
+/*
+POST /room/1/user
+{
+  "userId": "A"
+}
+
+// 1번방에 있는 유저 조회하기
+GET /room/1/user
+
+// 1번방에 있는 A 유저 조회하기 (param으로)
+GET /room/1/user/A
+
+// 1번방에서 A 유저가 나갈 때
+DELETE /room/1/user/A
+
+// 1번방에서 방장 위임하기
+POST /room/1/owner
+{
+  "userId": "A"
+}
+*/
+
+
+
+
+
+
 // Create a room
 router.post('/', function(req, res, next) {
   console.log("Connected correctly to server :: Create room");

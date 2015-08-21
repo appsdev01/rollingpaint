@@ -3,10 +3,9 @@ var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
 var gameUserSchema = new Schema({
-  _id: ShortId,
+  userId: ShortId,
   word: String,
-  score: Number,
-  profileImage: String // Profile Image Url
+  score: Number
 });
 
 var roomSchema = new Schema({
@@ -14,9 +13,7 @@ var roomSchema = new Schema({
   title: String,
   password: String,
   capacity: Number,
-  owner: {
-    _id : ShortId
-  },
+  ownerId: String,
   status: String, // 01: opened, 02: playing, 03: ended
   step: Number,
   users: [gameUserSchema],
