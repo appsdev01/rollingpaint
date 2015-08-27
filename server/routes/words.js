@@ -46,11 +46,11 @@ router.get('/', function(req, res, next) {
 });
 
 // Create WordSets
-router.get('/wordList/:roomNo/users/:userId', function(req, res, next) {
+router.get('/wordList/:roomNo/users/:userSeq', function(req, res, next) {
 
   var shuffle_array = [];
   var roomNum = req.params.roomNo;
-  var userId = req.params.userId;
+  var userSeq = req.params.userSeq;
   var cardNum = 3;
   var seq = 0;
   var wordListStr ="";
@@ -60,7 +60,6 @@ router.get('/wordList/:roomNo/users/:userId', function(req, res, next) {
     function(callback){
       Word.find(function(err, results) {
         shuffle_array = shuffle(results.slice(0), roomNum);
-        //console.log(roomNum + " :::::::::::::::::::::::::::::::::::::");
         for(var k=0; k< shuffle_array.length; k ++){
           wordListStr += shuffle_array[k].value + "/";
           if(k !== 0 && k % cardNum === cardNum-1){
@@ -69,7 +68,11 @@ router.get('/wordList/:roomNo/users/:userId', function(req, res, next) {
             wordListStr = "";
           }
         }
-        callback(null, reset_array[userId].split('/'));
+        if(reset_array !== null){
+          callback(null, reset_array[userSeq].split('/'));
+        } else{
+          callback(null, "No words");
+        }
       });
     }
   ],
