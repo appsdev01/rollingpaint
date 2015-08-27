@@ -254,14 +254,6 @@ angular.module('starter.controllers', ['ionic'])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('WordCtrl', function($scope) {
-  $scope.words = [
-    { value: 'dog' },
-    { value: 'cat' },
-    { value: 'superman' }
-  ];
-})
-
  .controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
      $scope.showPopup = function() {
        $scope.data = {};

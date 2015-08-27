@@ -19,7 +19,7 @@
     "gulp-minify-css": "^1.2.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
-    "knuth-shuffle": "^1.0.1",
+    "knuth-shuffle-seeded": "^1.0.6",
     "mongodb": "~2.0",
     "mongoose": "^4.1.1",
     "mongoose-minid": "1.1.1",
