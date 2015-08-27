@@ -10,7 +10,7 @@ var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
 var users = require('./server/routes/users');
 var words = require('./server/routes/words');
-var wordsSet = require('./server/routes/wordsSet');
+var sketchbooks = require('./server/routes/sketchbooks');
 
 var User = require('./server/models/user.js');
 
@@ -50,7 +50,8 @@ app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/pictures', paints);
 app.use('/words', words);
-app.use('/wordsSet', wordsSet);
+app.use('/sketchbooks', sketchbooks);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
