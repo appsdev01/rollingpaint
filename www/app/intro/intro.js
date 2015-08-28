@@ -1,16 +1,17 @@
-angular.module('home', ['ionic'])
+angular.module('intro', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
-      .state('home', {
-        url: '/home',
-        templateUrl: "app/home/home.html",
-        controller: 'HomeCtrl'
+      .state('intro', {
+        url: '/intro',
+        templateUrl: "app/intro/intro.html",
+        controller: 'IntroCtrl'
       });
   })
-  .controller('HomeCtrl', function($scope, $http) {
+  .controller('IntroCtrl', function($scope, $http) {
 
     $scope.loginData = {};
 
+/*
     // Perform the login action when the user submits the login form
     $scope.doLogin = function() {
       console.log('Doing login', $scope.loginData);
@@ -26,10 +27,5 @@ angular.module('home', ['ionic'])
         if (response) {}
       });
     };
-
-    $http.get('/pictures').then(function(response) {
-      console.log(response);
-      $scope.pictures = response.data;
-    });
-
+*/
   });

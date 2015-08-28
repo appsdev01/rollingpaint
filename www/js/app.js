@@ -4,7 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+
+angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'intro', 'register', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -24,12 +25,13 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.co
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+  /*
   .state('intro', {
     url: '/intro',
     templateUrl: "templates/intro.html",
     controller: 'AppCtrl'
   })
-
+*/
   .state('app', {
     url: "/app",
     abstract: true,
@@ -44,11 +46,6 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.co
         templateUrl: "templates/lobby.html"
       }
     }
-  })
-
-  .state('login', {
-    url: '/login',
-    templateUrl: "templates/login.html"
   })
 
   .state('app.room', {
@@ -108,17 +105,6 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.co
   .state('chat', {
     url: '/chat',
     templateUrl: "templates/chat.html"
-  })
-
-  //sehee
-  .state('app.word', {
-    url: "/word",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/word.html",
-        controller: 'WordCtrl'
-      }
-    }
   })
 
   //hyona

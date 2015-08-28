@@ -11,9 +11,22 @@ angular.module('register', ['ionic'])
 
     $scope.signUpData = {};
 
-    $http.get('/pictures').then(function(response) {
-      console.log(response);
-      $scope.pictures = response.data;
-    });
+    $scope.doSignUp = function() {
+      console.log('Doing sign up', $scope.signUpData);
 
+      $http({
+        method: 'POST',
+        url: 'register',
+        data: {
+          "username": $scope.signUpData.username,
+          "email": $scope.signUpData.email,
+          "password": $scope.signUpData.password
+        }
+      }).success(function(response) {
+          if (response) {
+            window.location.href = '#/app/lobby';
+          }
+        }
+      );
+    };
   });
