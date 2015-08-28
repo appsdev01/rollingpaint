@@ -16,12 +16,17 @@
         <input type="text" name="email" ng-model="loginData.email" placeholder="이메일">
       </label>
       <label class="item item-input">
-        <input type="text" name="password" ng-model="loginData.password" placeholder="패스워드">
+        <input type="password" name="password" ng-model="loginData.password" placeholder="패스워드">
       </label>
     </div>
     <div class="padding">
       <button class="button button-block button-positive" type="submit">로그인</button>
     </div>
-  </form>
+    </form>
+    <div>
+      <a class="button button-clear button-positive" href="#/register">
+        회원가입
+      </a>
+    </div>
   </ion-content>
 </ion-pane>

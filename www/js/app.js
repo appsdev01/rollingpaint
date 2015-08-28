@@ -4,7 +4,8 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+
+angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'intro', 'register', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -24,12 +25,13 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'st
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+  /*
   .state('intro', {
     url: '/intro',
     templateUrl: "templates/intro.html",
     controller: 'AppCtrl'
   })
-
+*/
   .state('app', {
     url: "/app",
     abstract: true,
@@ -44,11 +46,6 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'st
         templateUrl: "templates/lobby.html"
       }
     }
-  })
-
-  .state('login', {
-    url: '/login',
-    templateUrl: "templates/login.html"
   })
 
   .state('app.room', {

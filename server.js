@@ -12,11 +12,13 @@ var users = require('./server/routes/users');
 var words = require('./server/routes/words');
 var sketchbooks = require('./server/routes/sketchbooks');
 
+var auth = require('./server/routes/auth');
 var User = require('./server/models/user.js');
 
 var bodyParser = require('body-parser');
-var passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var mongoose = require('mongoose');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -126,10 +128,8 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/login_success',
-    failureRedirect: '/#/intro'
-  })
+  passport.authenticate('local', { successRedirect: '/#/app/lobby',
+                                   failureRedirect: '/#/intro'})
 );
 
 app.post('/register', function(req, res, next) {

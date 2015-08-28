@@ -1,7 +1,6 @@
 angular.module('starter.controllers', ['ionic'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $location) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -9,26 +8,6 @@ angular.module('starter.controllers', ['ionic'])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
 
 //   // Perform the login action when the user submits the login form
 //   $scope.createRoom = function() {
@@ -254,7 +233,7 @@ angular.module('starter.controllers', ['ionic'])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
- .controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
+.controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
      $scope.showPopup = function() {
        $scope.data = {};
        $ionicPopup.show({
