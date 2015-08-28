@@ -15,13 +15,13 @@ router.post('/', function(req, res, next) {
   console.log(req.body);
   var seqNo = 0;
   var word = new Word({ value: req.body.value });
-
+  console.log("word : " + word);
   word.save(function (err) {
     if (err) {
       return res.sendStatus(500);
     }
     Word.find(function(err, results) {
-      //console.log(results.length + 1);
+      console.log("results : " + results);
       seqNo = results.length;
       Word.update(word, {seq: seqNo}, function(err, result) {
         //  res.send(result);
