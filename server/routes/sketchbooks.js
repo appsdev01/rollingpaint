@@ -25,7 +25,7 @@ GET /skethbook/1/
 */
 
 var router = require('express').Router();
-var Sketchbook = require('../models/sketchbooks.js');
+var Sketchbook = require('../models/sketchbook.js');
 var async = require('async');
 
 // Create a sketchbook

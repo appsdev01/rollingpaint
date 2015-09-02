@@ -24,7 +24,7 @@ angular.module('register', ['ionic'])
         }
       }).success(function(response) {
           if (response) {
-            window.location.href = '#/app/lobby';
+            window.location.href = '#/lobby';
           }
         }
       );

@@ -115,7 +115,7 @@ passport.deserializeUser(function(user, done) {
 
 app.get('/login_success', ensureAuthenticated, function(req, res) {
   console.log(req.user);
-  res.redirect('/#/app/lobby');
+  res.redirect('/#/lobby');
 });
 
 function ensureAuthenticated(req, res, next) {
@@ -128,7 +128,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/#/app/lobby',
+  passport.authenticate('local', { successRedirect: '/#/lobby',
                                    failureRedirect: '/#/intro'})
 );
 

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'intro', 'register', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'intro', 'register', 'lobby', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -39,23 +39,23 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'in
     controller: 'AppCtrl'
   })
 
-  .state('app.lobby', {
-    url: '/lobby',
-    views: {
-      'menuContent': {
-        templateUrl: "templates/lobby.html"
-      }
-    }
-  })
-
-  .state('app.room', {
-    url: '/room',
-    views: {
-      'menuContent': {
-        templateUrl: "templates/room.html"
-      }
-    }
-  })
+  // .state('app.lobby', {
+  //   url: '/lobby',
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: "templates/lobby.html"
+  //     }
+  //   }
+  // })
+  //
+  // .state('app.room', {
+  //   url: '/room',
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: "templates/room.html"
+  //     }
+  //   }
+  // })
 
   .state('app.search', {
     url: "/search",

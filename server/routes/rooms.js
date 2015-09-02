@@ -1,9 +1,6 @@
 var router = require('express').Router();
 var Room = require('../models/room.js');
 
-//var url = 'mongodb://70.30.14.125:27017/rollingpaint';
-var url = 'mongodb://localhost:27017/rollingpaint';
-
 // REST API Naming Rule
 // 1번방에 A 유저 추가하기 (body에 json으로)
 /*
@@ -34,7 +31,7 @@ POST /room/1/owner
 
 
 // Create a room
-router.post('/', function(req, res, next) {
+router.post('/:id', function(req, res, next) {
   console.log("Connected correctly to server :: Create room");
   if (!req.body) {
     return res.sendStatus(400);
