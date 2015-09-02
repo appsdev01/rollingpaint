@@ -51,25 +51,30 @@ router.get('/wordList/:roomNo/users/:userSeq', function(req, res, next) {
   var shuffle_array = [];
   var roomNum = req.params.roomNo;
   var userSeq = req.params.userSeq;
-  var cardNum = 3;
+  var cardNum = 4;
   var seq = 0;
   var wordListStr ="";
   var reset_array = [];
 
+  for(var i=0; i< 27; i ++){
+    shuffle_array[i] = i+1;
+  }
+  shuffle_array = shuffle(shuffle_array.slice(0), roomNum);
+  console.log("===============================================");
+  console.log("roomNum : " + roomNum + " after array : " + shuffle_array);
+  var fromSeq = cardNum * (userSeq-1);
+  var toSeq = (cardNum * (userSeq-1)) + (cardNum-1);
+  console.log("from : " + fromSeq + " to : " + toSeq);
+
   async.series([
     function(callback){
       Word.find(function(err, results) {
-        shuffle_array = shuffle(results.slice(0), roomNum);
-        for(var k=0; k< shuffle_array.length; k ++){
-          wordListStr += shuffle_array[k].value + "/";
-          if(k !== 0 && k % cardNum === cardNum-1){
-            reset_array[seq++] = wordListStr;
-            console.log("array : " + reset_array[seq-1]);
-            wordListStr = "";
+        //console.log("results : " + results);
+        if(results !== null){
+          for(var k=0; k< cardNum; k ++){
+            reset_array[k] = results[fromSeq++].value;
           }
-        }
-        if(reset_array !== null){
-          callback(null, reset_array[userSeq].split('/'));
+          callback(null, reset_array);
         } else{
           callback(null, "No words");
         }
