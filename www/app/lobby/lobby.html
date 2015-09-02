@@ -102,11 +102,8 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item href="#/app/lobby" menu-close-left>
-          프로필 편집
-        </ion-item>
-        <ion-item href="#/app/lobby" menu-close>
-          방 목록
+        <ion-item menu-close href="#/profile">
+          {{user.username}}
         </ion-item>
 <!-- <ion-item menu-close ng-click="login()">
       Login

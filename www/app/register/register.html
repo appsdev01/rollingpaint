@@ -1,11 +1,11 @@
-<ion-modal-view>
+<ion-pane view-title="register">
   <ion-header-bar>
     <div class="buttons">
-      <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/intro">Back</a>
+      <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/intro"></a>
     </div>
     <h1 class="title">Sign Up</h1>
   </ion-header-bar>
-  <ion-content>
+  <ion-content id="register-content">
     <form ng-submit="doSignUp()">
       <div class="list">
         <label class="item item-input">
@@ -23,4 +23,4 @@
       </div>
     </form>
   </ion-content>
-</ion-modal-view>
+</ion-pane>

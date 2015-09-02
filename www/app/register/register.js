@@ -16,7 +16,7 @@ angular.module('register', ['ionic'])
 
       $http({
         method: 'POST',
-        url: 'register',
+        url: 'auth/register',
         data: {
           "username": $scope.signUpData.username,
           "email": $scope.signUpData.email,
