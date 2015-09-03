@@ -17,8 +17,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
 
 mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
 mongoose.connection.on('connected', function() {
@@ -26,13 +24,6 @@ mongoose.connection.on('connected', function() {
 });
 mongoose.connection.on('error', function() {
   console.log('[ERROR] Failed connecting to MongoDB');
-});
-
-// broadcasting
-io.on('connection', function(socket) {
-  socket.on('chat message', function(msg) {
-    io.emit('chat message', msg);
-  });
 });
 
 app.use(express.static('www'));

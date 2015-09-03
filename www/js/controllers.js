@@ -110,7 +110,7 @@ angular.module('starter.controllers', ['ionic'])
   };
 
 })
-
+/*
 .controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
 
   $scope.add = function() {
@@ -142,7 +142,7 @@ angular.module('starter.controllers', ['ionic'])
     $ionicScrollDelegate.scrollBottom(true);
   };
 })
-
+*/
 .controller('CanvasCtrl', function($scope) {
   var canvas = document.getElementById('myCanvas');
   var ratio =  Math.max(window.devicePixelRatio || 1, 1);

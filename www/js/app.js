@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+angular.module('starter', ['ionic', 'picture','ranking','guessword','chat', 'starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -103,13 +103,14 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'starter.co
       }
     }
   })
-
+/*
   // ddangddnag
   .state('chat', {
     url: '/chat',
-    templateUrl: "templates/chat.html"
+    templateUrl: "templates/chat.html",
+    controller: 'ChatCtrl'
   })
-
+*/
   //sehee
   .state('app.word', {
     url: "/word",
