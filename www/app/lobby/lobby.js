@@ -14,6 +14,11 @@ angular.module('lobby', ['ionic'])
       $scope.rooms = response.data;
     });
 
+    // get my profile
+    $http.get('/users/me').then(function(response) {
+      $scope.user = response.data;
+    });
+
     $scope.roomData = {
       // "title": "",
       // "password": ""
