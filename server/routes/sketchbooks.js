@@ -60,22 +60,24 @@ router.post('/:userId/paper/:paper', function(req, res, next) {
   console.log(req.body);
   var sketchbook = new Sketchbook({
     userId: req.params.userId,
-    word : req.body.word,
-    paper : { userId: req.params.userId,
-              type : req.body.type
+    word: req.body.word,
+    paper: {
+      userId: req.params.userId,
+      type: req.body.type
     },
-    score : req.body.score,
-    data : req.body.data
+    score: req.body.score,
+    data: req.body.data
   });
 
-console.log(sketchbook);
+  console.log(sketchbook);
 
-  sketchbook.save(function (err) {
+  sketchbook.save(function(err) {
     if (err) {
       return res.sendStatus(500);
     }
-    Sketchbook.findById(sketchbook, function (err, doc) {
+    Sketchbook.findById(sketchbook, function(err, doc) {
       if (err) return handleError(err);
+      console.log("results : " + doc);
       res.send(doc);
     });
   });
@@ -85,8 +87,10 @@ console.log(sketchbook);
 // 스케치북 조회하기
 // GET /skethbook/1/
 router.get('/:userId', function(req, res, next) {
-  Sketchbook.findOne({userId : req.params.userId}, function(err, results) {
-    if(!err){
+  Sketchbook.findOne({
+    userId: req.params.userId
+  }, function(err, results) {
+    if (!err) {
       console.log("results : " + results);
       res.send(results);
     }
