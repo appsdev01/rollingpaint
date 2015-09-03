@@ -6,13 +6,18 @@
     </div>
   </ion-header-bar>
   <ion-content>
-      <div class="list">
-        <div id="contents" ng-controller="WordCtrl" ng-repeat="word in words">
-            <div ng-click="createSketchbook(word[0])" class="item item-divider item-balanced">{{word[0]}}</div>
-            <div ng-click="createSketchbook(word[1])" class="item item-divider item-energized"> {{word[1]}}</div>
-            <div ng-click="createSketchbook(word[2])" class="item item-divider item-balanced">{{word[2]}}</div>
-            <div ng-click="createSketchbook(word[3])" class="item item-divider item-energized">{{word[3]}}</div>
-        </div>
+    <input type="hidden" name="resultWord" id="resultWord" value="{{resultWord}}" />
+    <div class="list">
+      <div id="contents" ng-controller="WordCtrl" ng-repeat="word in words">
+        <div ng-click="createSketchbook(word[0])" class="item item-divider item-balanced">{{word[0]}}</div>
+        <input type="hidden" name="word" id="word" value="{{word[0]}}" />
+        <div ng-click="createSketchbook(word[1])" class="item item-divider item-energized"> {{word[1]}}</div>
+        <div ng-click="createSketchbook(word[2])" class="item item-divider item-balanced">{{word[2]}}</div>
+        <div ng-click="createSketchbook(word[3])" class="item item-divider item-energized">{{word[3]}}</div>
       </div>
+      <div ng-show="resultWord != null">
+        {{resultWord}} is selected!!!!!!!!!!!!!!!
+      </div>
+    </div>
   </ion-content>
 </ion-modal-view>
