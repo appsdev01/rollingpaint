@@ -7,10 +7,10 @@
 
             <ion-list>
               <ion-item ng-repeat="userlist in userlists">
-                {{userlist.rank}}위&nbsp;&nbsp;&nbsp;{{userlist.name}}
-                <span class="item-note"> <i class="icon ion-checkmark"></i>&nbsp;맞춘단어 {{userlist.gamescore}}개 </span>
+                {{$index+1}}위&nbsp;&nbsp;&nbsp;{{userlist.userid}}
+                <span class="item-note"> <i class="icon ion-thumbsup"></i>&nbsp;인기도 {{userlist.popularityscore}}점 </span>
                 <span class="item-note"> </span>
-                <span class="item-note"> <i class="icon ion-thumbsup"></i>&nbsp;인기도 {{userlist.popularityscore}}점 &nbsp;&nbsp;</span>
+                  <span class="item-note"> <i class="icon ion-checkmark"></i>&nbsp;맞춘단어 {{userlist.gamescore}}개 &nbsp;&nbsp;</span>
               </ion-item>
             </ion-list>
 

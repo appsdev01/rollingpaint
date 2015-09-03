@@ -6,7 +6,10 @@ var wordSchema = new Schema({
   _id: ShortId,
   value: String,
   seq: String,
-  date: { type: Date, default: Date.now }
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 var Word = mongoose.model('Word', wordSchema);

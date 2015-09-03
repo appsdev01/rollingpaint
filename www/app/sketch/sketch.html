@@ -1,6 +1,6 @@
-<ion-pane view-title="Sketchbook">
+<ion-pane view-title="sketch">
   <ion-header-bar class="bar bar-header bar-stable" frosted-bar>
-    <h1 class="title">Sketchbook</h1>
+    <h1 class="title">Sketch</h1>
     <button class="button button-clear button-positive">완료</button>
   </ion-header-bar>
   <ion-content class="padding" scroll="false">
@@ -12,6 +12,8 @@
       <a class="button icon ion-ios-trash-outline" ng-click="clearSketchbook()"></a>
     </div>
     <br>
-    <canvas id="myCanvas" style="border: 1px solid grey; box-shadow: 5px 5px 5px #888888;"></canvas>
+    <canvas id="paper" style="border: 1px solid grey; box-shadow: 5px 5px 5px #888888;"></canvas>
+    <span>{{canvan}}</span>
+    <span>{{window}}</span>
   </ion-content>
 </ion-pane>

@@ -1,6 +1,8 @@
 var router = require('express').Router();
 var Word = require('../models/word.js');
 var async = require('async');
+var shuffle = require('knuth-shuffle-seeded');
+var assert = require('assert');
 
 //var url = 'mongodb://70.30.14.125:27017/rollingpaint';
 
@@ -11,94 +13,85 @@ router.post('/', function(req, res, next) {
   }
 
   console.log(req.body);
-
   var seqNo = 0;
-
-  var word = new Word({ value: req.body.value });
-
-  word.save(function (err) {
+  var word = new Word({
+    value: req.body.value
+  });
+  console.log("word : " + word);
+  word.save(function(err) {
     if (err) {
       return res.sendStatus(500);
     }
-
     Word.find(function(err, results) {
-      //console.log(results.length + 1);
+      console.log("results : " + results);
       seqNo = results.length;
-      Word.update(word, {seq: seqNo}, function(err, result) {
+      Word.update(word, {
+        seq: seqNo
+      }, function(err, result) {
         //  res.send(result);
       });
-
     });
 
-    Word.findById(word, function (err, doc) {
+    Word.findById(word, function(err, doc) {
       if (err) return handleError(err);
       res.send(doc);
-    })
+    });
   });
 
 });
 
 // Find all Words
 router.get('/', function(req, res, next) {
+
   Word.find(function(err, results) {
     console.log(results);
     res.send(results);
   });
 });
 
-// Find a Words
-router.get('/:seq', function(req, res, next) {
+// Create WordSets
+router.get('/wordList/:roomNo/users/:userSeq', function(req, res, next) {
 
-  var flag = 0;
-  var arrays = [];
-  var randomNo;
+  var shuffle_array = [];
+  var roomNum = req.params.roomNo;
+  var userSeq = req.params.userSeq;
+  var cardNum = 4;
+  var seq = 0;
+  var wordListStr = "";
+  var reset_array = [];
 
-  async.series([
-    function(callback){
-
-    /*  while(){
-        arrays
-        randomNo = Math.floor(Math.random()*10)+1;
-      }
-      */
-      Word.findOne( {seq : randomNo}, function(err, result) {
-        //res.send(result);
-        console.log("value : " + result.value);
-        arrays[0] = result.value;
-      });
-      // do some stuff ...
-      callback(null, 'one');
-    },
-    function(callback){
-      var randomNo = Math.floor(Math.random()*10)+1;
-      Word.findOne( {seq : randomNo}, function(err, result) {
-        //res.send(result);
-        console.log("value : " + result.value);
-        arrays[1] = result.value;
-      });
-      // do some more stuff ...
-      callback(null, 'two');
-    }
-  ],
-  // optional callback
-  function(err, results){
-    // results is now equal to ['one', 'two']
-  });
-
-/*
-  while(flag < 6){
-    var randomNo = Math.floor(Math.random()*10)+1;
-    Word.findOne( {seq : randomNo}, function(err, result) {
-      //res.send(result);
-      console.log("value : " + result.value);
-      arrays[flag] = result.value;
-    });
-    flag++;
+  for (var i = 0; i < 27; i++) {
+    shuffle_array[i] = i + 1;
   }
+  shuffle_array = shuffle(shuffle_array.slice(0), roomNum);
+  console.log("===============================================");
+  console.log("roomNum : " + roomNum + " after array : " + shuffle_array);
+  var fromSeq = cardNum * (userSeq - 1);
+  /*
+  var toSeq = (cardNum * (userSeq - 1)) + (cardNum - 1);
+  console.log("from : " + fromSeq + " to : " + toSeq);
+  console.log("from : " + shuffle_array[fromSeq] + " to : " + shuffle_array[toSeq]);
   */
-  console.log(arrays.length);
-  console.log(arrays);
-  res.send(arrays);
+  async.series([
+      function(callback) {
+        Word.find(function(err, results) {
+          //console.log("results : " + results);
+          if (results !== null) {
+            for (var k = 0; k < cardNum; k++) {
+              reset_array[k] = results[shuffle_array[fromSeq++]].value;
+            }
+            callback(null, reset_array);
+          } else {
+            callback(null, "No words");
+          }
+        });
+      }
+    ],
+    function(err, results) {
+      if (!err) {
+        res.send(results);
+      }
+    });
 });
 
 
@@ -107,15 +100,20 @@ router.put('/:id', function(req, res, next) {
   if (!req.body) {
     return res.sendStatus(400);
   }
-
-  Word.update({_id: req.params.id}, {value: req.body.value}, function(err, result) {
+  Word.update({
+    _id: req.params.id
+  }, {
+    value: req.body.value
+  }, function(err, result) {
     res.send(result);
   });
 });
 
 // Delete a Word
 router.delete('/:id', function(req, res, next) {
-  Word.remove({_id: req.params.id}, function(err, result) {
+  Word.remove({
+    _id: req.params.id
+  }, function(err, result) {
     console.log(result);
     res.send(result);
   });

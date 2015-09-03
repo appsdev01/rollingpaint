@@ -1,0 +1,26 @@
+<ion-pane view-title="register">
+  <ion-header-bar>
+    <div class="buttons">
+      <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/intro"></a>
+    </div>
+    <h1 class="title">Sign Up</h1>
+  </ion-header-bar>
+  <ion-content id="register-content">
+    <form ng-submit="doSignUp()">
+      <div class="list">
+        <label class="item item-input">
+          <input type="text" ng-model="signUpData.username" placeholder="Username">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="signUpData.email" placeholder="Email address">
+        </label>
+        <label class="item item-input">
+          <input type="password" ng-model="signUpData.password" placeholder="Password">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Sign Up</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-pane>
