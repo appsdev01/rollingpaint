@@ -32,12 +32,12 @@ angular.module('starter', ['ionic', 'picture','ranking','guessword', 'word', 'in
     controller: 'AppCtrl'
   })
 */
-  .state('app', {
-    url: "/app",
-    abstract: true,
-    templateUrl: "templates/menu.html",
-    controller: 'AppCtrl'
-  })
+  // .state('app', {
+  //   url: "/app",
+  //   abstract: true,
+  //   templateUrl: "templates/menu.html",
+  //   controller: 'AppCtrl'
+  // })
 
   // .state('app.lobby', {
   //   url: '/lobby',
