@@ -17,12 +17,7 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-    // ddangddnag
-      .state('chat', {
-        url: '/chat',
-        templateUrl: "templates/chat.html"
-      })
+    $stateProvider    
       //hyona
       .state('app.popup', {
         url: "/popup",
