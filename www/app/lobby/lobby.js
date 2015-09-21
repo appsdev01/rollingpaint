@@ -20,20 +20,20 @@ angular.module('lobby', ['ionic'])
       $scope.user = response.data;
     });
 
-    $scope.roomData = {
-      // "title": "",
-      // "password": ""
-      // user 별 ready 상태 필드 추가
-    };
+    $http.get('/rooms').then(function(response) {
+      $scope.roomList = response.data;
+      console.log($scope.roomList);
+    });
+
+    $scope.roomData = {};
 
     // Perform the login action when the user submits the login form
     $scope.createRoom = function(req,res) {
-      //console.log('Doing login', $scope.loginData);
-      console.log('Create a Room', $scope.roomData);
 
+      // 유효성 체크 필요 (Title, capacity 미설정 시 또는 Password 체크 후 값 미입력 시)
       $http({
         method: 'POST',
-        url: 'rooms/create',
+        url: 'rooms',
         data: {
           // "email": $scope.loginData.email,
           // "password": $scope.loginData.password
@@ -48,8 +48,8 @@ angular.module('lobby', ['ionic'])
         }
       }).success(function(response) {
         if (response) {
-          window.location.href = '#/lobby'; // 방으로 들어가도록 고쳐야 함
-          console.log('Create a Room Success !!!');
+          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+          $scope.closeNewRoom();
         }
       });
     };

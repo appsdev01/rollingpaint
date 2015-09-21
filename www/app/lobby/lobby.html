@@ -21,6 +21,16 @@
 
       <ion-content header-shrink scroll-event-interval="5">
 
+        <div class="list card" ng-repeat="list in roomList">
+          <div class="item item-divider item-balanced">
+            {{list.status}}
+          </div>
+          <div class="item">
+            <h2>{{list.title}} ({{list.users.size}}/{{list.capacity}})</h2>
+            <p>{{list.date}}</p>
+          </div>
+        </div>
+
         <div class="list card">
           <div class="item item-divider item-balanced">
             게임 중
@@ -93,7 +103,7 @@
         </div>
 
       </ion-content>
-    
+
   </ion-side-menu-content>
 
   <ion-side-menu side="left">

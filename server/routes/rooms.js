@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var Rooms = require('../models/room.js');
+var Room = require('../models/room');
 
 // REST API Naming Rule
 // 1번방에 A 유저 추가하기 (body에 json으로)
@@ -27,6 +27,10 @@ POST /room/1/owner
 
 // 1번 방 정보 조회
 // GET /room/1
+
+
+// 전체 방 조회
+// GET /rooms
 router.get('/', function(req, res, next) {
   Room.find(function(err, results) {
       res.send(results);
@@ -35,15 +39,13 @@ router.get('/', function(req, res, next) {
 
 // 방 생성하기 (방장세팅)
 // POST /room/user
-router.post('/create', function(req, res, next) {
-  console.log("Connected correctly to server :: Create room");
+router.post('/', function(req, res, next) {
+  console.log("Connected correctly to server :: /create");
   if (!req.body) {
     return res.sendStatus(400);
   }
-
-  console.log(req.body);
-
-  var room = new Rooms({
+  // console.log(req.body);
+  var room = new Room({
     title: req.body.title,
     password: req.body.password,
     capacity: req.body.capacity,
@@ -61,42 +63,30 @@ router.post('/create', function(req, res, next) {
 
     Room.findById(room, function (err, doc) {
       if (err) return handleError(err);
+      console.log(doc); // 생성한 방 정보
       res.send(doc);
     });
   });
 });
 
-// router.post('/:title', function(req, res, next) {
-//   MongoClient.connect(url, function(err, db) {
-//     console.log("Connected correctly to server with ham");
-//
-//     db.collection('rooms').insert([{
-//         title: req.params.title,
-//         owner: 'ham',
-//         capacity: 8,
-//         status: 'ready'
-//       }], function(err, result) {
-//         console.log('error occured');
-//     });
-//     db.close();
+// 방 수정
+// router.put('/:id', function(req, res, next) {
+//   res.send("Connected correctly to server :: Modify room");
+//   if (!req.body) {
+//     return res.sendStatus(400);
+//   }
+//   Room.update({_id:req.params.id}, function(err, result) {
+//     res.send(result);
 //   });
-//   res.send('Make room : ' + req.params.title);
 // });
 
-
-
-// 방 수정
-router.put('/', function(req, res, next) {
-  res.send('respond with a resource');
-
-  //db.collection('rooms')
-});
-
 // 방 삭제
-router.delete('/', function(req, res, next) {
-  res.send('respond with a resource');
-
-  //db.collection('rooms')
+router.delete('/:id', function(req, res, next) {
+  res.send("Connected correctly to server :: Delete room");
+  Room.remove({_id:req.params.id}, function(err, result) {
+    console.log(result);
+    res.send(result);
+  });
 });
 
 

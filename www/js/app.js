@@ -17,7 +17,7 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider    
+    $stateProvider
       //hyona
       .state('app.popup', {
         url: "/popup",
