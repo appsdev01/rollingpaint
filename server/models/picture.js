@@ -11,5 +11,12 @@ var PictureSchema = new Schema({
   }
 });
 
+if (!PictureSchema.options.toJSON) PictureSchema.options.toJSON = {};
+PictureSchema.options.toJSON.transform = function(doc, ret, options) {
+  ret.id = ret._id;
+  delete ret._id;
+  delete ret.__v;
+};
+
 var Picture = mongoose.model('Picture', PictureSchema);
 module.exports = Picture;

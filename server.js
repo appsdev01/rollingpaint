@@ -6,7 +6,6 @@ var session = require('express-session');
 var auth = require('./server/routes/auth');
 var chats = require('./server/routes/chats');
 var guesswords = require('./server/routes/guesswords');
-
 var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
 var users = require('./server/routes/users');

@@ -41,3 +41,9 @@ git commit -m "커밋 내용"
 git push origin master
 ```
 Gibhub에서 Pull Request 생성
+
+# Backend 구조
+server 아래 picture 참고
+```
+server.js --> routes/*.js --> controllers/*.js --> models/*.js
+```
