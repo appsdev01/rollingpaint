@@ -59,10 +59,10 @@ router.post('/:userId/paper/:paper', function(req, res, next) {
   }
   console.log(req.body);
   var sketchbook = new Sketchbook({
-    userId: req.params.userId,
+    ownerId: req.body.ownerId,  // 스케치북 주인
     word: req.body.word,
     paper: {
-      userId: req.params.userId,
+      userId: req.body.userId,  // 그림 or 단어 맞춘 주체
       type: req.body.type
     },
     score: req.body.score,

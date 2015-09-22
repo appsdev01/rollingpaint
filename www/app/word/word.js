@@ -10,16 +10,21 @@ angular.module('word', ['ionic'])
 
 .controller('WordCtrl', function($scope, $http, $ionicModal) {
   // '/wordList/:roomNo/users/:userId'
-  $http.get('/words/wordList/4/users/3').then(function(response) {
-    console.log(response);
+  $http.get('/words/wordList/i7wllEt/users/4').then(function(response) {
+    console.log("response : " + response);
+    console.log("response.data : " + response.data);
+    console.log("response.data[0] : " + response.data[0]);
+    console.log("response.data[0].value : " + response.data[0].value);
+
     $scope.words = response.data;
   });
 
-  $scope.resultWord = "";
+
 
   // 턴 지정하기
   // POST /sketchbook/1/paper/1/
   $scope.createSketchbook = function(word) {
+    $scope.resultWord = "";
     //console.log('Doing login', $scope.loginData);
     console.log('word : ', word);
 
@@ -28,7 +33,7 @@ angular.module('word', ['ionic'])
       url: '/sketchbooks/sehee88/paper/10',
       data: {
         "word": word,
-        "type": "answer"
+        "ownerId": "sehee88"
       }
     }).success(function(response) {
       if (response) {

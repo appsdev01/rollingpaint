@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var Word = require('../models/word.js');
+var Room = require('../models/room.js');
 var async = require('async');
 var shuffle = require('knuth-shuffle-seeded');
 var assert = require('assert');
@@ -42,54 +43,86 @@ router.post('/', function(req, res, next) {
 
 // Find all Words
 router.get('/', function(req, res, next) {
+  /*
+    Word.find(function(err, results) {
+      console.log(results);
+      res.send(results);
+    });
+  */
 
-  Word.find(function(err, results) {
-    console.log(results);
-    res.send(results);
-  });
 });
 
 // Create WordSets
-router.get('/wordList/:roomNo/users/:userSeq', function(req, res, next) {
+router.get('/wordList/:roomid/users/:userSeq', function(req, res, next) {
 
   var shuffle_array = [];
-  var roomNum = req.params.roomNo;
+  var roomNum = req.params.roomid;
   var userSeq = req.params.userSeq;
   var cardNum = 4;
-  var seq = 0;
+  var seqNum = 0;
   var wordListStr = "";
   var reset_array = [];
+  var wordseed;
+  var fromSeq = 0;
 
   for (var i = 0; i < 27; i++) {
     shuffle_array[i] = i + 1;
   }
-  shuffle_array = shuffle(shuffle_array.slice(0), roomNum);
-  console.log("===============================================");
-  console.log("roomNum : " + roomNum + " after array : " + shuffle_array);
-  var fromSeq = cardNum * (userSeq - 1);
-  /*
-  var toSeq = (cardNum * (userSeq - 1)) + (cardNum - 1);
-  console.log("from : " + fromSeq + " to : " + toSeq);
-  console.log("from : " + shuffle_array[fromSeq] + " to : " + shuffle_array[toSeq]);
-  */
   async.series([
       function(callback) {
-        Word.find(function(err, results) {
-          //console.log("results : " + results);
-          if (results !== null) {
-            for (var k = 0; k < cardNum; k++) {
-              reset_array[k] = results[shuffle_array[fromSeq++]].value;
-            }
-            callback(null, reset_array);
-          } else {
-            callback(null, "No words");
-          }
+        Room.findById(roomNum, function(err, doc) {
+
+          console.log("roomNum : " + roomNum);
+          if (err) return handleError(err);
+          wordseed = doc.wordseed;
+          shuffle_array = shuffle(shuffle_array.slice(0), wordseed);
+          console.log("===============================================");
+          console.log("wordseed : " + wordseed + " after array : " + shuffle_array);
+          fromSeq = cardNum * (userSeq - 1);
+          var toSeq = (cardNum * (userSeq - 1)) + (cardNum - 1);
+          console.log("from : " + shuffle_array[fromSeq] + " to : " + shuffle_array[toSeq]);
+          callback(null, null);
         });
-      }
+      },
+      function(callback) {
+        console.log(" fromSeq : " + fromSeq);
+        console.log(" shuffle_array : " + shuffle_array);
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          //console.log("doc : " + doc);
+          reset_array[0] = doc;
+        });
+
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          reset_array[1] = doc;
+        });
+
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          reset_array[2] = doc;
+        });
+
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          reset_array[3] = doc;
+          console.log("Before calling callback");
+          callback(null, reset_array);
+        });
+      },
     ],
     function(err, results) {
+      console.log("results : " + results[1]);
       if (!err) {
-        res.send(results);
+        res.send(results[1]);
       }
     });
 });
