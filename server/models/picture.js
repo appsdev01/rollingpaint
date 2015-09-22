@@ -1,13 +1,15 @@
-var mongoose = require('mongoose');
-var ShortId = require('mongoose-minid');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  ShortId = require('mongoose-minid');
 
-var pictureSchema = new mongoose.Schema({
+var PictureSchema = new Schema({
   _id: ShortId,
   url: String,
-  date: { type: Date, default: Date.now }
+  created: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-var Picture = mongoose.model('Picture', pictureSchema);
-
+var Picture = mongoose.model('Picture', PictureSchema);
 module.exports = Picture;

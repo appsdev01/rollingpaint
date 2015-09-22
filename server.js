@@ -6,7 +6,7 @@ var session = require('express-session');
 var auth = require('./server/routes/auth');
 var chats = require('./server/routes/chats');
 var guesswords = require('./server/routes/guesswords');
-var paints = require('./server/routes/pictures');
+
 var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
 var users = require('./server/routes/users');
@@ -35,11 +35,12 @@ app.use(bodyParser.urlencoded({
   extended: true
 })); // for parsing application/x-www-form-urlencoded
 
+require('./server/routes/pictures')(app);
+
 app.use('/scores', scores);
 app.use('/users', users);
 app.use('/chats', chats);
 app.use('/rooms', rooms);
-app.use('/pictures', paints);
 app.use('/words', words);
 app.use('/sketchbooks', sketchbooks);
 app.use('/auth', auth);
