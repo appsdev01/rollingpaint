@@ -1,0 +1,33 @@
+<ion-pane view-title="chat">
+  <ion-header-bar class="bar-frosted" frosted-bar>
+    <h1 class="title">CHAT!</h1>
+  </ion-header-bar>
+
+  <ion-content id="chat-content" start-y="120">
+    <ol class="messages">
+<!--    <form action="" class="chatForm">
+      <input type="text-align" id="messages" class="messageJYJ" autocomplete="off" value="send Message"/><button>Send</button>
+    </form>-->
+      안녕하세요!!
+      <li ng-bind-html="message.content"  class="{{message.self ? 'message-self' : 'message-others'}}"></li>
+
+  </ion-content>
+<!--  <ion-footer-bar class="bar-frosted"> -->
+      <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <input ng-model="input_message.content" placeholder="message" type="text">
+      </label>
+      <button class="button button-positive button-positive ion-chatbox-working" ng-click="send()"></button>
+    </div>
+<!-- </ion-footer-bar>  -->
+<!--
+<ion-content class="padding" start-y="120">
+  <ol class="messages">
+    <li ng-bind-html="message.content" ng-repeat="message in messages"></li>
+  </ol>
+</ion-content>
+<ion-footer-bar class="bar-frosted">
+  <button class="button button-clear button-positive" ng-click="add()">Add Message</button>
+</ion-footer-bar>
+-->
+</ion-pane>

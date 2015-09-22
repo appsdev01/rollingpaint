@@ -1,6 +1,6 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat','starter.controllers', 'ionic.contrib.frostedGlass'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -18,11 +18,6 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
   })
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
-    // ddangddnag
-      .state('chat', {
-        url: '/chat',
-        templateUrl: "templates/chat.html"
-      })
       //hyona
       .state('app.popup', {
         url: "/popup",

@@ -16,8 +16,6 @@ var sketchbooks = require('./server/routes/sketchbooks');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var mongoose = require('mongoose');
-var io = require('socket.io')(http);
-var http = require('http').Server(app);
 
 mongoose.connect(process.env.MONGODB || 'mongodb://localhost/rollingpaint');
 mongoose.connection.on('connected', function() {
@@ -25,13 +23,6 @@ mongoose.connection.on('connected', function() {
 });
 mongoose.connection.on('error', function() {
   console.log('[ERROR] Failed connecting to MongoDB');
-});
-
-// broadcasting
-io.on('connection', function(socket) {
-  socket.on('chat message', function(msg) {
-    io.emit('chat message', msg);
-  });
 });
 
 app.use(express.static('www'));

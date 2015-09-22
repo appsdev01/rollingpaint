@@ -11,7 +11,7 @@
         <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
-    <ion-view view-title="방 목록">
+
 <!-- <ion-header-bar class="bar-positive">
     <div class="buttons">
       <button class="button button-icon ion-navicon"></button>
@@ -20,6 +20,16 @@
   </ion-header-bar> -->
 
       <ion-content header-shrink scroll-event-interval="5">
+
+        <div class="list card" ng-repeat="list in roomList">
+          <div class="item item-divider item-balanced">
+            {{list.status}}
+          </div>
+          <div class="item">
+            <h2>{{list.title}} ({{list.users.size}}/{{list.capacity}})</h2>
+            <p>{{list.date}}</p>
+          </div>
+        </div>
 
         <div class="list card">
           <div class="item item-divider item-balanced">
@@ -93,7 +103,7 @@
         </div>
 
       </ion-content>
-    </ion-view>
+
   </ion-side-menu-content>
 
   <ion-side-menu side="left">

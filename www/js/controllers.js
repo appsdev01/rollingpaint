@@ -8,40 +8,6 @@ angular.module('starter.controllers', ['ionic'])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
   })
-  .controller('ChatCtrl', function($scope, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
-
-    $scope.add = function() {
-      //var nextMessage = messageOptions[messageIter++ % messageOptions.length];
-      //$scope.messages.push(angular.extend({}, nextMessage));
-
-      // Update the scroll area and tell the frosted glass to redraw itself
-      $ionicFrostedDelegate.update();
-      $ionicScrollDelegate.scrollBottom(true);
-    };
-
-    $scope.send = function() {
-      console.log($scope);
-      var sendMessage = {
-        content: '<p>' + $scope.input_message.content + '</p>',
-        self: true
-      };
-      console.log(sendMessage);
-      $scope.messages.push(angular.extend({}, sendMessage));
-      $scope.input_message.content = '';
-
-      var socket = io();
-      socket.emit('chat message', $scope.input_message.content);
-      $scope.input_message.content = '';
-
-      socket.on('chat message', function(msg) {
-        $('#messages').append($('<li>').text(msg));
-      });
-
-      // Update the scroll area and tell the frosted glass to redraw itself
-      $ionicFrostedDelegate.update();
-      $ionicScrollDelegate.scrollBottom(true);
-    };
-  })
   .controller('PopupCtrl', function($scope, $timeout, $q, $ionicPopup) {
     $scope.showPopup = function() {
       $scope.data = {};
@@ -89,6 +55,7 @@ angular.module('starter.controllers', ['ionic'])
         } else {
           console.log('You are not sure');
         }
+
       });
     };
     $scope.showPrompt = function() {

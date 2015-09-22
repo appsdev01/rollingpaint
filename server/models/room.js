@@ -23,4 +23,4 @@ var roomSchema = new Schema({
 
 var Room = mongoose.model('Room', roomSchema);
 
-module.expert = Room;
+module.exports = Room;

@@ -9,27 +9,28 @@ angular.module('lobby', ['ionic'])
   })
   .controller('LobbyCtrl', function($scope, $http, $ionicModal) {
 
-    $http.get('/rooms').then(function(response) {
-      console.log(response);
-      $scope.rooms = response.data;
-    });
+    // $http.get('/rooms').then(function(response) {
+    //   console.log("maybe no response");
+    //   console.log(response);
+    //   $scope.rooms = response.data;
+    // });
 
     // get my profile
     $http.get('/users/me').then(function(response) {
       $scope.user = response.data;
     });
 
-    $scope.roomData = {
-      // "title": "",
-      // "password": ""
-      // user 별 ready 상태 필드 추가
-    };
+    $http.get('/rooms').then(function(response) {
+      $scope.roomList = response.data;
+      console.log($scope.roomList);
+    });
+
+    $scope.roomData = {};
 
     // Perform the login action when the user submits the login form
     $scope.createRoom = function(req,res) {
-      //console.log('Doing login', $scope.loginData);
-      console.log('Create a Room', $scope.roomData);
 
+      // 유효성 체크 필요 (Title, capacity 미설정 시 또는 Password 체크 후 값 미입력 시)
       $http({
         method: 'POST',
         url: 'rooms',
@@ -38,17 +39,17 @@ angular.module('lobby', ['ionic'])
           // "password": $scope.loginData.password
           "title": $scope.roomData.title,
           "password": $scope.roomData.password,
-          "capaticy": $scope.roomData.capaticy,
-          "ownerId": "wBd9fbo", // 하드코딩 추후에 로그인 데이터 받아올 예정
-          "status": "01",
-          "wordseed": 0,
-          "gameround": 0,
-          "users": [{userId: "wBd9fbo"}],
-          "sketchbooks": ["a"]
+          "capacity": parseInt($scope.roomData.capacity),
+          "ownerId": $scope.user._id, // ownerID
+          //"status": "01", // 01: opened(default), 02: playing, 03: ended
+          "wordseed": Math.floor(Math.random() * 1000)+1,
+          //"gameround": 0,
+          "users": [{userId: $scope.user._id}]
         }
       }).success(function(response) {
         if (response) {
-          console.log('Create a Room Success !!!');
+          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+          $scope.closeNewRoom();
         }
       });
     };
