@@ -27,8 +27,28 @@ angular.module('lobby', ['ionic'])
 
     $scope.roomData = {};
 
+    $scope.joinRoom = function(req, res) {
+
+      // password 입력 후 기존 방의 password와 다르면 튕기도록 처리
+
+      $http({
+        method: 'PUT',
+        url: 'rooms/'+req._id+'/'+$scope.user._id
+
+        // data: {
+        //   "id": req._id,
+        //   "userId": $scope.user._id
+        // }
+      }).success(function(response) {
+        if (response) {
+          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+          $scope.closeNewRoom();
+        }
+      });
+    };
+
     // Perform the login action when the user submits the login form
-    $scope.createRoom = function(req,res) {
+    $scope.createRoom = function(req, res) {
 
       // 유효성 체크 필요 (Title, capacity 미설정 시 또는 Password 체크 후 값 미입력 시)
       $http({

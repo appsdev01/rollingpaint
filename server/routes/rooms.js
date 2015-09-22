@@ -25,27 +25,33 @@ POST /room/1/owner
 }
 */
 
-// 1번 방 정보 조회
-// GET /room/1
-
-
 // 전체 방 조회
 // GET /rooms
 router.get('/', function(req, res, next) {
+  console.log("Connected correctly to server :: Room Information");
   Room.find(function(err, results) {
-      res.send(results);
+    res.send(results);
+  });
+});
+
+// 방ID로 방 정보 조회
+// GET /room/{roomId}
+router.get('/:id', function(req, res, next) {
+  Room.findById(req.params.id, function (err, doc) {
+    if (err) return handleError(err);
+    console.log(doc); // 생성한 방 정보
+    res.send(doc);
   });
 });
 
 // 방 생성하기 (방장세팅)
-// POST /room/user
+// POST /room
 router.post('/', function(req, res, next) {
-  console.log("Connected correctly to server :: /create");
+  console.log("Connected correctly to server :: Create Room");
   if (!req.body) {
     return res.sendStatus(400);
   }
-  // console.log(req.body);
-  var room = new Room({
+    var room = new Room({
     title: req.body.title,
     password: req.body.password,
     capacity: req.body.capacity,
@@ -69,23 +75,27 @@ router.post('/', function(req, res, next) {
   });
 });
 
-// 방 수정
-// router.put('/:id', function(req, res, next) {
-//   res.send("Connected correctly to server :: Modify room");
-//   if (!req.body) {
-//     return res.sendStatus(400);
-//   }
-//   Room.update({_id:req.params.id}, function(err, result) {
-//     res.send(result);
-//   });
-// });
+// 방 참가 (멤버추가)
+// PUT /rooms/{roomId}/{userId}
+router.put('/:id/:userId', function(req, res, next) {
+  res.send("Connected correctly to server :: Join room");
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  console.log("Room Id : " + req.params.id);
+  console.log("User Id : " + req.params.userId);
+
+  Room.update({_id:req.params.id}, {$addToSet: {users: req.params.userId}}, {upsert: true}, function(err, result) {
+    res.send(result.WriteResult);
+  });
+});
 
 // 방 삭제
+// DELETE /rooms/{roomId}
 router.delete('/:id', function(req, res, next) {
   res.send("Connected correctly to server :: Delete room");
   Room.remove({_id:req.params.id}, function(err, result) {
-    console.log(result);
-    res.send(result);
+    res.send(result.WriteResult);
   });
 });
 

@@ -22,12 +22,19 @@
       <ion-content header-shrink scroll-event-interval="5">
 
         <div class="list card" ng-repeat="list in roomList">
-          <div class="item item-divider item-balanced">
-            {{list.status}}
+          <div class="item item-divider item-balanced" ng-show="list.status == 01">
+            대기
+          </div>
+          <div class="item item-divider item-balanced" ng-show="list.status == 02">
+            게임 중
           </div>
           <div class="item">
-            <h2>{{list.title}} ({{list.users.size}}/{{list.capacity}})</h2>
+            <h2>{{list.title}} ({{list.users.length}}/{{list.capacity}})</h2>
             <p>{{list.date}}</p>
+            <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
+              <i class="icon ion-android-walk"></i>
+              참가하기
+            </a>
           </div>
         </div>
 
