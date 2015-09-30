@@ -94,3 +94,10 @@ body {
 .messageJYJ button { width: 19%; background: rgb(130, 224, 255); border: none; padding: 10px; }
 .messagesJYJ li { padding: 5px 10px; }
 .messagesJYJ li:nth-child(odd) { background: #eee; }
+
+.paper {
+  border: 1px solid #EEEEEE;
+  box-shadow: 3px 3px 3px #CCCCCC;
+  display: block;
+  margin: 0 auto;
+}

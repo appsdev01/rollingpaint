@@ -10,86 +10,140 @@ angular.module('sketch', ['ionic'])
   .controller('SketchCtrl', function($scope, $http) {
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
+    var scale = Math.min(window.innerHeight, window.innerWidth) / 300;
+    console.dir(canvas);
+    console.dir(window);
+    console.log('ratio = ' + ratio);
+    console.log('scale = ' + scale);
 
-    console.log(canvas);
-    console.log(window);
-    $scope.canvas = angular.toJson(canvas);
-    $scope.window = angular.toJson(window);
+    // 저장할 이미지 크기의 일관성을 위하여 캔버스의 크기는
+    // 가로, 세로 300px로 설정하며 디바이스에 따라 스케일링을 한다.
+    canvas.height = 300 * scale - 25;
+    canvas.width = 300 * scale - 25;
+    canvas.getContext("2d").scale(scale, scale);
 
-    //console.log(ratio);
-    canvas.height = canvas.offsetWidth * ratio;
-    canvas.width = canvas.offsetHeight * ratio;
-    canvas.getContext("2d").scale(ratio, ratio);
+    // 선 스타일 설정
+    var ctx = canvas.getContext('2d');
+    ctx.lineWidth = 5;
+    ctx.lineJoin = ctx.lineCap = 'round';
 
-    //console.dir(canvas);
+    // 선들의 집합 - 되돌리기(undo) 기능을 위해 그려진 획을 저장
+    var paths = [];
+    // 오래된 선들은 되돌리기 목록에서 제외하고 이미지로 저장 - 성능 이슈
+    var imageData;
 
-    var context = canvas.getContext('2d');
+    function initSketchbook() {
+      paths.length = 0;
+      imageData = null;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
-    context.font = '15pt Calibri';
-    context.fillSStyle = 'blue';
-    context.fillText('Draw Something!', 10, 50);
+    function midPointBtw(p1, p2) {
+      return {
+        x: p1.x + (p2.x - p1.x) / 2,
+        y: p1.y + (p2.y - p1.y) / 2
+      };
+    }
 
-    var mouseButtonDown = false;
-    var startX, startY;
+    function draw() {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      if (imageData) {
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      ctx.beginPath();
+      for (var j = 0; j < paths.length; j++) {
+        points = paths[j];
+        var p1 = points[0];
+        var p2 = points[1];
+        ctx.moveTo(p1.x, p1.y);
+        for (var i = 1, len = points.length; i < len; i++) {
+          var midPoint = midPointBtw(p1, p2);
+          ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+          p1 = points[i];
+          p2 = points[i + 1];
+        }
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+
+        if (paths.length > 10) {
+          imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+          paths = paths.slice(-10);
+        }
+      }
+    }
 
     canvas.addEventListener("mousedown", function(event) {
-      console.log('mouse down!');
-      if (event.which === 1) {
-        mouseButtonDown = true;
+      // 마우스 왼쪽 버튼 누를 때
+      if (event.buttons === 1) {
+        var rect = canvas.getBoundingClientRect();
+        // 새로운 획을 추가한다.
+        paths.push([{
+          x: (event.clientX - rect.left) / scale,
+          y: (event.clientY - rect.top) / scale
+        }]);
       }
     });
 
     canvas.addEventListener("mousemove", function(event) {
-      if (mouseButtonDown) {
+      // 마우스 왼쪽 버튼 누른 상태
+      if (event.buttons === 1) {
+        // 마지막 획을 이어서 그린다.
+        lastPoints = paths[paths.length - 1];
         var rect = canvas.getBoundingClientRect();
-        var x = event.clientX - rect.left;
-        var y = event.clientY - rect.top;
-        console.log('x = ' + x + ', y = ' + y);
+        lastPoints.push({
+          x: (event.clientX - rect.left) / scale,
+          y: (event.clientY - rect.top) / scale
+        });
+        draw();
       }
     });
 
     canvas.addEventListener("mouseup", function(event) {
-      console.log('mouse up!');
-      mouseButtonDown = false;
+      // console.log('mouse up!');
     });
 
     canvas.addEventListener("touchstart", function(event) {
-      //console.log('touch start!');
-
       var touch = event.changedTouches[0];
-      startX = touch.clientX;
-      startY = touch.clientY;
-
-      context.moveTo(startX, startY);
-
-      mouseButtonDown = true;
+      var rect = canvas.getBoundingClientRect();
+      // 새로운 획을 추가한다.
+      paths.push([{
+        x: (touch.clientX - rect.left) / scale,
+        y: (touch.clientY - rect.top) / scale
+      }]);
     });
 
     canvas.addEventListener("touchmove", function(event) {
       event.preventDefault();
 
+      // 마지막 획을 이어서 그린다.
+      lastPoints = paths[paths.length - 1];
       var touch = event.changedTouches[0];
-      //console.log(touch);
-
-      if (mouseButtonDown) {
-        var rect = canvas.getBoundingClientRect();
-        //console.log(rect);
-        var x = touch.clientX - rect.left;
-        var y = touch.clientY - rect.top;
-        //console.log('(' + startX + ', ' + startY + ') -> (' + x + ', ' + y + ')');
-
-        context.beginPath();
-        context.moveTo(startX / ratio, startY / ratio);
-        context.lineTo(x / ratio, y / ratio);
-        context.stroke();
-
-        startX = x;
-        startY = y;
-      }
+      var rect = canvas.getBoundingClientRect();
+      lastPoints.push({
+        x: (touch.clientX - rect.left) / scale,
+        y: (touch.clientY - rect.top) / scale
+      });
+      draw();
     });
 
     canvas.addEventListener("touchend", function(event) {
       //console.log('touch end!');
-      mouseButtonDown = false;
     });
+
+    $scope.undoDrawing = function() {
+      if (paths.length > 0) {
+        paths.pop();
+        draw();
+      }
+    };
+
+    $scope.clearSketchbook = function() {
+      initSketchbook();
+    };
+
+    // 초기화 코드
+    initSketchbook();
+
   });

@@ -7,13 +7,11 @@
     <h3 class="title">{{timeCount}}초</h3>
     <div class="button-bar">
       <a class="button button-positive icon ion-paintbrush"></a>
-      <a class="button icon ion-ios-undo"></a>
+      <a class="button icon ion-ios-undo" ng-click="undoDrawing()"></a>
       <a class="button icon ion-ios-redo"></a>
       <a class="button icon ion-ios-trash-outline" ng-click="clearSketchbook()"></a>
     </div>
     <br>
-    <canvas id="paper" style="border: 1px solid grey; box-shadow: 5px 5px 5px #888888;"></canvas>
-    <span>{{canvan}}</span>
-    <span>{{window}}</span>
+    <canvas id="paper" class="paper"></canvas>
   </ion-content>
 </ion-pane>
