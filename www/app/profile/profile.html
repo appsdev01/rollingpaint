@@ -1,36 +1,33 @@
-<ion-view view-title="Profile">
-  <div class="ionic">
-        <div class="bar bar-header bar-positive">
-            <button class="button button-icon icon ion-person-add flat"></button>
-            <button class="button button-icon icon ion-android-search flat pull-right"></button>
-            <h1 class="title fab-left">Profile</h1>
-        </div>
-        <div class="content has-header">
-            <div class="hero has-mask slide-up" style="background-image: url('../img/profile-bg.jpg');">
-                <div class="content">
-                    <div class="avatar" style="background-image: url('img/avatar.png');"></div>
-                    <h3><a  class="light">Lil Jon</a></h3>
-                    <h4>English Teacher</h4>
-                </div>
-            </div>
-            <div class="button-bar">
-                <button class="button button-dark waves-effect waves-button waves-classic icon ion-images"></button>
-                <button class="button button-dark waves-effect waves-button waves-classic icon ion-stats-bars"></button>
-                <button class="button button-dark waves-effect waves-button waves-classic icon ion-pizza"></button>
-            </div>
-            <h4 class="positive content padding double-padding-x">Following</h4>
-            <div class="list animate-fade-slide-in-right">
-                <a class="item item-avatar waves-effect waves-button waves-dark" >
-                    <span class="avatar" style="background-image: url('../img/kobe.jpg');"></span>
-                    <h2>Kobe Bryant</h2>
-                    <p>81 pts #toolongago</p>
-                </a>
-                <a class="item item-avatar waves-effect waves-button waves-dark" >
-                    <span class="avatar" style="background-image: url('../img/white-mamba.jpg');"></span>
-                    <h2>Brian Scalabrine</h2>
-                    <p>#whitemamba</p>
-                </a>
-            </div>
-        </div>
-    </div>
-</ion-view>
+<ion-side-menus>
+  <ion-side-menu-content>
+    <ion-header-bar class="bar-calm">
+      <div class="buttons">
+        <a class="button icon-left button-clear ion-navicon" menu-toggle="left"></a>
+      </div>
+      <h1 class="title">profile</h1>
+    </ion-header-bar>
+    <ion-content id="profile-content">
+      <div class="avatar">
+        <img alt="프로필 사진" src="img/avatar.png"/>
+      </div>
+    </ion-content>
+  </ion-side-menu-content>
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-calm">
+      <h1 class="title">Menu</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list>
+        <ion-item href="#/lobby" menu-close>
+          Home
+        </ion-item>
+        <ion-item href="#/profile" menu-close>
+          {{user.username}}
+        </ion-item>
+        <ion-item href="#/intro" menu-close>
+          나가기
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

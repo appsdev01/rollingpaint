@@ -3,12 +3,12 @@ var express = require('express'),
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
-var auth = require('./server/routes/auth');
+//var auth = require('./server/routes/auth');
 var chats = require('./server/routes/chats');
 var guesswords = require('./server/routes/guesswords');
 var rooms = require('./server/routes/rooms');
 var scores = require('./server/routes/scores');
-var users = require('./server/routes/users');
+var users = require('./server/routes/users.server.routes');
 var words = require('./server/routes/words');
 var sketchbooks = require('./server/routes/sketchbooks');
 
@@ -35,6 +35,7 @@ app.use(bodyParser.urlencoded({
 })); // for parsing application/x-www-form-urlencoded
 
 require('./server/routes/pictures')(app);
+require('./server/routes/auth.server.routes')(app);
 
 app.use('/scores', scores);
 app.use('/users', users);
@@ -42,7 +43,7 @@ app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/words', words);
 app.use('/sketchbooks', sketchbooks);
-app.use('/auth', auth);
+// app.use('/auth', auth);
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
