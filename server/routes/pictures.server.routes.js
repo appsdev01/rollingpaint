@@ -1,4 +1,4 @@
-var pictures = require('../controllers/pictures');
+var pictures = require('../controllers/pictures.server.controller');
 
 module.exports = function(app) {
   app.route('/api/pictures')

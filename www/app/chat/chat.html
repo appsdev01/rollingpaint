@@ -5,22 +5,28 @@
 
   <ion-content id="chat-content" start-y="120">
     <ol class="messages">
-<!--    <form action="" class="chatForm">
+      <!--    <form action="" class="chatForm">
       <input type="text-align" id="messages" class="messageJYJ" autocomplete="off" value="send Message"/><button>Send</button>
     </form>-->
-      안녕하세요!!
-      <li ng-bind-html="message.content"  class="{{message.self ? 'message-self' : 'message-others'}}"></li>
+      <!-- 안녕하세요!! -->
+      <!-- <li ng-bind-html="message.content"  class="{{message.self ? 'message-self' : 'message-others'}}"></li> -->
+      <li ng-repeat="message in data.messages track by $index">{{message}}</li>
+    </ol>
 
-  </ion-content>
-<!--  <ion-footer-bar class="bar-frosted"> -->
-      <div class="item item-input-inset">
+    <div class="item item-input-inset">
       <label class="item-input-wrapper">
-        <input ng-model="input_message.content" placeholder="message" type="text">
+        <!-- <input ng-model="input_message.content" placeholder="message" type="text"> -->
+        <input ng-model="data.message" placeholder="message" type="text">
       </label>
-      <button class="button button-positive button-positive ion-chatbox-working" ng-click="send()"></button>
+      <!-- <button class="button button-positive button-positive ion-chatbox-working" ng-click="send()"></button> -->
+      <button class="button button-positive button-positive ion-chatbox-working" ng-click="sendMessage()"></button>
     </div>
-<!-- </ion-footer-bar>  -->
-<!--
+  </ion-content>
+
+  <!--  <ion-footer-bar class="bar-frosted"> -->
+
+  <!-- </ion-footer-bar>  -->
+  <!--
 <ion-content class="padding" start-y="120">
   <ol class="messages">
     <li ng-bind-html="message.content" ng-repeat="message in messages"></li>
