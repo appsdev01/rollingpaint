@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
-
 var scorelistSchema = new mongoose.Schema({
     userid: String,
     gamescore: Number,
