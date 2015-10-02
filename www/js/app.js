@@ -17,17 +17,6 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-      //hyona
-      .state('app.popup', {
-        url: "/popup",
-        views: {
-          'menuContent': {
-            templateUrl: "templates/popup.html",
-            controller: 'PopupCtrl'
-          }
-        }
-      });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/intro');
   });

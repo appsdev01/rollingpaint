@@ -1,4 +1,4 @@
-var Picture = require('../models/picture');
+var Picture = require('../models/picture.server.model');
 
 exports.create = function(req, res) {
   if (!req.body) {

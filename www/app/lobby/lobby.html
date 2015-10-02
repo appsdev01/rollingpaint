@@ -23,13 +23,18 @@
           <div class="item">
             <h2>{{list.title}} ({{list.users.length}}/{{list.capacity}})</h2>
             <p>{{list.date}}</p>
-            <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
+            <div class="item item-button-right" ng-show="list.status == 01">
+              참가하기
+              <button class="button button-positive" ng-click="joinRoom(list)">
+                <i class="icon ion-android-walk"></i>
+              </button>
+            </div>
+            <!-- <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
               <i class="icon ion-android-walk"></i>
               참가하기
-            </a>
+            </a> -->
           </div>
         </div>
-
       </ion-content>
 
   </ion-side-menu-content>
