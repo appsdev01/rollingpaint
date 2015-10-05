@@ -41,17 +41,12 @@ server.listen(app.get('port'), function() {
 
 // TODO: 아래 방식으로 변경
 var rooms = require('./server/routes/rooms');
-var scores = require('./server/routes/scores');
 var users = require('./server/routes/users.server.routes');
 var words = require('./server/routes/words');
-var sketchbooks = require('./server/routes/sketchbooks');
 
-app.use('/scores', scores);
 app.use('/users', users);
-app.use('/chats', chats);
 app.use('/rooms', rooms);
 app.use('/words', words);
-app.use('/sketchbooks', sketchbooks);
 
 // 컴포넌트별 라우터 로딩 - 각 컴포넌트 라우터는 내부에서 직접 경로를 설정
 require('./server/routes/pictures.server.routes')(app);
