@@ -1,41 +1,45 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
     <ion-nav-bar class="bar-calm">
-
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
       </ion-nav-buttons>
-
       <ion-nav-buttons side="right">
         <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
 
-      <ion-content header-shrink scroll-event-interval="5">
+    <ion-nav-view name="">
+      <ion-view view-title="Lobby">
+        <ion-content scroll-event-interval="5">
+          <ion-refresher on-refresh="listRooms()" pulling-text="새로고침..."></ion-refresher>
+          <div class="list card" ng-repeat="room in roomList">
+            <div class="item">
+              <h2>{{room.title}}
+                ({{room.users.length}}/{{room.capacity}})</h2>
+              <p>{{room.date}}</p>
+              <!-- <div class="item item-button-right" ng-show="room.status == 01">
+                참가하기
+                <a class="button button-positive" ng-href="#/room/{{room.id}}">
+                  <i class="icon ion-android-walk"></i>
+                </a>
+              </div> -->
 
-        <div class="list card" ng-repeat="list in roomList">
-          <div class="item item-divider item-balanced" ng-show="list.status == 01">
-            대기
-          </div>
-          <div class="item item-divider item-balanced" ng-show="list.status == 02">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>{{list.title}} ({{list.users.length}}/{{list.capacity}})</h2>
-            <p>{{list.date}}</p>
-            <div class="item item-button-right" ng-show="list.status == 01">
-              참가하기
-              <button class="button button-positive" ng-click="joinRoom(list)">
-                <i class="icon ion-android-walk"></i>
-              </button>
-            </div>
-            <!-- <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
+              <div class="item item-button-right" ng-show="room.status === '01'">
+                참가하기
+                <button class="button button-positive" ng-click="joinRoom(room)">
+                  <i class="icon ion-android-walk"></i>
+                </button>
+              </div>
+              <!-- <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
               <i class="icon ion-android-walk"></i>
               참가하기
             </a> -->
+            </div>
           </div>
-        </div>
-      </ion-content>
+        </ion-content>
+      </ion-view>
+    </ion-nav-view>
 
   </ion-side-menu-content>
 

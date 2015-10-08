@@ -20,31 +20,49 @@ angular.module('lobby', ['ionic'])
       $scope.user = response.data;
     });
 
-    $http.get('/rooms').then(function(response) {
+    $http.get('/api/rooms').then(function(response) {
       $scope.roomList = response.data;
       console.log($scope.roomList);
     });
 
     $scope.roomData = {};
 
-    $scope.joinRoom = function(req, res) {
-
-      // password 입력 후 기존 방의 password와 다르면 튕기도록 처리
-
-      $http({
-        method: 'PUT',
-        url: 'rooms/'+req._id+'/'+$scope.user._id
-
-        // data: {
-        //   "id": req._id,
-        //   "userId": $scope.user._id
-        // }
-      }).success(function(response) {
-        if (response) {
-          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
-          $scope.closeNewRoom();
-        }
+    $scope.listRooms = function() {
+      $http.get('/api/rooms').then(function(response) {
+        $scope.roomList = response.data;
+        console.log($scope.roomList);
+      }).finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
+    };
+
+    $scope.joinRoom = function(room) {
+      // password 입력 후 기존 방의 password와 다르면 튕기도록 처리
+      console.log('join room!');
+      console.log(room);
+
+      $http.post('/api/rooms/' + room.id + '/user', {
+          userId: $scope.user._id
+        })
+        .then(function(response) {
+          if (response.status === 200) {
+            window.location.href = '#/room/' + room.id;
+          }
+        });
+
+      // $http({
+      //   method: 'PUT',
+      //   url: '/api/rooms/'+req._id+'/'+$scope.user._id
+      //   // data: {
+      //   //   "id": req._id,
+      //   //   "userId": $scope.user._id
+      //   // }
+      // }).success(function(response) {
+      //   if (response) {
+      //     window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+      //     $scope.closeNewRoom();
+      //   }
+      // });
     };
 
     // Perform the login action when the user submits the login form
@@ -53,7 +71,7 @@ angular.module('lobby', ['ionic'])
       // 유효성 체크 필요 (Title, capacity 미설정 시 또는 Password 체크 후 값 미입력 시)
       $http({
         method: 'POST',
-        url: 'rooms',
+        url: '/api/rooms',
         data: {
           // "email": $scope.loginData.email,
           // "password": $scope.loginData.password
@@ -62,9 +80,11 @@ angular.module('lobby', ['ionic'])
           "capacity": parseInt($scope.roomData.capacity),
           "ownerId": $scope.user._id, // ownerID
           //"status": "01", // 01: opened(default), 02: playing, 03: ended
-          "wordseed": Math.floor(Math.random() * 1000)+1,
+          "wordseed": Math.floor(Math.random() * 1000) + 1,
           //"gameround": 0,
-          "users": [{userId: $scope.user._id}]
+          "users": [{
+            userId: $scope.user._id
+          }]
         }
       }).success(function(response) {
         if (response) {

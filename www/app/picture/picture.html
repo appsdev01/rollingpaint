@@ -1,10 +1,47 @@
-<ion-view view-title="PictureList">
-  <ion-content>
-    <h1>Pictures</h1>
-    <ion-list>
-      <ion-item ng-repeat="picture in pictures">
-        <img ng-src="{{picture.url}}" alt="picture description" />
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-view>
+<!-- <ion-nav-bar></ion-nav-bar>
+<ion-nav-view>
+  <ion-view view-title="Picture List">
+    <ion-content>
+      <h1>Pictures</h1>
+      <ion-list>
+        <ion-item ng-repeat="picture in pictures">
+          <img alt="picture description" ng-src="{{picture.url}}"/>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-view>
+</ion-nav-view> -->
+
+<ion-header-bar align-title="left" class="bar-positive">
+  <div class="buttons">
+    <button class="button" ng-click="doSomething()">Left Button</button>
+  </div>
+  <h1 class="title">Title!</h1>
+  <div class="buttons">
+    <button class="button">Right Button</button>
+  </div>
+</ion-header-bar>
+
+<ion-nav-bar class="bar-calm">aaa</ion-nav-bar>
+
+<ion-nav-view>
+  <ion-view>
+    <ion-content>
+      <h1>Pictures</h1>
+      <ion-list>
+        <ion-item ng-repeat="picture in pictures">
+          <img alt="picture description" ng-src="{{picture.url}}"/>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-view>
+</ion-nav-view>
+
+<!-- <ion-nav-bar>aaa</ion-nav-bar>
+<ion-nav-view>
+  <ion-view view-title="My Page">
+    <ion-content>
+      Hello!
+    </ion-content>
+  </ion-view>
+</ion-nav-view> -->

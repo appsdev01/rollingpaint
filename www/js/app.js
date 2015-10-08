@@ -1,8 +1,7 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat','starter.controllers', 'ionic.contrib.frostedGlass'])
-
-.run(function($ionicPlatform) {
+angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat', 'room', 'starter.controllers', 'ionic.contrib.frostedGlass'])
+  .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -20,27 +19,49 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/intro');
   })
-
   .factory('socket', function($rootScope) {
-   var socket = io.connect();
-   return {
-     on: function(eventName, callback) {
-       socket.on(eventName, function() {
-         var args = arguments;
-         $rootScope.$apply(function() {
-           callback.apply(socket, args);
-         });
-       });
-     },
-     emit: function(eventName, data, callback) {
-       socket.emit(eventName, data, function() {
-         var args = arguments;
-         $rootScope.$apply(function() {
-           if (callback) {
-             callback.apply(socket, args);
-           }
-         });
-       });
-     }
-   };
-   });
+    var socket = io.connect();
+    return {
+      on: function(eventName, callback) {
+        socket.on(eventName, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            callback.apply(socket, args);
+          });
+        });
+      },
+      emit: function(eventName, data, callback) {
+        socket.emit(eventName, data, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            if (callback) {
+              callback.apply(socket, args);
+            }
+          });
+        });
+      }
+    };
+  })
+  .factory('chatSocket', function($rootScope, $location) {
+    var socket = io.connect($location.protocol() + $location.host() + ':' + $location.port() + '/socket/chat');
+    return {
+      on: function(eventName, callback) {
+        socket.on(eventName, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            callback.apply(socket, args);
+          });
+        });
+      },
+      emit: function(eventName, data, callback) {
+        socket.emit(eventName, data, function() {
+          var args = arguments;
+          $rootScope.$apply(function() {
+            if (callback) {
+              callback.apply(socket, args);
+            }
+          });
+        });
+      }
+    };
+  });

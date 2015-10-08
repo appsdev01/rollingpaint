@@ -1,6 +1,10 @@
 module.exports = function(app, server) {
   var io = require('socket.io')(server);
 
+  var chatSocket = io.of('/socket/chat').on('connection', function(socket) {
+    console.log('connected ' + socket.id());
+  });
+
   // broadcasting
   io.on('connection', function(socket) {
     /*
@@ -22,9 +26,13 @@ module.exports = function(app, server) {
     });
     */
 
-    socket.on('chat message', function(msg){
+    socket.on('chat message', function(msg) {
       console.log('receiving message : ' + msg);
       io.emit('chat message', msg);
+    });
+
+    socket.on('room:join', function(msg) {
+      io.emit('room:join', msg);
     });
 
   });
