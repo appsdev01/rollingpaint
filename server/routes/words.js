@@ -72,57 +72,69 @@ router.get('/wordList/:roomid/users/:userSeq', function(req, res, next) {
       function(callback) {
         Room.findById(roomNum, function(err, doc) {
 
-          console.log("roomNum : " + roomNum);
+          console.log("\n\n\n\n\n\nroomNum : " + roomNum);
+          //console.log("doc.wordseed : " + doc.wordseed);
           if (err) return handleError(err);
           wordseed = doc.wordseed;
           shuffle_array = shuffle(shuffle_array.slice(0), wordseed);
-          console.log("===============================================");
-          console.log("wordseed : " + wordseed + " after array : " + shuffle_array);
+          //console.log("===============================================");
+          //console.log("wordseed : " + wordseed + " after array : " + shuffle_array);
           fromSeq = cardNum * (userSeq - 1);
           var toSeq = (cardNum * (userSeq - 1)) + (cardNum - 1);
-          console.log("from : " + shuffle_array[fromSeq] + " to : " + shuffle_array[toSeq]);
-          callback(null, null);
-        });
-      },
-      function(callback) {
-        console.log(" fromSeq : " + fromSeq);
-        console.log(" shuffle_array : " + shuffle_array);
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          //console.log("doc : " + doc);
-          reset_array[0] = doc;
-        });
-
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          reset_array[1] = doc;
-        });
-
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          reset_array[2] = doc;
-        });
-
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          reset_array[3] = doc;
-          console.log("Before calling callback");
+          //console.log("from : " + shuffle_array[fromSeq] + " to : " + shuffle_array[toSeq]);
           callback(null, reset_array);
         });
       },
+      function(callback) {
+        //console.log(" fromSeq : " + fromSeq);
+        //console.log(" shuffle_array : " + shuffle_array);
+        Word.find().where("seq").in(shuffle_array.slice(fromSeq, fromSeq+4)).select("value").exec(function(err, doc) {
+          if (err) return handleError(err);
+          console.log("doc : " + doc);
+          console.log("doc1 : " + doc[0].value);
+          reset_array[0] = doc;
+          callback(null, null);
+        });
+      }/*,
+      function(callback) {
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          console.log("doc2 : " + doc);
+          reset_array[1] = doc;
+          callback(null, reset_array);
+        });
+      }
+
+      function(callback) {
+
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          console.log("doc3 : " + doc);
+          reset_array[2] = doc;
+          callback(null, reset_array);
+        });
+      },
+      function(callback) {
+
+        Word.find({
+          seq: shuffle_array[fromSeq++]
+        }, function(err, doc) {
+          if (err) return handleError(err);
+          console.log("doc4 : " + doc);
+          reset_array[3] = doc;
+          callback(null, reset_array);
+        });
+      }
+      */
     ],
     function(err, results) {
-      console.log("results : " + results[1]);
+      console.log("results : " + results);
       if (!err) {
-        res.send(results[1]);
+        res.send(results[0]);
       }
     });
 });

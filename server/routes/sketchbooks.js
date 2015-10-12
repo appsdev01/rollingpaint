@@ -51,7 +51,7 @@ return res.sendStatus(500);
 */
 
 // 턴 지정하기
-// POST /sketchbook/1/paper/1/
+// POST /sketchbook/1(스케치북 id)/paper/1/
 
 router.post('/:userId/paper/:paper', function(req, res, next) {
   if (!req.body) {

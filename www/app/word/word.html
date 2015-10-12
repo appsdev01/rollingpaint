@@ -9,11 +9,10 @@
     <input type="hidden" name="resultWord" id="resultWord" value="{{resultWord}}" />
     <div class="list">
       <div id="contents" ng-controller="WordCtrl" ng-repeat="word in words">
-        <div ng-click="createSketchbook(word[0][0].value)" class="item item-divider item-balanced">{{word[0][0].value}}</div>
-        <input type="hidden" name="word" id="word" value="{{word[0]}}" />
-        <div ng-click="createSketchbook(word[1].value)" class="item item-divider item-energized"> {{word[1][0].value}}</div>
-        <div ng-click="createSketchbook(word[2].value)" class="item item-divider item-balanced">{{word[2][0].value}}</div>
-        <div ng-click="createSketchbook(word[3].value)" class="item item-divider item-energized">{{word[3][0].value}}</div>
+        <div ng-click="createSketchbook(word[0].value)" class="item item-divider item-balanced">{{word[0].value}}</div>
+        <div ng-click="createSketchbook(word[1].value)" class="item item-divider item-energized">{{word[1].value}}</div>
+        <div ng-click="createSketchbook(word[2].value)" class="item item-divider item-balanced">{{word[2].value}}</div>
+        <div ng-click="createSketchbook(word[3].value)" class="item item-divider item-energized">{{word[3].value}}</div>
       </div>
       <div ng-show="resultWord != null">
         {{resultWord}} is selected!!!!!!!!!!!!!!!
