@@ -2,12 +2,7 @@ var mongoose = require('mongoose');
 var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
-// var gameUserSchema = new Schema({
-//   userId: ShortId,
-//   ready: Boolean, // true:ready, false:not ready
-// });
-
-var roomSchema = new Schema({
+var RoomSchema = new Schema({
   _id: ShortId,
   title: String,
   password: String, // null default
@@ -18,9 +13,20 @@ var roomSchema = new Schema({
   gameround: Number, // 1(default)
   users: [ShortId], // ownerId default
   sketchbooks: [ShortId], // status(02) > game
-  date: { type: Date, default: Date.now }
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-var Room = mongoose.model('Room', roomSchema);
+if (!RoomSchema.options.toJSON) {
+  RoomSchema.options.toJSON = {};
+}
+RoomSchema.options.toJSON.transform = function(doc, ret, options) {
+  ret.id = ret._id;
+  delete ret._id;
+  delete ret.__v;
+};
 
+var Room = mongoose.model('Room', RoomSchema);
 module.exports = Room;

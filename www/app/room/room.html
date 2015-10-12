@@ -1,0 +1,18 @@
+<ion-pane view-title="chat">
+  <ion-header-bar class="bar-frosted" frosted-bar>
+    <h1 class="title">{{room.title}} ({{room.users.length}}/{{room.capacity}})</h1>
+  </ion-header-bar>
+
+  <ion-content id="chat-content" start-y="120">
+    <ol class="messages">
+      <li ng-repeat="message in data.messages track by $index">{{users[message.user].username}} : {{message.content}}</li>
+    </ol>
+
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <input ng-model="data.message" placeholder="message" type="text" ng-keyup="$event.keyCode == 13 ? sendMessage() : null">
+      </label>
+      <button class="button button-positive button-positive ion-chatbox-working" ng-click="sendMessage()"></button>
+    </div>
+  </ion-content>
+</ion-pane>

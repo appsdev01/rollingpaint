@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var User = require('../models/user');
+var User = require('../models/user.server.models');
 
 // 내 정보 조회하기
 // GET /users/me

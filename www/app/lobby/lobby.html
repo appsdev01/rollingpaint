@@ -1,139 +1,57 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-stable">
-      <ion-nav-back-button></ion-nav-back-button>
-
+    <ion-nav-bar class="bar-calm">
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
       </ion-nav-buttons>
-
       <ion-nav-buttons side="right">
         <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
 
-<!-- <ion-header-bar class="bar-positive">
-    <div class="buttons">
-      <button class="button button-icon ion-navicon"></button>
-    </div>
-    <h1 class="title">방 목록</h1>
-  </ion-header-bar> -->
+    <ion-nav-view name="">
+      <ion-view view-title="Lobby">
+        <ion-content scroll-event-interval="5">
+          <ion-refresher on-refresh="listRooms()" pulling-text="새로고침..."></ion-refresher>
+          <div class="list card" ng-repeat="room in roomList">
+            <div class="item">
+              <h2>{{room.title}}
+                ({{room.users.length}}/{{room.capacity}})</h2>
+              <p>{{room.date}}</p>
+              <!-- <div class="item item-button-right" ng-show="room.status == 01">
+                참가하기
+                <a class="button button-positive" ng-href="#/room/{{room.id}}">
+                  <i class="icon ion-android-walk"></i>
+                </a>
+              </div> -->
 
-      <ion-content header-shrink scroll-event-interval="5">
-
-        <div class="list card" ng-repeat="list in roomList">
-          <div class="item item-divider item-balanced" ng-show="list.status == 01">
-            대기
-          </div>
-          <div class="item item-divider item-balanced" ng-show="list.status == 02">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>{{list.title}} ({{list.users.length}}/{{list.capacity}})</h2>
-            <p>{{list.date}}</p>
-            <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
+              <div class="item item-button-right" ng-show="room.status === '01'">
+                참가하기
+                <button class="button button-positive" ng-click="joinRoom(room)">
+                  <i class="icon ion-android-walk"></i>
+                </button>
+              </div>
+              <!-- <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
               <i class="icon ion-android-walk"></i>
               참가하기
-            </a>
+            </a> -->
+            </div>
           </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-balanced">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>놀자 (5/5)</h2>
-            <p>May 05, 2015</p>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-energized">
-            대기
-          </div>
-          <div class="item">
-            <h2>셀러방 (3/5)</h2>
-            <p>May 05, 2015</p>
-            <a class="button button-block button-royal" href="#/app/room">
-              <i class="icon ion-android-walk"></i>
-              참가하기
-            </a>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-balanced">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>헬로우 월드 (8/8)</h2>
-            <p>May 05, 2015</p>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-balanced">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>테스트 (5/5)</h2>
-            <p>May 05, 2015</p>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-icon-right item-energized">
-            대기
-            <i class="icon ion-ios-locked-outline"></i>
-          </div>
-          <div class="item">
-            <h2>비공개방 (3/5)</h2>
-            <p>May 05, 2015</p>
-          </div>
-          <div class="item item-button-right">
-            참가하기
-            <button class="button button-positive">
-              <i class="icon ion-android-walk"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-divider item-balanced">
-            게임 중
-          </div>
-          <div class="item">
-            <h2>ㅎㅎㅎ (5/5)</h2>
-            <p>May 05, 2015</p>
-          </div>
-        </div>
-
-      </ion-content>
+        </ion-content>
+      </ion-view>
+    </ion-nav-view>
 
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
+    <ion-header-bar class="bar-calm">
+      <h1 class="title">Menu</h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close href="#/profile">
+        <ion-item href="#/profile" menu-close>
           {{user.username}}
         </ion-item>
-<!-- <ion-item menu-close ng-click="login()">
-      Login
-    </ion-item>
-    <ion-item menu-close href="#/app/search">
-      Search
-    </ion-item>
-    <ion-item menu-close href="#/app/browse">
-      Browse
-    </ion-item>
-    <ion-item menu-close href="#/app/playlists">
-      Playlists
-    </ion-item> -->
         <ion-item href="#/intro" menu-close>
           나가기
         </ion-item>

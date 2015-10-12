@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var Word = require('../models/word.js');
-var Room = require('../models/room.js');
+var Room = require('../models/room.server.model.js');
 var async = require('async');
 var shuffle = require('knuth-shuffle-seeded');
 var assert = require('assert');

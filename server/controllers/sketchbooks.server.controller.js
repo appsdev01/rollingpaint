@@ -24,8 +24,7 @@ GET /skethbook/1/
 }
 */
 
-var router = require('express').Router();
-var Sketchbook = require('../models/sketchbook.js');
+var Sketchbook = require('../models/sketchbook.server.model');
 var async = require('async');
 
 // Create a sketchbook
@@ -53,7 +52,7 @@ return res.sendStatus(500);
 // 턴 지정하기
 // POST /sketchbook/1(스케치북 id)/paper/1/
 
-router.post('/:userId/paper/:paper', function(req, res, next) {
+exports.countTurn =  function(req, res, next) {
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -81,12 +80,12 @@ router.post('/:userId/paper/:paper', function(req, res, next) {
       res.send(doc);
     });
   });
-});
+};
 
 
 // 스케치북 조회하기
 // GET /skethbook/1/
-router.get('/:userId', function(req, res, next) {
+exports.getSketchbook =  function(req, res, next) {
   Sketchbook.findOne({
     userId: req.params.userId
   }, function(err, results) {
@@ -95,7 +94,4 @@ router.get('/:userId', function(req, res, next) {
       res.send(results);
     }
   });
-});
-
-
-module.exports = router;
+};
