@@ -7,7 +7,7 @@ angular.module('lobby', ['ionic'])
         controller: 'LobbyCtrl'
       });
   })
-  .controller('LobbyCtrl', function($scope, $http, $ionicModal) {
+  .controller('LobbyCtrl', function($scope, $http, $ionicModal, chatSocket) {
 
     // $http.get('/rooms').then(function(response) {
     //   console.log("maybe no response");
@@ -41,10 +41,16 @@ angular.module('lobby', ['ionic'])
       console.log('join room!');
       console.log(room);
 
-      $http.post('/api/rooms/' + room.id + '/user', {
+      $http.post('/api/rooms/' + room.id + '/users', {
           userId: $scope.user._id
         })
         .then(function(response) {
+          // DB 업데이트 완료 후 소켓 room 참가
+          chatSocket.emit('room:join', {
+            userId: $scope.user._id,
+            roomId: room.id
+          });
+
           if (response.status === 200) {
             window.location.href = '#/room/' + room.id;
           }

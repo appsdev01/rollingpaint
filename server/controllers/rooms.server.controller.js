@@ -111,7 +111,7 @@ exports.leave = function(req, res) {
     _id: req.params.roomId
   }, {
     $pull: {
-      users: req.body.userId
+      users: req.params.userId
     }
   }, function(err, result) {
     res.send(result.WriteResult);

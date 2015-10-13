@@ -9,8 +9,10 @@ module.exports = function(app) {
     .get(rooms.get)
     .delete(rooms.delete);
 
-  app.route('/api/rooms/:roomId/user')
-    .post(rooms.join)
+  app.route('/api/rooms/:roomId/users')
+    .post(rooms.join);
+
+  app.route('/api/rooms/:roomId/users/:userId')
     .delete(rooms.leave);
 
   app.route('/api/rooms/:roomId/owner')
