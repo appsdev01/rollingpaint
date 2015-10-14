@@ -41,10 +41,8 @@ server.listen(app.get('port'), function() {
 
 // TODO: 아래 방식으로 변경
 var users = require('./server/routes/users.server.routes');
-var words = require('./server/routes/words');
 
 app.use('/users', users);
-app.use('/words', words);
 
 // 컴포넌트별 라우터 로딩 - 각 컴포넌트 라우터는 내부에서 직접 경로를 설정
 require('./server/routes/pictures.server.routes')(app);
@@ -53,4 +51,5 @@ require('./server/routes/chats.server.routes')(app, server);
 require('./server/routes/auth.server.routes')(app);
 require('./server/routes/sketchbooks.server.routes')(app);
 require('./server/routes/scores.server.routes')(app);
+require('./server/routes/words.server.routes')(app);
 //require('./server/routes/guesswords.server.routes')(app);

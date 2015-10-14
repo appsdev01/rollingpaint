@@ -1,6 +1,5 @@
-var router = require('express').Router();
-var Word = require('../models/word.js');
-var Room = require('../models/room.server.model.js');
+var Word = require('../models/word.server.model');
+var Room = require('../models/room.server.model');
 var async = require('async');
 var shuffle = require('knuth-shuffle-seeded');
 var assert = require('assert');
@@ -8,7 +7,7 @@ var assert = require('assert');
 //var url = 'mongodb://70.30.14.125:27017/rollingpaint';
 
 // Create a Word
-router.post('/', function(req, res, next) {
+exports.create = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -39,10 +38,10 @@ router.post('/', function(req, res, next) {
     });
   });
 
-});
+};
 
 // Find all Words
-router.get('/', function(req, res, next) {
+exports.get = function(req, res) {
   /*
     Word.find(function(err, results) {
       console.log(results);
@@ -50,10 +49,10 @@ router.get('/', function(req, res, next) {
     });
   */
 
-});
+};
 
 // Create WordSets
-router.get('/wordList/:roomid/users/:userSeq', function(req, res, next) {
+exports.get = function(req, res) {
 
   var shuffle_array = [];
   var roomNum = req.params.roomid;
@@ -137,11 +136,11 @@ router.get('/wordList/:roomid/users/:userSeq', function(req, res, next) {
         res.send(results[0]);
       }
     });
-});
+};
 
 
 // Update a Word
-router.put('/:id', function(req, res, next) {
+exports.update = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -152,16 +151,14 @@ router.put('/:id', function(req, res, next) {
   }, function(err, result) {
     res.send(result);
   });
-});
+};
 
 // Delete a Word
-router.delete('/:id', function(req, res, next) {
+exports.delete = function(req, res) {
   Word.remove({
     _id: req.params.id
   }, function(err, result) {
     console.log(result);
     res.send(result);
   });
-});
-
-module.exports = router;
+};
