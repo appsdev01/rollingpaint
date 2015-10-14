@@ -10,7 +10,7 @@ angular.module('word', ['ionic'])
 
 .controller('WordCtrl', function($scope, $http, $ionicModal) {
   // '/wordList/:roomNo/users/:userId'
-  $http.get('/words/wordList/ANkG7-E/users/4').then(function(response) {
+  $http.get('/api/words/wordList/4cLhZLz/user/4').then(function(response) {
     console.log("response : " + response);
     console.log("response.data : " + response.data);
     console.log("response.data[0].value : " + response.data[0][0].value);
