@@ -2,6 +2,12 @@ var mongoose = require('mongoose');
 var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
+var GameUserSchema = new Schema({
+  _id: ShortId,
+  username: String,
+  readyStatus: String
+});
+
 var RoomSchema = new Schema({
   _id: ShortId,
   title: String,
@@ -11,7 +17,7 @@ var RoomSchema = new Schema({
   status: String, // 01: opened(default), 02: playing, 03: ended
   wordseed: String, // random value
   gameround: Number, // 1(default)
-  users: [ShortId], // ownerId default
+  users: [GameUserSchema], // ownerId default
   sketchbooks: [ShortId], // status(02) > game
   date: {
     type: Date,

@@ -52,7 +52,11 @@ exports.create = function(req, res) {
     status: "01",
     wordseed: req.body.wordseed,
     gameround: 1,
-    users: [req.body.users[0].userId],
+    users: [{
+      _id: req.body.users[0].userId,
+      username: req.body.users[0].username,
+      readyStatus: "01"
+    }],
     sketchbooks: []
   });
   room.save(function(err) {
@@ -92,7 +96,11 @@ exports.join = function(req, res) {
     _id: req.params.roomId
   }, {
     $addToSet: {
-      users: req.body.userId
+      users : {
+        _id: req.body.userId,
+        username: req.body.username,
+        readyStatus: "01"
+      }
     }
   }, {
     upsert: true
@@ -111,7 +119,7 @@ exports.leave = function(req, res) {
     _id: req.params.roomId
   }, {
     $pull: {
-      users: req.params.userId
+      users : {_id: req.params.userId}
     }
   }, function(err, result) {
     res.send(result.WriteResult);

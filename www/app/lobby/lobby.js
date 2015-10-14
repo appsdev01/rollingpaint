@@ -42,7 +42,8 @@ angular.module('lobby', ['ionic'])
       console.log(room);
 
       $http.post('/api/rooms/' + room.id + '/users', {
-          userId: $scope.user._id
+          userId: $scope.user._id,
+          username: $scope.user.username
         })
         .then(function(response) {
           // DB 업데이트 완료 후 소켓 room 참가
@@ -89,7 +90,8 @@ angular.module('lobby', ['ionic'])
           "wordseed": Math.floor(Math.random() * 1000) + 1,
           //"gameround": 0,
           "users": [{
-            userId: $scope.user._id
+            userId: $scope.user._id,
+            username: $scope.user.username
           }]
         }
       }).success(function(response) {
