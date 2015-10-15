@@ -45,6 +45,11 @@ body {
 	float:right;
 }
 
+.messages li.message-system {
+	text-align:center;
+  font-weight:bold;
+}
+
 .messages p.message-sender {
   margin-bottom: 2px;
 }

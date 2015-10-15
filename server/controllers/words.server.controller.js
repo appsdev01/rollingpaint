@@ -94,41 +94,7 @@ exports.get = function(req, res) {
           reset_array[0] = doc;
           callback(null, null);
         });
-      }/*,
-      function(callback) {
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          console.log("doc2 : " + doc);
-          reset_array[1] = doc;
-          callback(null, reset_array);
-        });
       }
-
-      function(callback) {
-
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          console.log("doc3 : " + doc);
-          reset_array[2] = doc;
-          callback(null, reset_array);
-        });
-      },
-      function(callback) {
-
-        Word.find({
-          seq: shuffle_array[fromSeq++]
-        }, function(err, doc) {
-          if (err) return handleError(err);
-          console.log("doc4 : " + doc);
-          reset_array[3] = doc;
-          callback(null, reset_array);
-        });
-      }
-      */
     ],
     function(err, results) {
       console.log("results : " + results);

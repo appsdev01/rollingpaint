@@ -44,6 +44,35 @@ module.exports = function(app, server) {
       io.of('/chat').in(msg.roomId).emit('room:message', returnMsg);
     });
 
+    socket.on('room:sendReadyMessage', function(msg) {
+      console.log(msg);
+      // msg = { "userId": "", "roomId": "", "content": "" }
+
+      var returnMsg = {
+        userId: msg.userId,
+        content: msg.content
+      };
+
+      console.log(msg.roomId);
+      console.log(returnMsg);
+
+      // 특정 방의 참가자에게 메시지 브로드캐스팅
+      io.of('/chat').in(msg.roomId).emit('room:sendReadyMessage', returnMsg);
+    });
+
+    socket.on('room:sendStartMessage', function(msg) {
+      var returnMsg = {
+        userId: msg.userId,
+        content: msg.content
+      };
+
+      console.log(msg.roomId);
+      console.log(returnMsg);
+
+      // 특정 방의 참가자에게 메시지 브로드캐스팅
+      io.of('/chat').in(msg.roomId).emit('room:sendStartMessage', returnMsg);
+    });
+
   });
 
 };

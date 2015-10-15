@@ -29,7 +29,7 @@ angular.module('word', ['ionic'])
 
     $http({
       method: 'POST',
-      url: '/sketchbooks/sehee88/paper/10',
+      url: '/api/sketchbooks/sehee88/paper/10',
       data: {
         "word": word,
         "ownerId": "sehee88"

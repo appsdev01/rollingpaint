@@ -58,6 +58,26 @@ angular.module('room', ['ionic'])
       $scope.data.message = '';
     };
 
+    // 서버로 메시지 전송
+    $scope.sendStatusMessage = function() {
+
+      if($scope.user._id === $scope.room.ownerId){
+        chatSocket.emit('room:sendStartMessage', {
+          userId: '',
+          roomId: $scope.room.id,
+          content: '게임 시작합니다!!!',
+          system : true
+        });
+      }else{
+        chatSocket.emit('room:sendReadyMessage', {
+          userId: '',
+          roomId: $scope.room.id,
+          content: $scope.user._id + '가 준비가 됐습니다.',
+          system : true
+        });
+      }
+    };
+
     // 방에서 나가기
     $scope.leaveRoom = function() {
       console.log('leave room!');
@@ -71,6 +91,22 @@ angular.module('room', ['ionic'])
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
     });
 
+    // 서버로부터 받은 메시지를 추가
+    chatSocket.on('room:sendReadyMessage', function(msg) {
+      console.log(msg);
+      $scope.data.messages.push(msg);
+      $scope.data.messages.system = true;
+      $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+    });
+
+    // 서버로부터 받은 메시지를 추가
+    chatSocket.on('room:sendStartMessage', function(msg) {
+      console.log(msg);
+      $scope.data.messages.push(msg);
+      $scope.data.messages.system = true;
+      $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+    });
+
     // 새로운 참가자 이벤트
     chatSocket.on('room:joined', function(msg) {
       updateRoomInfo();
@@ -80,7 +116,8 @@ angular.module('room', ['ionic'])
         $scope.users[response.data._id] = response.data;
         $scope.data.messages.push({
           userId: '',
-          content: response.data.username + '님이 참가하셨습니다.'
+          content: response.data.username + '님이 참가하셨습니다.',
+          system : true
         });
         $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
       });
@@ -92,7 +129,8 @@ angular.module('room', ['ionic'])
       console.log($scope.users);
       $scope.data.messages.push({
         userId: '',
-        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.'
+        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.',
+        system : true
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
