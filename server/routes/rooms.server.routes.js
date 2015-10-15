@@ -17,4 +17,7 @@ module.exports = function(app) {
 
   app.route('/api/rooms/:roomId/owner')
     .post(rooms.delegate);
+
+  app.route('/api/rooms/:roomId/users/:userId')
+    .put(rooms.update);
 };

@@ -140,3 +140,24 @@ exports.delegate = function(req, res) {
     res.send(result.WriteResult);
   });
 };
+
+// 상태 update
+exports.update = function(req, res) {
+
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  console.log("Room User status change!!!!!!!!!!!!!");
+  console.log("Room Id : " + req.params.roomId);
+  console.log("User Id : " + req.params.userId);
+
+  Room.update({
+    'users._id': req.params.userId
+  }, {
+    '$set' : {
+      'users.$.readyStatus' : "02"
+    }
+  }, function(err, result) {
+    res.send(result.WriteResult);
+  });
+};

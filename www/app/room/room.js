@@ -65,16 +65,21 @@ angular.module('room', ['ionic'])
         chatSocket.emit('room:sendStartMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: '게임 시작합니다!!!',
-          system : true
+          content: '게임 시작합니다!!!'
         });
       }else{
+
+        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id).then(function(response) {
+          console.log(response.data);
+          //$scope.room = response.data;
+        });
+
         chatSocket.emit('room:sendReadyMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: $scope.user._id + '가 준비가 됐습니다.',
-          system : true
+          content: $scope.user._id + '가 준비가 됐습니다.'
         });
+        updateRoomInfo();
       }
     };
 
@@ -95,7 +100,6 @@ angular.module('room', ['ionic'])
     chatSocket.on('room:sendReadyMessage', function(msg) {
       console.log(msg);
       $scope.data.messages.push(msg);
-      $scope.data.messages.system = true;
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
     });
 
@@ -103,7 +107,6 @@ angular.module('room', ['ionic'])
     chatSocket.on('room:sendStartMessage', function(msg) {
       console.log(msg);
       $scope.data.messages.push(msg);
-      $scope.data.messages.system = true;
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
     });
 
@@ -116,8 +119,7 @@ angular.module('room', ['ionic'])
         $scope.users[response.data._id] = response.data;
         $scope.data.messages.push({
           userId: '',
-          content: response.data.username + '님이 참가하셨습니다.',
-          system : true
+          content: response.data.username + '님이 참가하셨습니다.'
         });
         $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
       });
@@ -129,8 +131,7 @@ angular.module('room', ['ionic'])
       console.log($scope.users);
       $scope.data.messages.push({
         userId: '',
-        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.',
-        system : true
+        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.'
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
