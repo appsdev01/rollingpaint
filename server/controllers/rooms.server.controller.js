@@ -22,6 +22,13 @@ POST /room/1/owner
 {
   "userId": "A"
 }
+
+// 1번방 상태 변경
+PUT /room/1
+
+// 1번방 A 유저 상태 변경
+PUT /room/1/user/A
+
 */
 
 // 전체 방 조회
@@ -96,7 +103,7 @@ exports.join = function(req, res) {
     _id: req.params.roomId
   }, {
     $addToSet: {
-      users : {
+      users: {
         _id: req.body.userId,
         username: req.body.username,
         readyStatus: "01"
@@ -119,7 +126,9 @@ exports.leave = function(req, res) {
     _id: req.params.roomId
   }, {
     $pull: {
-      users : {_id: req.params.userId}
+      users: {
+        _id: req.params.userId
+      }
     }
   }, function(err, result) {
     res.send(result.WriteResult);
@@ -141,8 +150,8 @@ exports.delegate = function(req, res) {
   });
 };
 
-// 상태 update
-exports.update = function(req, res) {
+// User Status Update
+exports.userUpdate = function(req, res) {
 
   if (!req.body) {
     return res.sendStatus(400);
@@ -150,13 +159,33 @@ exports.update = function(req, res) {
   console.log("Room User status change!!!!!!!!!!!!!");
   console.log("Room Id : " + req.params.roomId);
   console.log("User Id : " + req.params.userId);
+  console.log("status Code : " + req.body.status);
 
   Room.update({
     'users._id': req.params.userId
   }, {
-    '$set' : {
-      'users.$.readyStatus' : "02"
+    '$set': {
+      'users.$.readyStatus': req.body.status
     }
+  }, function(err, result) {
+    res.send(result.WriteResult);
+  });
+};
+
+// Room Status Update
+exports.update = function(req, res) {
+
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  console.log("Room status change!!!!!!!!!!!!!");
+  console.log("Room Id : " + req.params.roomId);
+  console.log("status Code : " + req.body.status);
+
+  Room.update({
+    _id: req.params.roomId
+  }, {
+    status: req.body.status
   }, function(err, result) {
     res.send(result.WriteResult);
   });

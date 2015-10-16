@@ -14,7 +14,9 @@ router.get('/me', function(req, res) {
 // 사용자 조회
 // GET /user/{userid}
 router.get('/:id', function(req, res, next) {
-  User.findOne({_id: req.params.id}, function (err, user) {
+  User.findOne({
+    _id: req.params.id
+  }, function(err, user) {
     res.send(user);
   });
 });

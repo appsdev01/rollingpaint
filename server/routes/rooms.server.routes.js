@@ -7,7 +7,8 @@ module.exports = function(app) {
 
   app.route('/api/rooms/:roomId')
     .get(rooms.get)
-    .delete(rooms.delete);
+    .delete(rooms.delete)
+    .put(rooms.update);
 
   app.route('/api/rooms/:roomId/users')
     .post(rooms.join);
@@ -19,5 +20,5 @@ module.exports = function(app) {
     .post(rooms.delegate);
 
   app.route('/api/rooms/:roomId/users/:userId')
-    .put(rooms.update);
+    .put(rooms.userUpdate);
 };

@@ -25,11 +25,22 @@ angular.module('room', ['ionic'])
         console.log(response.data);
         $scope.room = response.data;
 
+        $scope.room.status = '02';
+
         // 방 참가자 정보 조회
         angular.forEach($scope.room.users, function(user) {
-          $http.get('/users/' + user).then(function(response) {
+
+          if (user.readyStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
+          $http.get('/users/' + user._id).then(function(response) {
             $scope.users[response.data._id] = response.data;
+            $scope.users[response.data._id].readyStatus = user.readyStatus;
           });
+        });
+
+        $http.put('/api/rooms/' + $stateParams.roomId, {
+          status: $scope.room.status
+        }).then(function(response) {
+          console.log(response.data);
         });
       });
     }
@@ -61,15 +72,17 @@ angular.module('room', ['ionic'])
     // 서버로 메시지 전송
     $scope.sendStatusMessage = function() {
 
-      if($scope.user._id === $scope.room.ownerId){
+      if ($scope.user._id === $scope.room.ownerId) {
         chatSocket.emit('room:sendStartMessage', {
           userId: '',
           roomId: $scope.room.id,
           content: '게임 시작합니다!!!'
         });
-      }else{
-
-        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id).then(function(response) {
+      } else {
+        var readyStatus = $scope.users[$scope.user._id].readyStatus === '01' ? '02' : '01';
+        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
+          status: readyStatus
+        }).then(function(response) {
           console.log(response.data);
           //$scope.room = response.data;
         });
@@ -77,7 +90,7 @@ angular.module('room', ['ionic'])
         chatSocket.emit('room:sendReadyMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: $scope.user._id + '가 준비가 됐습니다.'
+          content: (readyStatus === '02' ? $scope.users[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.users[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
         updateRoomInfo();
       }

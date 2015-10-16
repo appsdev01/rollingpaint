@@ -8,9 +8,9 @@
   <div class="bar bar-subheader">
     <h2 class="title">({{room.users.length}}/{{room.capacity}})</h2>
     <!--user._id === room.ownerId && room.status === '01'-->
-    <button class="button button-positive" ng-click="sendStatusMessage()" ng-disabled="">
-      <!--{{user._id === room.ownerId ? '시작' : (room.users[user._id].readyStatus === '01' ? ''Ready'}}'' : 'unReady')}}-->
-      {{user._id === room.ownerId ? '시작' : '준비'}}
+    <button class="button button-positive" ng-click="sendStatusMessage()" ng-disabled="user._id === room.ownerId && room.status === '01'">
+      {{user._id === room.ownerId ? '시작' : (users[user._id].readyStatus === '01' ? 'Ready' : 'unReady')}}
+      <!--{{user._id === room.ownerId ? '시작' : '준비'}}-->
     </button>
   </div>
 
