@@ -1,16 +1,40 @@
+var Room = require('../models/room.server.model');
+
 module.exports = function(app, server) {
   var io = require('socket.io')(server);
 
+  var sockets = {};
+
   var chatSocket = io.of('/chat').on('connection', function(socket) {
     console.log('Connected from ' + socket.id);
+    sockets[socket.id] = {};
 
     socket.on('disconnect', function() {
       console.log('Disconnected from ' + socket.id);
+
+      // 연결이 끊긴 경우 방에서 내보내고 방 참가자들에게 통보
+      if (sockets[socket.id]) {
+        Room.update({
+          _id: sockets[socket.id].roomId
+        }, {
+          $pull: {
+            users: sockets[socket.id].userId
+          }
+        }, function(err, result) {
+
+        });
+
+        socket.broadcast.to(sockets[socket.id].roomId).emit('room:lost', sockets[socket.id]);
+
+        delete sockets[socket.id];
+      }
+
     });
 
     socket.on('room:join', function(msg) {
       console.log(msg);
       // msg = { "userId": "", "roomId": "" }
+      sockets[socket.id] = msg;
 
       // 방 ID로 socket room 참가
       socket.join(msg.roomId);
@@ -21,6 +45,8 @@ module.exports = function(app, server) {
     socket.on('room:leave', function(msg) {
       console.log(msg);
       // msg = { "userId": "", "roomId": "" }
+
+      delete sockets[socket.id];
 
       // 방 ID로 socket room 참가
       socket.leave(msg.roomId);

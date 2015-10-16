@@ -98,3 +98,28 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+.card-room {
+  margin: 1px;
+}
+
+.card-room .item .item-timeago {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+}
+
+.card-room .item-fade {
+  position: relative;
+  height: 4.8em; /* exactly three lines */
+}
+.card-room .item-fade:after {
+  content: "";
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70%;
+  height: 1.2em;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}

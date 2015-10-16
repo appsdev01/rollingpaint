@@ -23,6 +23,17 @@ angular.module('room', ['ionic'])
       // 놀이방 정보 조회
       $http.get('/api/rooms/' + $stateParams.roomId).then(function(response) {
         console.log(response.data);
+
+        var isparticipant = false;
+        angular.forEach(response.data.users, function(user) {
+          if (user._id === $scope.user._id)
+            isparticipant = true;
+        });
+
+        if (!isparticipant) {
+          window.location.href = '#/lobby';
+        }
+
         $scope.room = response.data;
 
         $scope.room.status = '02';
@@ -145,6 +156,18 @@ angular.module('room', ['ionic'])
       $scope.data.messages.push({
         userId: '',
         content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.'
+      });
+      updateRoomInfo();
+      $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+    });
+
+    // 사용자 연결 끊김 이벤트
+    chatSocket.on('room:lost', function(msg) {
+      console.log(msg);
+      console.log($scope.users);
+      $scope.data.messages.push({
+        userId: '',
+        content: $scope.users[msg.userId].username + '님의 연결이 끊겼습니다.'
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);

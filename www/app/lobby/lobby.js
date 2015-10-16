@@ -43,7 +43,8 @@ angular.module('lobby', ['ionic'])
 
       $http.post('/api/rooms/' + room.id + '/users', {
           userId: $scope.user._id,
-          username: $scope.user.username
+          username: $scope.user.username,
+          password: room.password
         })
         .then(function(response) {
           // DB 업데이트 완료 후 소켓 room 참가
@@ -52,24 +53,13 @@ angular.module('lobby', ['ionic'])
             roomId: room.id
           });
 
-          if (response.status === 200) {
-            window.location.href = '#/room/' + room.id;
-          }
+          window.location.href = '#/room/' + room.id;
+        }, function(response) {
+          console.log('방 참가 실패');
+          console.log(response);
         });
 
-      // $http({
-      //   method: 'PUT',
-      //   url: '/api/rooms/'+req._id+'/'+$scope.user._id
-      //   // data: {
-      //   //   "id": req._id,
-      //   //   "userId": $scope.user._id
-      //   // }
-      // }).success(function(response) {
-      //   if (response) {
-      //     window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
-      //     $scope.closeNewRoom();
-      //   }
-      // });
+      $scope.closePasswordModal();
     };
 
     // Perform the login action when the user submits the login form
@@ -102,20 +92,42 @@ angular.module('lobby', ['ionic'])
       });
     };
 
-    // Create the login modal that we will use later
+    // 방만들기 모달
     $ionicModal.fromTemplateUrl('app/lobby/newroom.html', {
       scope: $scope
     }).then(function(modal) {
       $scope.modalNewRoom = modal;
     });
 
-    // Triggered in the login modal to close it
+    $scope.openNewRoom = function() {
+      $scope.modalNewRoom.show();
+    };
+
     $scope.closeNewRoom = function() {
       $scope.modalNewRoom.hide();
     };
 
-    // Open the login modal
-    $scope.openNewRoom = function() {
-      $scope.modalNewRoom.show();
+    // 비밀번호 입력 모달
+    $ionicModal.fromTemplateUrl('app/lobby/password.modal.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modalJoinRoom = modal;
+    });
+
+    $scope.openPasswordModal = function(room) {
+      room.password = '';
+      $scope.joiningRoom = room;
+      $scope.modalJoinRoom.show();
     };
+
+    $scope.closePasswordModal = function() {
+      $scope.modalJoinRoom.hide();
+    };
+
+    // 컨트롤러 종료 시 모달 자원 해제
+    $scope.$on('$destroy', function() {
+      $scope.modalNewRoom.remove();
+      $scope.modalJoinRoom.remove();
+    });
+
   });
