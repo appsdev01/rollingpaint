@@ -53,10 +53,10 @@ exports.create = function(req, res) {
     status: "01",
     wordseed: req.body.wordseed,
     gameround: 1,
-    users: [{
-      _id: req.body.users[0].userId,
+    players: [{
+      userId: req.body.users[0].userId,
       username: req.body.users[0].username,
-      readyStatus: "01"
+      playStatus: "01"
     }],
     sketchbooks: []
   });
@@ -74,11 +74,14 @@ exports.create = function(req, res) {
 
 // 방 삭제
 exports.delete = function(req, res) {
-  res.send("Connected correctly to server :: Delete room");
   Room.remove({
     _id: req.params.roomId
   }, function(err, result) {
-    res.send(result.WriteResult);
+    if (!err) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(400);
+    }
   });
 };
 
@@ -121,7 +124,7 @@ exports.join = function(req, res) {
 
           // isMatch 결과에 따른 처리
           if (isMatch) {
-              callback(null, room);
+            callback(null, room);
           } else {
             callback('INVALID_PASSWORD', room);
           }
@@ -133,8 +136,8 @@ exports.join = function(req, res) {
         _id: req.params.roomId
       }, {
         $addToSet: {
-          users: {
-            _id: req.body.userId,
+          players: {
+            userId: req.body.userId,
             username: req.body.username,
             readyStatus: "01"
           }
@@ -168,8 +171,8 @@ exports.leave = function(req, res) {
     _id: req.params.roomId
   }, {
     $pull: {
-      users: {
-        _id: req.params.userId
+      players: {
+        userId: req.params.userId
       }
     }
   }, function(err, result) {
@@ -194,7 +197,6 @@ exports.delegate = function(req, res) {
 
 // User Status Update
 exports.userUpdate = function(req, res) {
-
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -204,10 +206,10 @@ exports.userUpdate = function(req, res) {
   console.log("status Code : " + req.body.status);
 
   Room.update({
-    'users._id': req.params.userId
+    'players.userId': req.params.userId
   }, {
     '$set': {
-      'users.$.readyStatus': req.body.status
+      'players.$.playStatus': req.body.status
     }
   }, function(err, result) {
     res.send(result.WriteResult);
@@ -216,7 +218,6 @@ exports.userUpdate = function(req, res) {
 
 // Room Status Update
 exports.update = function(req, res) {
-
   if (!req.body) {
     return res.sendStatus(400);
   }

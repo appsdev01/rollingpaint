@@ -12,7 +12,7 @@ angular.module('room', ['ionic'])
     console.log('start RoomCtrl');
     $scope.room = {};
     $scope.user = {};
-    $scope.users = {};
+    $scope.players = {};
 
     // 접속자 정보 조회
     $http.get('/users/me').then(function(response) {
@@ -25,8 +25,8 @@ angular.module('room', ['ionic'])
         console.log(response.data);
 
         var isparticipant = false;
-        angular.forEach(response.data.users, function(user) {
-          if (user._id === $scope.user._id)
+        angular.forEach(response.data.players, function(player) {
+          if (player.userId === $scope.user._id)
             isparticipant = true;
         });
 
@@ -39,12 +39,12 @@ angular.module('room', ['ionic'])
         $scope.room.status = '02';
 
         // 방 참가자 정보 조회
-        angular.forEach($scope.room.users, function(user) {
+        angular.forEach($scope.room.players, function(player) {
 
-          if (user.readyStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
-          $http.get('/users/' + user._id).then(function(response) {
-            $scope.users[response.data._id] = response.data;
-            $scope.users[response.data._id].readyStatus = user.readyStatus;
+          if (player.playStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
+          $http.get('/users/' + player.userId).then(function(response) {
+            $scope.players[response.data._id] = response.data;
+            $scope.players[response.data._id].playStatus = player.playStatus;
           });
         });
 
@@ -90,9 +90,9 @@ angular.module('room', ['ionic'])
           content: '게임 시작합니다!!!'
         });
       } else {
-        var readyStatus = $scope.users[$scope.user._id].readyStatus === '01' ? '02' : '01';
+        var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
         $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
-          status: readyStatus
+          status: playStatus
         }).then(function(response) {
           console.log(response.data);
           //$scope.room = response.data;
@@ -101,7 +101,7 @@ angular.module('room', ['ionic'])
         chatSocket.emit('room:sendReadyMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: (readyStatus === '02' ? $scope.users[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.users[$scope.user._id].username + '님이 준비를 취소하였습니다.')
+          content: (playStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
         updateRoomInfo();
       }
@@ -140,7 +140,7 @@ angular.module('room', ['ionic'])
 
       // 새로운 참가자 정보 조회
       $http.get('/users/' + msg.userId).then(function(response) {
-        $scope.users[response.data._id] = response.data;
+        $scope.players[response.data._id] = response.data;
         $scope.data.messages.push({
           userId: '',
           content: response.data.username + '님이 참가하셨습니다.'
@@ -152,10 +152,10 @@ angular.module('room', ['ionic'])
     // 사용자 퇴장 이벤트
     chatSocket.on('room:left', function(msg) {
       console.log(msg);
-      console.log($scope.users);
+      console.log($scope.players);
       $scope.data.messages.push({
         userId: '',
-        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.'
+        content: $scope.players[msg.userId].username + '님이 퇴장하셨습니다.'
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
@@ -164,10 +164,10 @@ angular.module('room', ['ionic'])
     // 사용자 연결 끊김 이벤트
     chatSocket.on('room:lost', function(msg) {
       console.log(msg);
-      console.log($scope.users);
+      console.log($scope.players);
       $scope.data.messages.push({
         userId: '',
-        content: $scope.users[msg.userId].username + '님의 연결이 끊겼습니다.'
+        content: $scope.players[msg.userId].username + '님의 연결이 끊겼습니다.'
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);

@@ -21,16 +21,14 @@ angular.module('lobby', ['ionic'])
     });
 
     $http.get('/api/rooms').then(function(response) {
-      $scope.roomList = response.data;
-      console.log($scope.roomList);
+      $scope.rooms = response.data;
     });
 
     $scope.roomData = {};
 
     $scope.listRooms = function() {
       $http.get('/api/rooms').then(function(response) {
-        $scope.roomList = response.data;
-        console.log($scope.roomList);
+        $scope.rooms = response.data;
       }).finally(function() {
         $scope.$broadcast('scroll.refreshComplete');
       });
