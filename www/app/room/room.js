@@ -39,23 +39,14 @@ angular.module('room', ['ionic'])
         $scope.room.status = '02';
 
         // 방 참가자 정보 조회
-<<<<<<< HEAD
         var i = 1;
-        angular.forEach($scope.room.users, function(user) {
-
-          if (user.readyStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
-          $http.get('/users/' + user._id).then(function(response) {
-            $scope.users[response.data._id] = response.data;
-            $scope.users[response.data._id].readyStatus = user.readyStatus;
-            $scope.users[response.data._id].seq = i++;
-=======
         angular.forEach($scope.room.players, function(player) {
 
           if (player.playStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
           $http.get('/users/' + player.userId).then(function(response) {
             $scope.players[response.data._id] = response.data;
             $scope.players[response.data._id].playStatus = player.playStatus;
->>>>>>> fa5c34f1a05041c249b703cdc417ae5ad62ff8af
+            $scope.players[response.data._id].seq = i++;
           });
         });
 
@@ -106,19 +97,12 @@ angular.module('room', ['ionic'])
           $http.put('/api/sketchbooks/' + $scope.user._id).then(function(response) {
             console.log(response.data);
           });
-        }
-
-        window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.users[$scope.user._id].seq;
+        });
+        window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.players[$scope.user._id].seq;
       } else {
-<<<<<<< HEAD
-        var readyStatus = $scope.users[$scope.user._id].readyStatus === '01' ? '02' : '01';
-        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id , {
-          status: readyStatus
-=======
         var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
         $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
-          status: playStatus
->>>>>>> fa5c34f1a05041c249b703cdc417ae5ad62ff8af
+          status: readyStatus
         }).then(function(response) {
           console.log(response.data);
           //$scope.room = response.data;
@@ -127,7 +111,7 @@ angular.module('room', ['ionic'])
         chatSocket.emit('room:sendReadyMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: (playStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
+          content: (readyStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
         updateRoomInfo();
       }
