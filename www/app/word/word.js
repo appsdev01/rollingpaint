@@ -2,15 +2,20 @@ angular.module('word', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('word', {
-        url: '/word',
+        url: '/word/:roomId/user/:userId/seq/:seqId',
         templateUrl: "app/word/word.html",
         controller: 'WordCtrl'
       });
   })
 
-.controller('WordCtrl', function($scope, $http, $ionicModal) {
+.controller('WordCtrl', function($scope, $stateParams, $http, $ionicModal) {
+
+  $scope.roomId = $stateParams.roomId;
+  $scope.userId = $stateParams.userId;
+
   // '/wordList/:roomNo/users/:userId'
-  $http.get('/api/words/wordList/4cLhZLz/user/4').then(function(response) {
+  console.log("response : " + $stateParams.roomId);
+  $http.get('/api/words/wordList/' + $stateParams.roomId + '/seq/' + $stateParams.seqId).then(function(response) {
     console.log("response : " + response);
     console.log("response.data : " + response.data);
     console.log("response.data[0].value : " + response.data[0][0].value);
@@ -29,10 +34,11 @@ angular.module('word', ['ionic'])
 
     $http({
       method: 'POST',
-      url: '/api/sketchbooks/sehee88/paper/10',
+      url: '/api/sketchbooks/' + $scope.userId + '/paper',
       data: {
         "word": word,
-        "ownerId": "sehee88"
+        "ownerId": $scope.userId,
+        "type" : 'word'
       }
     }).success(function(response) {
       if (response) {

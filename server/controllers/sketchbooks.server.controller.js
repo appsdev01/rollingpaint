@@ -52,13 +52,13 @@ return res.sendStatus(500);
 // 턴 지정하기
 // POST /sketchbook/1(스케치북 id)/paper/1/
 
-exports.countTurn =  function(req, res, next) {
+exports.createSketchbook =  function(req, res, next) {
   if (!req.body) {
     return res.sendStatus(400);
   }
   console.log(req.body);
   var sketchbook = new Sketchbook({
-    ownerId: req.body.ownerId,  // 스케치북 주인
+    ownerId: req.params.ownerId,  // 스케치북 주인
     word: req.body.word,
     paper: {
       userId: req.body.userId,  // 그림 or 단어 맞춘 주체
@@ -79,6 +79,30 @@ exports.countTurn =  function(req, res, next) {
       console.log("results : " + doc);
       res.send(doc);
     });
+  });
+};
+
+exports.countTurn = function(req, res) {
+  res.send("Connected correctly to server :: Join room");
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+  console.log("type : " + req.body.type);
+  console.log("User Id : " + req.params.userId);
+
+  Sketchbook.update({
+    _id: req.params.roomId
+  }, {
+    $addToSet: {
+      papers: {
+        userId: req.params.userId,
+        type : req.body.type
+      }, word : req.body.word
+    }
+  }, {
+    upsert: true
+  }, function(err, result) {
+    res.send(result.WriteResult);
   });
 };
 

@@ -28,12 +28,14 @@ angular.module('room', ['ionic'])
         $scope.room.status = '02';
 
         // 방 참가자 정보 조회
+        var i = 1;
         angular.forEach($scope.room.users, function(user) {
 
           if (user.readyStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
           $http.get('/users/' + user._id).then(function(response) {
             $scope.users[response.data._id] = response.data;
             $scope.users[response.data._id].readyStatus = user.readyStatus;
+            $scope.users[response.data._id].seq = i++;
           });
         });
 
@@ -78,9 +80,18 @@ angular.module('room', ['ionic'])
           roomId: $scope.room.id,
           content: '게임 시작합니다!!!'
         });
+
+        // 인원 수만큼 스케치북 생성
+        angular.forEach($scope.room.users, function(user) {
+          $http.put('/api/sketchbooks/' + $scope.user._id).then(function(response) {
+            console.log(response.data);
+          });
+        }
+
+        window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.users[$scope.user._id].seq;
       } else {
         var readyStatus = $scope.users[$scope.user._id].readyStatus === '01' ? '02' : '01';
-        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
+        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id , {
           status: readyStatus
         }).then(function(response) {
           console.log(response.data);

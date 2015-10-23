@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var paperSchema = new mongoose.Schema({
   _id: ShortId,
   userId: String,
-  type: String,
+  type: String, //"picture" or "answer" or "word"
   answer: String,
   picture: String,
   score: String,
