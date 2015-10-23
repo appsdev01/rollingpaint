@@ -1,17 +1,21 @@
 <ion-pane view-title="sketch">
   <ion-header-bar class="bar bar-header bar-stable" frosted-bar>
     <h1 class="title">Sketch</h1>
-    <button class="button button-clear button-positive">완료</button>
+    <div class="buttons">
+      <button class="button button-clear button-positive" ng-click="saveImage()">완료</button>
+    <!--  <a href="#" id="saveBtn" class="button button-clear button-positive" ng-click="saveImage()">완료</a> -->
+    </div>
   </ion-header-bar>
   <ion-content class="padding" scroll="false">
     <h3 class="title">{{timeCount}}초</h3>
     <div class="button-bar">
       <a class="button button-positive icon ion-paintbrush"></a>
       <a class="button icon ion-ios-undo" ng-click="undoDrawing()"></a>
-      <a class="button icon ion-ios-redo"></a>
+    <!--  <a class="button icon ion-ios-redo"></a> -->
       <a class="button icon ion-ios-trash-outline" ng-click="clearSketchbook()"></a>
     </div>
     <br>
     <canvas id="paper" class="paper"></canvas>
+  <!--  <img id="paperImage" >-->
   </ion-content>
 </ion-pane>

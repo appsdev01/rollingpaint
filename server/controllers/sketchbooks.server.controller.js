@@ -25,6 +25,8 @@ GET /skethbook/1/
 */
 
 var Sketchbook = require('../models/sketchbook.server.model');
+var base64 = require('node-base64-image');
+fs = require('fs');
 var async = require('async');
 
 // Create a sketchbook
@@ -94,4 +96,19 @@ exports.getSketchbook =  function(req, res, next) {
       res.send(results);
     }
   });
+};
+
+exports.saveImageToLocal = function(req, res) {
+  console.log("saveImageToLocal in!");
+  console.log(req.body.dataURL);
+
+//  var tmp =  req.dataURL;
+//  var img = tmp.replace(/^data:image\/\w+;base64,/, "");
+//  var buf = new Buffer(img, 'base64');
+
+//  fs.writeFile('image.png', buf);
+//  window.open('image.png');
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
 };

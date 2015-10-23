@@ -6,4 +6,7 @@ module.exports = function(app) {
 
   app.route('/api/sketchbooks/:userId')
     .get(sketchbooks.getSketchbook);
+//'/api/sketchbooks/imageURL/:imageURL'
+  app.route('/api/sketchbooks/imageURL/:userId')
+    .post(sketchbooks.saveImageToLocal);
 };
