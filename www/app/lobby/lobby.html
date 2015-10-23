@@ -23,54 +23,54 @@
         <ion-content scroll-event-interval="5">
           <ion-refresher on-refresh="listRooms()" pulling-text="새로고침..."></ion-refresher>
 
-          <div class="row" ng-if="$index % 2 === 0" ng-repeat="room in roomList">
-            <div class="col col-50" ng-if="$index < roomList.length">
+          <div class="row" ng-if="$index % 2 === 0" ng-repeat="room in rooms">
+            <div class="col col-50" ng-if="$index < rooms.length">
               <div class="card card-room">
                 <div class="item item-divider">
                   <i class="icon ion-android-person calm"></i>
-                  {{roomList[$index].users.length}}/{{roomList[$index].capacity}}
-                  <span class="item-note" ng-if="roomList[$index].password">
+                  {{rooms[$index].players.length}}/{{rooms[$index].capacity}}
+                  <span class="item-note" ng-if="rooms[$index].isSecret">
                     <i class="ion-android-lock"></i>
                   </span>
                 </div>
                 <div class="item item-text-wrap">
                   <p>
-                    {{roomList[$index].title}}
+                    {{rooms[$index].title}}
                   </p>
                   <p class="item-timeago">
-                    <span  am-time-ago="roomList[$index].date"></span>
+                    <span  am-time-ago="rooms[$index].createdAt"></span>
                   </p>
                 </div>
-                <a class="item item-icon-left positive" href="#" ng-if="roomList[$index].password" ng-click="openPasswordModal(roomList[$index])">
+                <a class="item item-icon-left positive" href="#" ng-if="rooms[$index].isSecret" ng-click="openPasswordModal(rooms[$index])">
                   <i class="icon ion-log-in"></i>참가하기
                 </a>
-                <a class="item item-icon-left positive" href="#" ng-if="!roomList[$index].password" ng-click="joinRoom(roomList[$index])">
+                <a class="item item-icon-left positive" href="#" ng-if="!rooms[$index].isSecret" ng-click="joinRoom(rooms[$index])">
                   <i class="icon ion-log-in"></i>참가하기
                 </a>
               </div>
             </div>
 
-            <div class="col col-50" ng-if="$index + 1 < roomList.length">
+            <div class="col col-50" ng-if="$index + 1 < rooms.length">
               <div class="card card-room">
                 <div class="item item-divider">
                   <i class="icon ion-android-person calm"></i>
-                  {{roomList[$index + 1].users.length}}/{{roomList[$index + 1].capacity}}
-                  <span class="item-note" ng-if="roomList[$index + 1].password">
+                  {{rooms[$index + 1].players.length}}/{{rooms[$index + 1].capacity}}
+                  <span class="item-note" ng-if="rooms[$index + 1].isSecret">
                     <i class="ion-android-lock"></i>
                   </span>
                 </div>
                 <div class="item item-text-wrap">
                   <p>
-                    {{roomList[$index + 1].title}}
+                    {{rooms[$index + 1].title}}
                   </p>
                   <p class="item-timeago">
-                    <span  am-time-ago="roomList[$index].date"></span>
+                    <span  am-time-ago="rooms[$index + 1].createdAt"></span>
                   </p>
                 </div>
-                <a class="item item-icon-left positive" href="#" ng-if="roomList[$index + 1].password" ng-click="openPasswordModal(roomList[$index + 1])">
+                <a class="item item-icon-left positive" href="#" ng-if="rooms[$index + 1].isSecret" ng-click="openPasswordModal(rooms[$index + 1])">
                   <i class="icon ion-log-in"></i>참가하기
                 </a>
-                <a class="item item-icon-left positive" href="#" ng-if="!roomList[$index + 1].password" ng-click="joinRoom(roomList[$index + 1])">
+                <a class="item item-icon-left positive" href="#" ng-if="!rooms[$index + 1].isSecret" ng-click="joinRoom(rooms[$index + 1])">
                   <i class="icon ion-log-in"></i>참가하기
                 </a>
               </div>
