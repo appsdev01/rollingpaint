@@ -12,7 +12,7 @@ angular.module('room', ['ionic'])
     console.log('start RoomCtrl');
     $scope.room = {};
     $scope.user = {};
-    $scope.users = {};
+    $scope.players = {};
 
     // 접속자 정보 조회
     $http.get('/users/me').then(function(response) {
@@ -23,11 +23,23 @@ angular.module('room', ['ionic'])
       // 놀이방 정보 조회
       $http.get('/api/rooms/' + $stateParams.roomId).then(function(response) {
         console.log(response.data);
+
+        var isparticipant = false;
+        angular.forEach(response.data.players, function(player) {
+          if (player.userId === $scope.user._id)
+            isparticipant = true;
+        });
+
+        if (!isparticipant) {
+          window.location.href = '#/lobby';
+        }
+
         $scope.room = response.data;
 
         $scope.room.status = '02';
 
         // 방 참가자 정보 조회
+<<<<<<< HEAD
         var i = 1;
         angular.forEach($scope.room.users, function(user) {
 
@@ -36,6 +48,14 @@ angular.module('room', ['ionic'])
             $scope.users[response.data._id] = response.data;
             $scope.users[response.data._id].readyStatus = user.readyStatus;
             $scope.users[response.data._id].seq = i++;
+=======
+        angular.forEach($scope.room.players, function(player) {
+
+          if (player.playStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
+          $http.get('/users/' + player.userId).then(function(response) {
+            $scope.players[response.data._id] = response.data;
+            $scope.players[response.data._id].playStatus = player.playStatus;
+>>>>>>> fa5c34f1a05041c249b703cdc417ae5ad62ff8af
           });
         });
 
@@ -90,9 +110,15 @@ angular.module('room', ['ionic'])
 
         window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.users[$scope.user._id].seq;
       } else {
+<<<<<<< HEAD
         var readyStatus = $scope.users[$scope.user._id].readyStatus === '01' ? '02' : '01';
         $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id , {
           status: readyStatus
+=======
+        var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
+        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
+          status: playStatus
+>>>>>>> fa5c34f1a05041c249b703cdc417ae5ad62ff8af
         }).then(function(response) {
           console.log(response.data);
           //$scope.room = response.data;
@@ -101,7 +127,7 @@ angular.module('room', ['ionic'])
         chatSocket.emit('room:sendReadyMessage', {
           userId: '',
           roomId: $scope.room.id,
-          content: (readyStatus === '02' ? $scope.users[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.users[$scope.user._id].username + '님이 준비를 취소하였습니다.')
+          content: (playStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
         updateRoomInfo();
       }
@@ -140,7 +166,7 @@ angular.module('room', ['ionic'])
 
       // 새로운 참가자 정보 조회
       $http.get('/users/' + msg.userId).then(function(response) {
-        $scope.users[response.data._id] = response.data;
+        $scope.players[response.data._id] = response.data;
         $scope.data.messages.push({
           userId: '',
           content: response.data.username + '님이 참가하셨습니다.'
@@ -152,10 +178,22 @@ angular.module('room', ['ionic'])
     // 사용자 퇴장 이벤트
     chatSocket.on('room:left', function(msg) {
       console.log(msg);
-      console.log($scope.users);
+      console.log($scope.players);
       $scope.data.messages.push({
         userId: '',
-        content: $scope.users[msg.userId].username + '님이 퇴장하셨습니다.'
+        content: $scope.players[msg.userId].username + '님이 퇴장하셨습니다.'
+      });
+      updateRoomInfo();
+      $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+    });
+
+    // 사용자 연결 끊김 이벤트
+    chatSocket.on('room:lost', function(msg) {
+      console.log(msg);
+      console.log($scope.players);
+      $scope.data.messages.push({
+        userId: '',
+        content: $scope.players[msg.userId].username + '님의 연결이 끊겼습니다.'
       });
       updateRoomInfo();
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);

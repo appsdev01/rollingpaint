@@ -1,7 +1,7 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat', 'room', 'starter.controllers', 'ionic.contrib.frostedGlass'])
-  .run(function($ionicPlatform) {
+angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat', 'room', 'starter.controllers', 'ionic.contrib.frostedGlass', 'angularMoment'])
+  .run(function($ionicPlatform, amMoment) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -14,6 +14,7 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
         StatusBar.styleDefault();
       }
     });
+    amMoment.changeLocale('ko');
   })
   .config(function($stateProvider, $urlRouterProvider) {
     // if none of the above states are matched, use this as the fallback
@@ -67,6 +68,9 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
             }
           });
         });
+      },
+      disconnect: function() {
+        socket.disconnect();
       }
     };
   });

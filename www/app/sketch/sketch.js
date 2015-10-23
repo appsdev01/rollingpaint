@@ -53,9 +53,11 @@ angular.module('sketch', ['ionic'])
       }
 
       ctx.beginPath();
+  //    console.log('paths.length : ' + paths.length);
       for (var j = 0; j < paths.length; j++) {
         points = paths[j];
         var p1 = points[0];
+    //    console.log('points[0].x : ' + points[0].x + ', points[0].y : ' + points[0].y + '\n');
         var p2 = points[1];
         ctx.moveTo(p1.x, p1.y);
         for (var i = 1, len = points.length; i < len; i++) {
@@ -87,6 +89,7 @@ angular.module('sketch', ['ionic'])
     });
 
     canvas.addEventListener("mousemove", function(event) {
+      console.log('mouse in ');
       // 마우스 왼쪽 버튼 누른 상태
       if (event.buttons === 1) {
         // 마지막 획을 이어서 그린다.
@@ -116,7 +119,7 @@ angular.module('sketch', ['ionic'])
 
     canvas.addEventListener("touchmove", function(event) {
       event.preventDefault();
-
+      console.log('touch in ');
       // 마지막 획을 이어서 그린다.
       lastPoints = paths[paths.length - 1];
       var touch = event.changedTouches[0];
@@ -142,6 +145,59 @@ angular.module('sketch', ['ionic'])
     $scope.clearSketchbook = function() {
       initSketchbook();
     };
+
+    function convertImgtoDataURL() {
+      var paper = document.getElementById("paper");
+      //var paperImage = document.getElementById("paperImage");
+      //paperImage.src = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+      var link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'image.png';
+
+      link.click();
+      console.log(canvas.toDataURL('image/png'));
+    }
+
+    $scope.saveImage = function() {
+      console.log('save Image!');
+      var paperImage = document.getElementById("paper");
+      var dataURL = paperImage.toDataURL('image/png');
+      var fileName = 'testImage.png';
+
+      convertImgtoDataURL();
+
+      //alert(dataURL);
+
+      $.ajax({
+        url: '/api/sketchbooks/imageURL/yj0518.jang',
+        type: 'POST',
+        data: {
+          "dataURL": dataURL
+        },
+        async:true,
+        success: function (responseData) {
+          alert(responseData);
+        }
+      });
+/*
+      $http({
+        method: 'POST',
+        url: '/api/sketchbooks/imageURL/yj0518.jang',
+	      data: {
+          "dataURL": dataURL
+        }
+      }).success(function(response) {
+        if (response) {
+          console.log('save ok!');
+          //alert('저장완료!');
+          window.open(response);
+        }
+
+      });
+*/
+
+    };
+
 
     // 초기화 코드
     initSketchbook();

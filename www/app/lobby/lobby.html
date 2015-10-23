@@ -1,42 +1,82 @@
 <ion-side-menus enable-menu-with-back-views="false">
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-calm">
+    <!-- <ion-nav-bar class="bar-calm">
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
         <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()"></button>
       </ion-nav-buttons>
-    </ion-nav-bar>
+    </ion-nav-bar> -->
+    <ion-header-bar class="bar-calm">
+      <div class="buttons">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+      </div>
+      <h1 class="title">Rolling Paint</h1>
+      <div class="buttons">
+        <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="openNewRoom()"></button>
+      </div>
+    </ion-header-bar>
 
     <ion-nav-view name="">
       <ion-view view-title="Lobby">
         <ion-content scroll-event-interval="5">
           <ion-refresher on-refresh="listRooms()" pulling-text="새로고침..."></ion-refresher>
-          <div class="list card" ng-repeat="room in roomList">
-            <div class="item">
-              <h2>{{room.title}}
-                ({{room.users.length}}/{{room.capacity}})</h2>
-              <p>{{room.date}}</p>
-              <!-- <div class="item item-button-right" ng-show="room.status == 01">
-                참가하기
-                <a class="button button-positive" ng-href="#/room/{{room.id}}">
-                  <i class="icon ion-android-walk"></i>
-                </a>
-              </div> -->
 
-              <div class="item item-button-right" ng-show="room.status === '01'">
-                참가하기
-                <button class="button button-positive" ng-click="joinRoom(room)">
-                  <i class="icon ion-android-walk"></i>
-                </button>
+          <div class="row" ng-if="$index % 2 === 0" ng-repeat="room in rooms">
+            <div class="col col-50" ng-if="$index < rooms.length">
+              <div class="card card-room">
+                <div class="item item-divider">
+                  <i class="icon ion-android-person calm"></i>
+                  {{rooms[$index].players.length}}/{{rooms[$index].capacity}}
+                  <span class="item-note" ng-if="rooms[$index].isSecret">
+                    <i class="ion-android-lock"></i>
+                  </span>
+                </div>
+                <div class="item item-text-wrap">
+                  <p>
+                    {{rooms[$index].title}}
+                  </p>
+                  <p class="item-timeago">
+                    <span  am-time-ago="rooms[$index].createdAt"></span>
+                  </p>
+                </div>
+                <a class="item item-icon-left positive" href="#" ng-if="rooms[$index].isSecret" ng-click="openPasswordModal(rooms[$index])">
+                  <i class="icon ion-log-in"></i>참가하기
+                </a>
+                <a class="item item-icon-left positive" href="#" ng-if="!rooms[$index].isSecret" ng-click="joinRoom(rooms[$index])">
+                  <i class="icon ion-log-in"></i>참가하기
+                </a>
               </div>
-              <!-- <a class="button button-block button-royal" ng-show="list.status == 01" ng-click="joinRoom(list)">
-              <i class="icon ion-android-walk"></i>
-              참가하기
-            </a> -->
+            </div>
+
+            <div class="col col-50" ng-if="$index + 1 < rooms.length">
+              <div class="card card-room">
+                <div class="item item-divider">
+                  <i class="icon ion-android-person calm"></i>
+                  {{rooms[$index + 1].players.length}}/{{rooms[$index + 1].capacity}}
+                  <span class="item-note" ng-if="rooms[$index + 1].isSecret">
+                    <i class="ion-android-lock"></i>
+                  </span>
+                </div>
+                <div class="item item-text-wrap">
+                  <p>
+                    {{rooms[$index + 1].title}}
+                  </p>
+                  <p class="item-timeago">
+                    <span  am-time-ago="rooms[$index + 1].createdAt"></span>
+                  </p>
+                </div>
+                <a class="item item-icon-left positive" href="#" ng-if="rooms[$index + 1].isSecret" ng-click="openPasswordModal(rooms[$index + 1])">
+                  <i class="icon ion-log-in"></i>참가하기
+                </a>
+                <a class="item item-icon-left positive" href="#" ng-if="!rooms[$index + 1].isSecret" ng-click="joinRoom(rooms[$index + 1])">
+                  <i class="icon ion-log-in"></i>참가하기
+                </a>
+              </div>
             </div>
           </div>
+
         </ion-content>
       </ion-view>
     </ion-nav-view>
