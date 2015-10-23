@@ -169,7 +169,7 @@ angular.module('sketch', ['ionic'])
       //alert(dataURL);
 
       $.ajax({
-        url: '/api/sketchbooks/imageURL/yj0518.jang',
+        url: '/api/sketchbooks/yj0518.jang/imageURL',
         type: 'POST',
         data: {
           "dataURL": dataURL
