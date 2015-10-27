@@ -84,7 +84,7 @@ angular.module('lobby', ['ionic'])
         }
       }).success(function(response) {
         if (response) {
-          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+          window.location.href = '#/room/' + response.id; // 방으로 들어가도록 고쳐야 함
           $scope.closeNewRoom();
         }
       });
