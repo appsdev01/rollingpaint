@@ -55,7 +55,7 @@ exports.get = function(req, res) {
 exports.get = function(req, res) {
 
   var shuffle_array = [];
-  var roomNum = req.params.roomid;
+  var roomNum = req.params.roomId;
   var userSeq = req.params.userSeq;
   var cardNum = 4;
   var seqNum = 0;
@@ -89,15 +89,13 @@ exports.get = function(req, res) {
         //console.log(" shuffle_array : " + shuffle_array);
         Word.find().where("seq").in(shuffle_array.slice(fromSeq, fromSeq+4)).select("value").exec(function(err, doc) {
           if (err) return handleError(err);
-          console.log("doc : " + doc);
-          console.log("doc1 : " + doc[0].value);
           reset_array[0] = doc;
           callback(null, null);
         });
       }
     ],
     function(err, results) {
-      console.log("results : " + results);
+      //console.log("results : " + results);
       if (!err) {
         res.send(results[0]);
       }

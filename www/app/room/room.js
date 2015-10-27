@@ -85,6 +85,7 @@ angular.module('room', ['ionic'])
     // 서버로 메시지 전송
     $scope.sendStatusMessage = function() {
 
+      var sketchbookId = "";
       if ($scope.user._id === $scope.room.ownerId) {
         chatSocket.emit('room:sendStartMessage', {
           userId: '',
@@ -93,12 +94,20 @@ angular.module('room', ['ionic'])
         });
 
         // 인원 수만큼 스케치북 생성
-        angular.forEach($scope.room.users, function(user) {
-          $http.put('/api/sketchbooks/' + $scope.user._id).then(function(response) {
-            console.log(response.data);
-          });
+        angular.forEach($scope.room.players, function(user) {
+
         });
-        window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.players[$scope.user._id].seq;
+
+        console.log($scope.user._id + "의 스케치북 생성!!!!!!!!!!!!!");
+        $http.post('/api/sketchbooks/' + $scope.user._id, {
+          roomId: $scope.room.id
+        }).then(function(response) {
+          sketchbookId = response.data;
+          console.log("::: sketchbookId : " + sketchbookId);
+          console.log("::: last sketchbookId : " + sketchbookId);
+          window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.players[$scope.user._id].seq + '/sketchbook/'+ sketchbookId;
+        });
+
       } else {
         var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
         $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
