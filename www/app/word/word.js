@@ -44,7 +44,7 @@ angular.module('word', ['ionic'])
       if (response) {
         $scope.resultWord = response.word;
         console.log('Create a sketchbook Success !!!');
-        window.location.href = '#/;
+        //window.location.href = '#/';
       }
     });
   };

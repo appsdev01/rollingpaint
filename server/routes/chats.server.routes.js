@@ -99,6 +99,19 @@ module.exports = function(app, server) {
       io.of('/chat').in(msg.roomId).emit('room:sendStartMessage', returnMsg);
     });
 
+    socket.on('room:changeDisplay', function(msg) {
+      var returnMsg = {
+        userId: msg.userId,
+        roomId: msg.roomId,
+        url: msg.url
+      };
+
+      console.log(returnMsg);
+
+      // 특정 방의 참가자에게 메시지 브로드캐스팅
+      io.of('/chat').in(msg.roomId).emit('room:changeDisplay', returnMsg);
+    });
+
   });
 
 };
