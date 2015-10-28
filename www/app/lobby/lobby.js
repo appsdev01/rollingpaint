@@ -63,20 +63,30 @@ angular.module('lobby', ['ionic'])
     // Perform the login action when the user submits the login form
     $scope.createRoom = function(req, res) {
 
+      $scope.roomData.titleAlert = false;
+      $scope.roomData.passwordAlert = false;
+      $scope.roomData.capacityAlert = false;
       // 유효성 체크 필요 (Title, capacity 미설정 시 또는 Password 체크 후 값 미입력 시)
+      if ($scope.roomData.title === undefined || $scope.roomData.title === "") {
+        $scope.roomData.titleAlert = true;
+        return;
+      } else if ($scope.roomData.lock && ($scope.roomData.password === undefined || $scope.roomData.password === "")) {
+        $scope.roomData.passwordAlert = true;
+        return;
+      } else if ($scope.roomData.capacity === undefined) {
+        $scope.roomData.capacityAlert = true;
+        return;
+      }
+
       $http({
         method: 'POST',
         url: '/api/rooms',
         data: {
-          // "email": $scope.loginData.email,
-          // "password": $scope.loginData.password
           "title": $scope.roomData.title,
           "password": $scope.roomData.password,
           "capacity": parseInt($scope.roomData.capacity),
-          "ownerId": $scope.user._id, // ownerID
-          //"status": "01", // 01: opened(default), 02: playing, 03: ended
+          "ownerId": $scope.user._id,
           "wordseed": Math.floor(Math.random() * 1000) + 1,
-          //"gameround": 0,
           "users": [{
             userId: $scope.user._id,
             username: $scope.user.username
@@ -84,7 +94,7 @@ angular.module('lobby', ['ionic'])
         }
       }).success(function(response) {
         if (response) {
-          window.location.href = '#/chat'; // 방으로 들어가도록 고쳐야 함
+          window.location.href = '#/room/' + response.id; // 방으로 들어가도록 고쳐야 함
           $scope.closeNewRoom();
         }
       });
@@ -98,6 +108,9 @@ angular.module('lobby', ['ionic'])
     });
 
     $scope.openNewRoom = function() {
+      $scope.roomData.titleAlert = false;
+      $scope.roomData.passwordAlert = false;
+      $scope.roomData.capacityAlert = false;
       $scope.modalNewRoom.show();
     };
 

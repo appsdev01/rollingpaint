@@ -40,6 +40,9 @@
         <label class="item">
           <button class="button button-block button-positive" type="submit">만들기</button>
         </label>
+        <div ng-model="roomData.titleAlert" ng-show="roomData.titleAlert">제목을 입력해주세요</div>
+        <div ng-model="roomData.passwordAlert" ng-show="roomData.passwordAlert">비밀번호를 설정해주세요</div>
+        <div ng-model="roomData.capacityAlert" ng-show="roomData.capacityAlert">인원을 선택해주세요</div>
       </div>
     </form>
   </ion-content>
