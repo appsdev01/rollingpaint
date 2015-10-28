@@ -95,14 +95,12 @@ angular.module('room', ['ionic'])
 
         // 인원 수만큼 스케치북 생성
         angular.forEach($scope.room.players, function(user) {
-          console.log(user.userId + "의 스케치북 생성!!!!!!!!!!!!!");
+          console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
           $http.post('/api/sketchbooks/' + user.userId, {
             roomId: $scope.room.id
           }).then(function(response) {
             sketchbookId = response.data;
-            console.log("::: sketchbookId : " + sketchbookId);
-            console.log("::: last sketchbookId : " + sketchbookId);
-            var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/'+ $scope.players[user.userId].seq + '/sketchbook/'+ sketchbookId;
+            var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/' + $scope.players[user.userId].seq + '/sketchbook/' + sketchbookId;
             chatSocket.emit('room:changeDisplay', {
               userId: user.userId,
               roomId: $scope.room.id,
@@ -198,7 +196,7 @@ angular.module('room', ['ionic'])
     // 게임시작 후, 사용자별 화면 전환
     chatSocket.on('room:changeDisplay', function(msg) {
       console.log(msg);
-      if(msg.userId === $scope.user._id){
+      if (msg.userId === $scope.user._id) {
         window.location.href = msg.url;
       }
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);

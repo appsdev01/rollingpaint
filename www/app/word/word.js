@@ -27,24 +27,20 @@ angular.module('word', ['ionic'])
   // 턴 지정하기
   // POST /sketchbook/1/paper/1/
   $scope.createSketchbook = function(word) {
-    $scope.resultWord = "";
-    //console.log('Doing login', $scope.loginData);
-    console.log('word : ', word);
 
     $http({
       method: 'POST',
       url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
       data: {
-        "sketchbookId":$scope.sketchbookId,
+        "sketchbookId": $scope.sketchbookId,
         "word": word,
         "ownerId": $scope.userId,
-        "type" : 'word'
+        "type": 'word'
       }
     }).success(function(response) {
       if (response) {
-        $scope.resultWord = response.word;
-        console.log('Create a sketchbook Success !!!');
-        //window.location.href = '#/';
+        console.log('Create a sketchbook Paper Success !!!');
+        window.location.href = '#/sketch';
       }
     });
   };

@@ -58,7 +58,6 @@ return res.sendStatus(500);
 exports.createSketchbook = function(req, res, next) {
 
   console.log("::::::::::::::: createSketchbook !!!!!!!!!!!!!!");
-  console.log(req.body);
   var sketchbookId = "";
 
   async.series([
@@ -72,16 +71,12 @@ exports.createSketchbook = function(req, res, next) {
         }
         Sketchbook.findById(sketchbook, function(err, doc) {
           if (err) return handleError(err);
-          console.log("doc._id : " + doc._id);
           sketchbookId = doc._id;
           callback(null, doc);
         });
       });
     },
     function(callback) {
-      console.log("::::::::::::::: update room Sketchbook !!!!!!!!!!!!!!");
-      console.log("::::::::::::::: req.body.roomId : " + req.body.roomId);
-      console.log("::::::::::::::: sketchbookId : " + sketchbookId);
       Room.update({
         _id: req.body.roomId
       }, {
@@ -102,10 +97,8 @@ exports.createSketchbook = function(req, res, next) {
 };
 
 exports.countTurn = function(req, res) {
-  console.log("countTurn!!!!!!!!!!");
+
   console.log(req.body);
-  console.log("type : " + req.body.type);
-  console.log("sketchbookId : " + req.params.sketchbookId);
 
   Sketchbook.update({
     _id: req.params.sketchbookId
@@ -120,7 +113,8 @@ exports.countTurn = function(req, res) {
   }, {
     upsert: true
   }, function(err, result) {
-    res.send(result.WriteResult);
+    console.log("result : " + result);
+    res.send(result);
   });
 };
 
