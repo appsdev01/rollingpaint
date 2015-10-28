@@ -139,7 +139,7 @@ exports.savePaperImage = function(req, res) {
   // 이미지 파일명 셋팅
   var date = new Date();
   var dateString = date.getFullYear() + "" + (date.getMonth()+1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
-  var staticPath = 'www/img/sketchbookImg/sketchbook_'; // sketchbook_timestamp.png
+  var staticPath = 'www/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
 
   var tmp = req.body.dataURL;
   var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
