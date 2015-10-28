@@ -94,6 +94,11 @@ angular.module('lobby', ['ionic'])
         }
       }).success(function(response) {
         if (response) {
+          // DB 업데이트 완료 후 소켓 room 참가
+          chatSocket.emit('room:join', {
+            userId: $scope.user._id,
+            roomId: response.id
+          });
           window.location.href = '#/room/' + response.id; // 방으로 들어가도록 고쳐야 함
           $scope.closeNewRoom();
         }

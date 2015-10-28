@@ -56,7 +56,7 @@ exports.create = function(req, res) {
     players: [{
       userId: req.body.users[0].userId,
       username: req.body.users[0].username,
-      playStatus: "01"
+      playStatus: "02"
     }],
     sketchbooks: []
   });
