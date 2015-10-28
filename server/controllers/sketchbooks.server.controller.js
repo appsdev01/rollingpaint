@@ -25,6 +25,7 @@ GET /skethbook/1/
 */
 
 var Sketchbook = require('../models/sketchbook.server.model');
+var Room = require('../models/room.server.model');
 var base64 = require('node-base64-image');
 fs = require('fs');
 var async = require('async');
@@ -54,52 +55,67 @@ return res.sendStatus(500);
 // 턴 지정하기
 // POST /sketchbook/1(스케치북 id)/paper/1/
 
-exports.createSketchbook =  function(req, res, next) {
-  if (!req.body) {
-    return res.sendStatus(400);
-  }
+exports.createSketchbook = function(req, res, next) {
+
+  console.log("::::::::::::::: createSketchbook !!!!!!!!!!!!!!");
   console.log(req.body);
-  var sketchbook = new Sketchbook({
-    ownerId: req.params.ownerId,  // 스케치북 주인
-    word: req.body.word,
-    paper: {
-      userId: req.body.userId,  // 그림 or 단어 맞춘 주체
-      type: req.body.type
+  var sketchbookId = "";
+
+  async.series([
+    function(callback) {
+      var sketchbook = new Sketchbook({
+        ownerId: req.params.userId, // 스케치북 주인
+      });
+      sketchbook.save(function(err) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+        Sketchbook.findById(sketchbook, function(err, doc) {
+          if (err) return handleError(err);
+          console.log("doc._id : " + doc._id);
+          sketchbookId = doc._id;
+          callback(null, doc);
+        });
+      });
     },
-    score: req.body.score,
-    data: req.body.data
-  });
-
-  console.log(sketchbook);
-
-  sketchbook.save(function(err) {
-    if (err) {
-      return res.sendStatus(500);
+    function(callback) {
+      console.log("::::::::::::::: update room Sketchbook !!!!!!!!!!!!!!");
+      console.log("::::::::::::::: req.body.roomId : " + req.body.roomId);
+      console.log("::::::::::::::: sketchbookId : " + sketchbookId);
+      Room.update({
+        _id: req.body.roomId
+      }, {
+        $addToSet: {
+          sketchbooks: sketchbookId
+        }
+      }, {
+        upsert: true
+      }, function(err, result) {
+        callback(null, result);
+      });
     }
-    Sketchbook.findById(sketchbook, function(err, doc) {
-      if (err) return handleError(err);
-      console.log("results : " + doc);
-      res.send(doc);
-    });
+  ], function(err, result) {
+    console.log("sketchbookId : " + sketchbookId);
+    res.send(sketchbookId);
   });
+
 };
 
 exports.countTurn = function(req, res) {
-  res.send("Connected correctly to server :: Join room");
-  if (!req.body) {
-    return res.sendStatus(400);
-  }
+  console.log("countTurn!!!!!!!!!!");
+  console.log(req.body);
   console.log("type : " + req.body.type);
-  console.log("User Id : " + req.params.userId);
+  console.log("sketchbookId : " + req.params.sketchbookId);
 
   Sketchbook.update({
-    _id: req.params.roomId
+    _id: req.params.sketchbookId
   }, {
     $addToSet: {
       papers: {
-        userId: req.params.userId,
-        type : req.body.type
-      }, word : req.body.word
+        userId: req.body.ownerId,
+        type: req.body.type
+      },
+      word: req.body.word
     }
   }, {
     upsert: true
@@ -111,7 +127,7 @@ exports.countTurn = function(req, res) {
 
 // 스케치북 조회하기
 // GET /skethbook/1/
-exports.getSketchbook =  function(req, res, next) {
+exports.getSketchbook = function(req, res, next) {
   Sketchbook.findOne({
     userId: req.params.userId
   }, function(err, results) {
@@ -126,12 +142,12 @@ exports.saveImageToLocal = function(req, res) {
   console.log("saveImageToLocal in!");
   console.log(req.body.dataURL);
 
-//  var tmp =  req.dataURL;
-//  var img = tmp.replace(/^data:image\/\w+;base64,/, "");
-//  var buf = new Buffer(img, 'base64');
+  //  var tmp =  req.dataURL;
+  //  var img = tmp.replace(/^data:image\/\w+;base64,/, "");
+  //  var buf = new Buffer(img, 'base64');
 
-//  fs.writeFile('image.png', buf);
-//  window.open('image.png');
+  //  fs.writeFile('image.png', buf);
+  //  window.open('image.png');
   if (!req.body) {
     return res.sendStatus(400);
   }

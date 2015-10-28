@@ -85,6 +85,7 @@ angular.module('room', ['ionic'])
     // 서버로 메시지 전송
     $scope.sendStatusMessage = function() {
 
+      var sketchbookId = "";
       if ($scope.user._id === $scope.room.ownerId) {
         chatSocket.emit('room:sendStartMessage', {
           userId: '',
@@ -93,12 +94,23 @@ angular.module('room', ['ionic'])
         });
 
         // 인원 수만큼 스케치북 생성
-        angular.forEach($scope.room.users, function(user) {
-          $http.put('/api/sketchbooks/' + $scope.user._id).then(function(response) {
-            console.log(response.data);
+        angular.forEach($scope.room.players, function(user) {
+          console.log(user.userId + "의 스케치북 생성!!!!!!!!!!!!!");
+          $http.post('/api/sketchbooks/' + user.userId, {
+            roomId: $scope.room.id
+          }).then(function(response) {
+            sketchbookId = response.data;
+            console.log("::: sketchbookId : " + sketchbookId);
+            console.log("::: last sketchbookId : " + sketchbookId);
+            var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/'+ $scope.players[user.userId].seq + '/sketchbook/'+ sketchbookId;
+            chatSocket.emit('room:changeDisplay', {
+              userId: user.userId,
+              roomId: $scope.room.id,
+              url: url
+            });
           });
         });
-        window.location.href = '#/word/' + $scope.room.id + '/user/' + $scope.user._id + '/seq/'+ $scope.players[$scope.user._id].seq;
+
       } else {
         var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
         $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
@@ -180,6 +192,15 @@ angular.module('room', ['ionic'])
         content: $scope.players[msg.userId].username + '님의 연결이 끊겼습니다.'
       });
       updateRoomInfo();
+      $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+    });
+
+    // 게임시작 후, 사용자별 화면 전환
+    chatSocket.on('room:changeDisplay', function(msg) {
+      console.log(msg);
+      if(msg.userId === $scope.user._id){
+        window.location.href = msg.url;
+      }
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
     });
 
