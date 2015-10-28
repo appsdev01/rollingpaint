@@ -145,20 +145,22 @@ exports.savePaperImage = function(req, res) {
   var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
   var imageData = new Buffer(replaceDataUrl, 'base64');
 
-  var options = {filename: staticPath + dateString}; // 저장할경로/파일명.png
+  var fileName = {filename: staticPath + dateString}; // 저장할경로/파일명.png
 
 
-  base64.base64decoder(imageData, options, function(err, saved) {
+  base64.base64decoder(imageData, fileName, function(err, saved) {
     if (err) {
       console.log(err);
     }
-    console.log('\n\n options.filename = ' + options.filename);
+    console.log('\n\n fileName.filename = ' + filename.filename);
     console.log('\n\n saved = ' + saved);
   });
-
   //  fs.writeFile('image.png', buf);
   //  window.open('image.png');
+
   if (!req.body) {
     return res.sendStatus(400);
   }
+
+
 };
