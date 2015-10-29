@@ -132,17 +132,35 @@ exports.getSketchbook = function(req, res, next) {
   });
 };
 
-exports.saveImageToLocal = function(req, res) {
-  console.log("saveImageToLocal in!");
-  console.log(req.body.dataURL);
+exports.savePaperImage = function(req, res) {
+  console.log("savePaperImage in!");
+//  console.log(req.body.dataURL);
 
-  //  var tmp =  req.dataURL;
-  //  var img = tmp.replace(/^data:image\/\w+;base64,/, "");
-  //  var buf = new Buffer(img, 'base64');
+  // 이미지 파일명 셋팅
+  var date = new Date();
+  var dateString = date.getFullYear() + "" + (date.getMonth()+1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
+  var staticPath = 'www/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
 
+  var tmp = req.body.dataURL;
+  var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
+  var imageData = new Buffer(replaceDataUrl, 'base64');
+
+  var fileName = {filename: staticPath + dateString}; // 저장할경로/파일명.png
+
+
+  base64.base64decoder(imageData, fileName, function(err, saved) {
+    if (err) {
+      console.log(err);
+    }
+    console.log('\n\n fileName.filename = ' + filename.filename);
+    console.log('\n\n saved = ' + saved);
+  });
   //  fs.writeFile('image.png', buf);
   //  window.open('image.png');
+
   if (!req.body) {
     return res.sendStatus(400);
   }
+
+
 };

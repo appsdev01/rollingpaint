@@ -56,7 +56,7 @@ exports.create = function(req, res) {
     players: [{
       userId: req.body.users[0].userId,
       username: req.body.users[0].username,
-      playStatus: "01"
+      playStatus: "02"
     }],
     sketchbooks: []
   });
@@ -133,7 +133,8 @@ exports.join = function(req, res) {
     },
     function(callback) {
       Room.update({
-        _id: req.params.roomId
+        _id: req.params.roomId,
+        players: {userId: req.params.userId}
       }, {
         $addToSet: {
           players: {

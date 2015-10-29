@@ -147,6 +147,7 @@ angular.module('sketch', ['ionic'])
     };
 
     function convertImgtoDataURL() {
+
       var paper = document.getElementById("paper");
       //var paperImage = document.getElementById("paperImage");
       //paperImage.src = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
@@ -156,15 +157,15 @@ angular.module('sketch', ['ionic'])
 
       link.click();
       console.log(canvas.toDataURL('image/png'));
+
     }
 
-    $scope.saveImage = function() {
+    $scope.savePaper = function() {
       console.log('save Image!');
       var paperImage = document.getElementById("paper");
       var dataURL = paperImage.toDataURL('image/png');
-      var fileName = 'testImage.png';
 
-      convertImgtoDataURL();
+    //  convertImgtoDataURL();
 
       //alert(dataURL);
 
@@ -172,7 +173,8 @@ angular.module('sketch', ['ionic'])
         url: '/api/sketchbooks/yj0518.jang/imageURL',
         type: 'POST',
         data: {
-          "dataURL": dataURL
+          "dataURL" : dataURL,
+          "type" : "p"
         },
         async:true,
         success: function (responseData) {
