@@ -5,7 +5,12 @@ var User = require('../models/user.server.models');
 // GET /users/me
 router.get('/me', function(req, res) {
   if (req.isAuthenticated()) {
-    res.send(req.user);
+    console.log(req.user.email);
+    User.findOne({
+      email: req.user.email
+    }, function(err, user) {
+      res.send(user);
+    });
   } else {
     res.sendStatus(401);
   }

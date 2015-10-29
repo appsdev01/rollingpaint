@@ -27,6 +27,21 @@ module.exports = function(app) {
     });
   });
 
+  app.route('/editprofile').post(function(req, res, next) {
+    if (!req.body) {
+      return res.sendStatus(400);
+    }
+
+      User.findByIdAndUpdate(req.body.userId,  {
+        $set: {
+            username: req.body.username
+        }
+    }, function(err, doc) {
+        if (err) return handleError(err);
+        res.send(doc);
+      });
+  });
+
   app.route('/login')
   .post(
     passport.authenticate('local', {

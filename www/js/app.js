@@ -16,8 +16,9 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     });
     amMoment.changeLocale('ko');
   })
-  .config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     // if none of the above states are matched, use this as the fallback
+    $ionicConfigProvider.views.maxCache(0);
     $urlRouterProvider.otherwise('/intro');
   })
   // .factory('socket', function($rootScope) {
@@ -29,6 +30,7 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
   //         $rootScope.$apply(function() {
   //           callback.apply(socket, args);
   //         });
+
   //       });
   //     },
   //     emit: function(eventName, data, callback) {

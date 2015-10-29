@@ -16,11 +16,11 @@ angular.module('lobby', ['ionic'])
     // });
 
     // get my profile
-    $http.get('/users/me').then(function(response) {
+    $http.get('/users/me',{cache:false}).then(function(response) {
       $scope.user = response.data;
     });
 
-    $http.get('/api/rooms').then(function(response) {
+    $http.get('/api/rooms' ,{cache:false}).then(function(response) {
       $scope.rooms = response.data;
     });
 

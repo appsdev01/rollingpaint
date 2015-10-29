@@ -4,22 +4,28 @@
       <div class="buttons">
         <a class="button icon-left button-clear ion-navicon" menu-toggle="left"></a>
       </div>
-      <h1 class="title">profile</h1>
+      <h1 class="title">Edit Profile
+      </h1>
     </ion-header-bar>
     <ion-content id="profile-content">
       <div class="avatar">
         <img alt="프로필 사진" src="img/avatar.png"/>
       </div>
-      <div class="list">
-        <label class="item item-input item-stacked-label">
-          <h2>E-Mail</h2>
-          <p>{{user.email}}</p>
-        </label>
-        <label class="item item-input item-stacked-label">
-          <h2>First Name</h2>
-          <p>{{user.username}}</p>
-        </label>
-      </div>
+      <form ng-submit="saveProfile()">
+        <div class="list">
+          <label class="item item-input item-stacked-label">
+            <h2>E-Mail</h2>
+            <p>{{user.email}}
+              이메일은 변경 할 수 없습니다.</p>
+          </label>
+          <label class="item item-input item-stacked-label">
+            <h2>First Name</h2>
+            <input ng-model="editData.username" placeholder="{{user.username}}" type="text">
+          </label>
+        </div>
+        <button class="button button-block button-positive" type="submit">저장</button>
+      </form>
+      <div ng-model="nameAlert" ng-show="nameAlert">제목을 입력해주세요</div>
     </ion-content>
   </ion-side-menu-content>
   <ion-side-menu side="left">
@@ -30,9 +36,6 @@
       <ion-list>
         <ion-item href="#/lobby" menu-close>
           Home
-        </ion-item>
-        <ion-item menu-close ng-click="openEditProfile()" >
-          프로필 수정
         </ion-item>
         <ion-item href="" menu-close>
           비밀번호 변경

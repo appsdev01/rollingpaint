@@ -2,7 +2,6 @@ angular.module('room', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('room', {
-        cache: false,
         url: '/room/:roomId',
         templateUrl: "app/room/room.html",
         controller: 'RoomCtrl'
