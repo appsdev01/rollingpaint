@@ -1,6 +1,9 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat', 'room', 'starter.controllers', 'ionic.contrib.frostedGlass', 'angularMoment'])
+angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass', 'angularMoment',
+    'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile',
+    'lobby', 'sketch', 'chat', 'room',
+  ])
   .run(function($ionicPlatform, amMoment) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
