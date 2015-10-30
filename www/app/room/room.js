@@ -13,6 +13,8 @@ angular.module('room', ['ionic'])
     $scope.user = {};
     $scope.players = {};
 
+    chatSocket.connect();
+
     // 접속자 정보 조회
     $http.get('/users/me').then(function(response) {
       $scope.user = response.data;
@@ -29,13 +31,19 @@ angular.module('room', ['ionic'])
             isparticipant = true;
         });
 
-        if (!isparticipant) {
-          window.location.href = '#/lobby';
-        }
+        // if (!isparticipant) {
+        //   window.location.href = '#/lobby';
+        //   return;
+        // }
 
         $scope.room = response.data;
-
         $scope.room.status = '02';
+
+        // 방 정보 조회 후 참가 이벤트 소켓으로 전달
+        chatSocket.emit('room:join', {
+          userId: $scope.user._id,
+          roomId: $scope.room.id
+        });
 
         // 방 참가자 정보 조회
         var i = 1;
@@ -211,6 +219,8 @@ angular.module('room', ['ionic'])
             userId: $scope.user._id,
             roomId: $scope.room.id
           });
+
+          chatSocket.disconnect();
         });
     });
 
