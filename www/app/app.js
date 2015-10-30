@@ -1,8 +1,8 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass', 'angularMoment',
-    'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile',
-    'lobby', 'sketch', 'chat', 'room',
+angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass',
+    'angularMoment', 'picture', 'ranking', 'guessword', 'word', 'intro',
+    'register', 'profile', 'lobby', 'sketch', 'chat', 'room',
   ])
   .run(function($ionicPlatform, amMoment) {
     $ionicPlatform.ready(function() {
@@ -25,7 +25,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass', 'angularMoment
     $urlRouterProvider.otherwise('/intro');
   })
   .factory('chatSocket', function($rootScope, $location) {
-    var socketUrl = $location.protocol() + $location.host() + ':' + $location.port() + '/chat-socket';
+    var socketUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/chat-socket';
     console.log(socketUrl);
 
     var socket = io.connect('/chat');
