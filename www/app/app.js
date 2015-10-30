@@ -25,11 +25,8 @@ angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass',
     $urlRouterProvider.otherwise('/intro');
   })
   .factory('chatSocket', function($rootScope, $location) {
-    var socketUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/chat-socket';
-    console.log(socketUrl);
-
-    var socket = io.connect('/chat');
-    console.log(socket);
+    var socketUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/chat';
+    var socket = io.connect(socketUrl);
 
     return {
       on: function(eventName, callback) {
