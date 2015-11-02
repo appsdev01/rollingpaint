@@ -7,24 +7,16 @@ angular.module('lobby', ['ionic'])
         controller: 'LobbyCtrl'
       });
   })
-  .controller('LobbyCtrl', function($scope, $http, $ionicModal, chatSocket) {
+  .controller('LobbyCtrl', function($scope, $http, $ionicModal) {
+    $scope.roomData = {};
 
-    // $http.get('/rooms').then(function(response) {
-    //   console.log("maybe no response");
-    //   console.log(response);
-    //   $scope.rooms = response.data;
-    // });
-
-    // get my profile
-    $http.get('/users/me').then(function(response) {
+    $http.get('/users/me',{cache:false}).then(function(response) {
       $scope.user = response.data;
     });
 
-    $http.get('/api/rooms').then(function(response) {
+    $http.get('/api/rooms' ,{cache:false}).then(function(response) {
       $scope.rooms = response.data;
     });
-
-    $scope.roomData = {};
 
     $scope.listRooms = function() {
       $http.get('/api/rooms').then(function(response) {
@@ -45,12 +37,6 @@ angular.module('lobby', ['ionic'])
           password: room.password
         })
         .then(function(response) {
-          // DB 업데이트 완료 후 소켓 room 참가
-          chatSocket.emit('room:join', {
-            userId: $scope.user._id,
-            roomId: room.id
-          });
-
           window.location.href = '#/room/' + room.id;
         }, function(response) {
           console.log('방 참가 실패');

@@ -1,6 +1,9 @@
 // Ionic Starter App
 
-angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', 'intro', 'register', 'profile', 'lobby', 'sketch', 'chat', 'room', 'starter.controllers', 'ionic.contrib.frostedGlass', 'angularMoment'])
+angular.module('starter', ['ionic', 'ionic.contrib.frostedGlass',
+    'angularMoment', 'picture', 'ranking', 'guessword', 'word', 'intro',
+    'register', 'profile', 'lobby', 'sketch', 'chat', 'room',
+  ])
   .run(function($ionicPlatform, amMoment) {
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -16,39 +19,14 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
     });
     amMoment.changeLocale('ko');
   })
-  .config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     // if none of the above states are matched, use this as the fallback
+    $ionicConfigProvider.views.maxCache(0);
     $urlRouterProvider.otherwise('/intro');
   })
-  // .factory('socket', function($rootScope) {
-  //   var socket = io.connect();
-  //   return {
-  //     on: function(eventName, callback) {
-  //       socket.on(eventName, function() {
-  //         var args = arguments;
-  //         $rootScope.$apply(function() {
-  //           callback.apply(socket, args);
-  //         });
-  //       });
-  //     },
-  //     emit: function(eventName, data, callback) {
-  //       socket.emit(eventName, data, function() {
-  //         var args = arguments;
-  //         $rootScope.$apply(function() {
-  //           if (callback) {
-  //             callback.apply(socket, args);
-  //           }
-  //         });
-  //       });
-  //     }
-  //   };
-  // })
   .factory('chatSocket', function($rootScope, $location) {
-    var socketUrl = $location.protocol() + $location.host() + ':' + $location.port() + '/chat-socket';
-    console.log(socketUrl);
-
-    var socket = io.connect('/chat');
-    console.log(socket);
+    var socketUrl = $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/chat';
+    var socket;
 
     return {
       on: function(eventName, callback) {
@@ -71,6 +49,11 @@ angular.module('starter', ['ionic', 'picture', 'ranking', 'guessword', 'word', '
       },
       disconnect: function() {
         socket.disconnect();
+      },
+      connect: function() {
+        socket = io.connect(socketUrl, {
+          'force new connection': true
+        });
       }
     };
   });

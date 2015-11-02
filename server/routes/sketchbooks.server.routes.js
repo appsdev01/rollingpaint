@@ -12,5 +12,5 @@ module.exports = function(app) {
     .get(sketchbooks.getSketchbook);
 */
   app.route('/api/sketchbooks/:userId/imageURL')
-    .post(sketchbooks.saveImageToLocal);
+    .post(sketchbooks.savePaperImage);
 };
