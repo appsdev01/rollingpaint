@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
-var paperSchema = new mongoose.Schema({
+var PaperSchema = new mongoose.Schema({
   _id: ShortId,
   userId: String,
   type: String, //"picture" or "answer" or "word"
@@ -15,7 +15,7 @@ var paperSchema = new mongoose.Schema({
 var sketchbookSchema = new mongoose.Schema({
   _id: ShortId,
   ownerId: String,
-  papers: [paperSchema],
+  papers: [PaperSchema],
   word: String,
   date: { type: Date, default: Date.now }
 });

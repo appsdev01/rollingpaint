@@ -13,6 +13,7 @@ angular.module('room', ['ionic'])
     $scope.room = {};
     $scope.user = {};
     $scope.players = {};
+    $scope.sketchbooks = {};
 
     // 접속자 정보 조회
     $http.get('/users/me').then(function(response) {
@@ -47,7 +48,7 @@ angular.module('room', ['ionic'])
             $scope.players[response.data._id] = response.data;
             $scope.players[response.data._id].playStatus = player.playStatus;
             $scope.players[response.data._id].seq = i++;
-          });
+            });
         });
 
         $http.put('/api/rooms/' + $stateParams.roomId, {
@@ -95,11 +96,17 @@ angular.module('room', ['ionic'])
 
         // 인원 수만큼 스케치북 생성
         angular.forEach($scope.room.players, function(user) {
+          /*
+          var nextUserId = "";
+          if($scope.players[user.userId].seq === $scope.room.players.length) nextUserId = $scope.room.players[0].userId;
+          else nextUserId = $scope.room.players[$scope.players[user.userId].seq].userId;
+          */
           console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
           $http.post('/api/sketchbooks/' + user.userId, {
             roomId: $scope.room.id
           }).then(function(response) {
             sketchbookId = response.data;
+            $scope.sketchbooks[$scope.players[user.userId].seq - 1] = sketchbookId;
             var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/' + $scope.players[user.userId].seq + '/sketchbook/' + sketchbookId;
             chatSocket.emit('room:changeDisplay', {
               userId: user.userId,

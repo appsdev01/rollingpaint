@@ -2,7 +2,7 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch',
+        url: '/sketch/:sketchbookId',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl'
       });
