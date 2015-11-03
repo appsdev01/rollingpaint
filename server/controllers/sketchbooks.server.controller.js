@@ -188,7 +188,7 @@ exports.savePaperImage = function(req, res) {
     if (err) {
       console.log(err);
     }
-    console.log('\n\n fileName.filename = ' + filename.filename);
+    console.log('\n\n fileName.filename = ' + fileName.filename);
     console.log('\n\n saved = ' + saved);
   });
   //  fs.writeFile('image.png', buf);

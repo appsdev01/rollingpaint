@@ -2,12 +2,18 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch/:sketchbookId',
+        url: '/sketch/:sketchbookId/roomId/:roomId/seqId/:seqId',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $http) {
+  .controller('SketchCtrl', function($scope, $stateParams, $http) {
+
+    $scope.roomId = $stateParams.roomId;
+    $scope.seqId = $stateParams.seqId;
+    $scope.sketchbookId = $stateParams.sketchbookId;
+    $scope.sketchbooks = {};
+
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
     var scale = Math.min(window.innerHeight, window.innerWidth) / 300;
@@ -203,5 +209,11 @@ angular.module('sketch', ['ionic'])
 
     // 초기화 코드
     initSketchbook();
+
+    $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
+        console.log("rooms 조회!!!!!!!!!!");
+        $scope.sketchbooks = response.data.sketchbooks;
+        console.log($scope.sketchbooks);
+    });
 
   });
