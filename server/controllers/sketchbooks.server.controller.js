@@ -95,7 +95,7 @@ exports.createSketchbook = function(req, res, next) {
   });
 
 };
-
+/*
 exports.countTurn = function(req, res) {
 
   console.log(req.body);
@@ -117,7 +117,7 @@ exports.countTurn = function(req, res) {
     res.send(result);
   });
 };
-
+*/
 
 // 스케치북 조회하기
 // GET /skethbook/1/
@@ -131,7 +131,7 @@ exports.getSketchbook = function(req, res, next) {
     }
   });
 };
-
+/*
 exports.savePaperImage = function(req, res) {
   console.log("savePaperImage in!");
 //  console.log(req.body.dataURL);
@@ -147,13 +147,14 @@ exports.savePaperImage = function(req, res) {
 
   var fileName = {filename: staticPath + dateString}; // 저장할경로/파일명.png
 
-
+  var result;
   base64.base64decoder(imageData, fileName, function(err, saved) {
     if (err) {
       console.log(err);
     }
-    console.log('\n\n fileName.filename = ' + filename.filename);
+    console.log('\n\n fileName.filename = ' + fileName.filename);
     console.log('\n\n saved = ' + saved);
+    result = saved;
   });
   //  fs.writeFile('image.png', buf);
   //  window.open('image.png');
@@ -162,5 +163,59 @@ exports.savePaperImage = function(req, res) {
     return res.sendStatus(400);
   }
 
+  return result;
 
 };
+*/
+exports.createPaper = function(req, res) {
+  console.log('createPaper In !!');
+
+  if (!req.body) {
+    return res.sendStatus(400);
+  }
+
+  // 이미지 파일명 셋팅
+  var date = new Date();
+  var dateString = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
+  var staticPath = '/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
+
+  console.log(req.body);
+  console.log(req.param.dataURL);
+  var tmp = req.param.dataURL;
+  var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
+  var imageData = new Buffer(replaceDataUrl, 'base64');
+
+  var fileFullPath = {
+    path: 'www' + staticPath + dateString // 저장할경로/파일명.png
+  };
+  var filePath = staticPath + dataString;
+
+  //로컬에 이미지 저장
+  base64.base64decoder(imageData, fileFullPath, function(err, saved) {
+    if (err) {
+      console.log(err);
+    }
+    console.log('\n\n fileName.filename = ' + fileFullPath.path);
+    console.log('\n\n saved = ' + saved);
+  });
+
+  var paper = new Paper({
+    userId: req.body.userId,
+    type: req.body.type,
+    answer: '',
+    picture: filePath,
+    score: 0
+  });
+  paper.save(function(err) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+  });
+};
+
+exports.get = function() {};
+exports.update = function() {};
+exports.delete = function() {};
+exports.listPaper = function() {};
+exports.updatePaper = function() {};
+exports.deletePaper = function() {};

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var ShortId = require('mongoose-minid');
 var Schema = mongoose.Schema;
 
-var paperSchema = new mongoose.Schema({
+var PaperSchema = new mongoose.Schema({
   _id: ShortId,
   userId: String,
   type: String, //"picture" or "answer" or "word"
@@ -15,17 +15,17 @@ var paperSchema = new mongoose.Schema({
   }
 });
 
-if (!paperSchema.options.toJSON) {
-  paperSchema.options.toJSON = {};
+if (!PaperSchema.options.toJSON) {
+  PaperSchema.options.toJSON = {};
 }
-paperSchema.options.toJSON.transform = function(doc, ret, options) {
+PaperSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
 };
 
 var sketchbookSchema = new mongoose.Schema({
   _id: ShortId,
   ownerId: String,
-  papers: [paperSchema],
+  papers: [PaperSchema],
   word: String,
   date: {
     type: Date,
@@ -40,7 +40,6 @@ sketchbookSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
 };
 
-
-var Sketchbook = mongoose.model('sketchbook', sketchbookSchema);
+var Sketchbook = mongoose.model('Sketchbook', sketchbookSchema);
 
 module.exports = Sketchbook;

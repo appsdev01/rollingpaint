@@ -2,12 +2,12 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch',
+        url: '/sketch/:roomId/user/:userId/seq/:seqId',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $http) {
+  .controller('SketchCtrl', function($scope, $stateParams, $http) {
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
     var scale = Math.min(window.innerHeight, window.innerWidth) / 300;
@@ -53,11 +53,11 @@ angular.module('sketch', ['ionic'])
       }
 
       ctx.beginPath();
-  //    console.log('paths.length : ' + paths.length);
+      //    console.log('paths.length : ' + paths.length);
       for (var j = 0; j < paths.length; j++) {
         points = paths[j];
         var p1 = points[0];
-    //    console.log('points[0].x : ' + points[0].x + ', points[0].y : ' + points[0].y + '\n');
+        //    console.log('points[0].x : ' + points[0].x + ', points[0].y : ' + points[0].y + '\n');
         var p2 = points[1];
         ctx.moveTo(p1.x, p1.y);
         for (var i = 1, len = points.length; i < len; i++) {
@@ -146,8 +146,10 @@ angular.module('sketch', ['ionic'])
       initSketchbook();
     };
 
-    function convertImgtoDataURL() {
+    $scope.roomId = $stateParams.roomId;
+    $scope.userId = $stateParams.userId;
 
+    function convertImgtoDataURL() {
       var paper = document.getElementById("paper");
       //var paperImage = document.getElementById("paperImage");
       //paperImage.src = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
@@ -157,7 +159,6 @@ angular.module('sketch', ['ionic'])
 
       link.click();
       console.log(canvas.toDataURL('image/png'));
-
     }
 
     $scope.savePaper = function() {
@@ -165,38 +166,61 @@ angular.module('sketch', ['ionic'])
       var paperImage = document.getElementById("paper");
       var dataURL = paperImage.toDataURL('image/png');
 
-    //  convertImgtoDataURL();
-
+      //  convertImgtoDataURL();
       //alert(dataURL);
 
-      $.ajax({
-        url: '/api/sketchbooks/yj0518.jang/imageURL',
-        type: 'POST',
-        data: {
-          "dataURL" : dataURL,
-          "type" : "p"
-        },
-        async:true,
-        success: function (responseData) {
-          alert(responseData);
-        }
+      $http.get('/api/rooms/' + $scope.roomId, {
+        cache: false
+      }).then(function(response) {
+        $scope.room = response.data;
       });
-/*
+
+      var tmp1 = $scope.room.sketchbooks;
+      alert(tmp1[0]);
       $http({
         method: 'POST',
-        url: '/api/sketchbooks/imageURL/yj0518.jang',
-	      data: {
-          "dataURL": dataURL
+        url: '/api/sketchbooks/' + tmp1 + '/paper',
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        data: {
+          "dataURL": dataURL,
+          "userId": $scope.userId,
+          "type": 'picture'
         }
       }).success(function(response) {
         if (response) {
-          console.log('save ok!');
-          //alert('저장완료!');
-          window.open(response);
+          alert("success");
         }
-
       });
-*/
+
+      /*
+            $.ajax({
+              url: '/api/sketchbooks/yj0518.jang/imageURL',
+              type: 'POST',
+              data: {
+                "dataURL": dataURL,
+                "type": "picture"
+              },
+              async: true,
+              success: function(responseData) {
+                alert(responseData);
+              }
+            });
+
+                  $http({
+                    method: 'POST',
+                    url: '/api/sketchbooks/imageURL/yj0518.jang',
+            	      data: {
+                      "dataURL": dataURL
+                    }
+                  }).success(function(response) {
+                    if (response) {
+                      console.log('save ok!');
+                      //alert('저장완료!');
+                      window.open(response);
+                    }
+
+                  });
+            */
 
     };
 
