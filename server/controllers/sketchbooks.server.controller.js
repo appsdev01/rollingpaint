@@ -142,9 +142,17 @@ exports.update = function(req, res, next) {
 exports.delete = function(req, res, next) {
 };
 
-// 스케치북 삭제하기
-// DELETE /skethbook/1/
+// 스케치북 조회하기
+// GET /skethbook/1/
 exports.listPaper = function(req, res, next) {
+  Sketchbook.findOne({
+    _id: req.params.sketchbookId
+  }, function(err, results) {
+    if (!err) {
+      console.log("results : " + results);
+      res.send(results);
+    }
+  });
 };
 
 // 스케치북 삭제하기
@@ -190,6 +198,7 @@ exports.savePaperImage = function(req, res) {
     }
     console.log('\n\n fileName.filename = ' + fileName.filename);
     console.log('\n\n saved = ' + saved);
+    res.send(saved);
   });
   //  fs.writeFile('image.png', buf);
   //  window.open('image.png');

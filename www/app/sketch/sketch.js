@@ -184,7 +184,21 @@ angular.module('sketch', ['ionic'])
         },
         async:true,
         success: function (responseData) {
-          alert(responseData);
+          $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
+              console.log("rooms 조회!!!!!!!!!!");
+              $scope.sketchbooks = response.data.sketchbooks;
+              console.log($scope.sketchbooks);
+
+              var preUserSeq = $scope.seqId === "1" ?  $scope.sketchbooks.length - 1 : $scope.seqId - 2;
+              var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
+
+              $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
+                  console.log("sketchbooks 조회!!!!!!!!!!");
+                  console.log(response.data.papers);
+                  console.log(response.data.papers[response.data.papers.length - 1]);
+                  //window.location.href = response.data.papers[response.data.papers.length - 1].url;
+              });
+          });
         }
       });
 /*
@@ -210,10 +224,8 @@ angular.module('sketch', ['ionic'])
     // 초기화 코드
     initSketchbook();
 
-    $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
-        console.log("rooms 조회!!!!!!!!!!");
-        $scope.sketchbooks = response.data.sketchbooks;
-        console.log($scope.sketchbooks);
-    });
+
+
+
 
   });
