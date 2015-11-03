@@ -20,6 +20,7 @@ if (!PaperSchema.options.toJSON) {
 }
 PaperSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
+  delete ret.__v;
 };
 
 var SketchbookSchema = new mongoose.Schema({
@@ -38,6 +39,7 @@ if (!SketchbookSchema.options.toJSON) {
 }
 SketchbookSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
+  delete ret.__v;
 };
 
 var Sketchbook = mongoose.model('Sketchbook', SketchbookSchema);

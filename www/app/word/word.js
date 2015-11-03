@@ -12,6 +12,7 @@ angular.module('word', ['ionic'])
 
   $scope.roomId = $stateParams.roomId;
   $scope.userId = $stateParams.userId;
+  $scope.seqId = $stateParams.seqId;
   $scope.sketchbookId = $stateParams.sketchbookId;
 
   // '/wordList/:roomNo/users/:userId'
@@ -24,7 +25,7 @@ angular.module('word', ['ionic'])
 
   // 스케치북으로 이동
   $scope.goSketchbook = function(word) {
-    window.location.href = '#/sketch/' + $scope.sketchbookId;
+    window.location.href = '#/sketch/' + $scope.sketchbookId + '/roomId/' + $scope.roomId + '/seqId/' + $scope.seqId;
   };
 
   // 턴 지정하기

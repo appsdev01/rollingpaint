@@ -160,14 +160,14 @@ exports.createPaper = function(req, res) {
   var dateString = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
   var staticPath = '/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
 
-  console.log(req.body.dataURL);
+  //console.log(req.body.picture);
 
-  var tmp = req.body.dataURL;
-  var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
+  var imgUrl = req.body.picture;
+  var replaceDataUrl = imgUrl.replace(/^data:image\/\w+;base64,/, "");
   var imageData = new Buffer(replaceDataUrl, 'base64');
 
   var fileFullPath = {
-    path: 'www' + staticPath + dateString // 저장할경로/파일명.png
+    filename: 'www' + staticPath + dateString // 저장할경로/파일명.png
   };
   var filePath = staticPath + dateString;
 
@@ -176,21 +176,54 @@ exports.createPaper = function(req, res) {
     if (err) {
       console.log(err);
     }
-    console.log('\n\n fileName.filename = ' + fileFullPath.path);
+    console.log('\n\n fileFullPath.filename = ' + fileFullPath.filename);
     console.log('\n\n saved = ' + saved);
   });
 
-  var paper = new Paper({
-    userId: req.body.userId,
-    type: req.body.type,
-    answer: '',
-    picture: filePath,
-    score: 0
-  });
-  paper.save(function(err) {
-    if (err) {
-      return res.sendStatus(500);
+  var paperId = '';
+  async.series([
+    function(callback) {
+      var paper = new Paper({
+        userId: req.body.userId,
+        type: req.body.type,
+        answer: req.body.answer,
+        picture: filePath,
+        score: req.body.score
+      });
+      paper.save(function(err) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+        Paper.findById(paper, function(err, doc) {
+          if (err) return handleError(err);
+          paperId = doc._id;
+          callback(null, doc);
+        });
+      });
+    },
+    function(callback) {
+      Sketchbook.update({
+        _id: req.params.sketchbookId
+      }, {
+        $addToSet: {
+          papers: {
+            paperId : paperId,
+            userId: req.body.userId,
+            type: req.body.type,
+            answer: req.body.answer,
+            picture: filePath,
+            score: req.body.score
+          }
+        }
+      }, {
+        upsert: true
+      }, function(err, result) {
+        callback(null, result);
+      });
     }
+  ], function(err, result) {
+    console.log("paperId : " + paperId);
+    res.send(result.papers);
   });
 };
 

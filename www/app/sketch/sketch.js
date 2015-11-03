@@ -2,12 +2,19 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch/:sketchbookId',
+        url: '/sketch/:sketchbookId/roomId/:roomId/seqId/:seqId',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl'
       });
   })
   .controller('SketchCtrl', function($scope, $stateParams, $http) {
+
+    $scope.roomId = $stateParams.roomId;
+    $scope.seqId = $stateParams.seqId;
+    $scope.sketchbookId = $stateParams.sketchbookId;
+    $scope.sketchbooks = {};
+    $scope.user = {};
+
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
     var scale = Math.min(window.innerHeight, window.innerWidth) / 300;
@@ -146,9 +153,6 @@ angular.module('sketch', ['ionic'])
       initSketchbook();
     };
 
-    $scope.userId = $stateParams.userId;
-    $scope.sketchbookId = $stateParams.sketchbookId;
-
     function convertImgtoDataURL() {
       var paper = document.getElementById("paper");
       //var paperImage = document.getElementById("paperImage");
@@ -161,30 +165,49 @@ angular.module('sketch', ['ionic'])
       console.log(canvas.toDataURL('image/png'));
     }
 
+    $http.get('/api/rooms/' + $scope.roomId, {
+      cache: false
+    }).then(function(response) {
+      $scope.room = response.data;
+      console.log($scope.room);
+    });
+
+    // 접속자 정보 조회
+    $http.get('/users/me',{cache:false}).then(function(response) {
+      $scope.user = response.data;
+      console.log($scope.user);
+    });
+
     $scope.savePaper = function() {
       console.log('save Image!');
       var paperImage = document.getElementById("paper");
       var dataURL = paperImage.toDataURL('image/png');
 
       //  convertImgtoDataURL();
-
       $http({
         method: 'POST',
         url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
-        //contentType: "application/x-www-form-urlencoded; charset=utf-8",
         data: {
-          "dataURL": dataURL,
-          "userId": $scope.userId,
-          "type": 'picture'
+          "userId": $scope.user._id,
+          "type": 'picture',
+          "answer": '',
+          "picture": dataURL,
+          "score": 0
         }
       }).success(function(response) {
         if (response) {
-          alert("success");
+          console.log(response.data);
         }
       });
     };
 
     // 초기화 코드
     initSketchbook();
+
+    $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
+      console.log("rooms 조회!!!!!!!!!!");
+      $scope.sketchbooks = response.data.sketchbooks;
+      console.log($scope.sketchbooks);
+    });
 
   });
