@@ -153,18 +153,6 @@ angular.module('sketch', ['ionic'])
       initSketchbook();
     };
 
-    function convertImgtoDataURL() {
-      var paper = document.getElementById("paper");
-      //var paperImage = document.getElementById("paperImage");
-      //paperImage.src = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
-      var link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = 'image.png';
-
-      link.click();
-      console.log(canvas.toDataURL('image/png'));
-    }
-
     $http.get('/api/rooms/' + $scope.roomId, {
       cache: false
     }).then(function(response) {
@@ -173,7 +161,9 @@ angular.module('sketch', ['ionic'])
     });
 
     // 접속자 정보 조회
-    $http.get('/users/me',{cache:false}).then(function(response) {
+    $http.get('/users/me', {
+      cache: false
+    }).then(function(response) {
       $scope.user = response.data;
       console.log($scope.user);
     });
@@ -183,7 +173,6 @@ angular.module('sketch', ['ionic'])
       var paperImage = document.getElementById("paper");
       var dataURL = paperImage.toDataURL('image/png');
 
-      //  convertImgtoDataURL();
       $http({
         method: 'POST',
         url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
@@ -194,20 +183,25 @@ angular.module('sketch', ['ionic'])
           "picture": dataURL,
           "score": 0
         }
-      }).success(function(response) {
-        if (response) {
-          console.log(response.data);
-        }
+      }).success(function(responseData) {
+        $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
+          console.log("rooms 조회!!!!!!!!!!");
+          $scope.sketchbooks = response.data.sketchbooks;
+          console.log($scope.sketchbooks);
+
+          var preUserSeq = $scope.seqId === "1" ? $scope.sketchbooks.length - 1 : $scope.seqId - 2;
+          var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
+
+          $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
+            console.log("sketchbooks 조회!!!!!!!!!!");
+            console.log(response.data.papers);
+            console.log(response.data.papers[response.data.papers.length - 1]);
+            //window.location.href = response.data.papers[response.data.papers.length - 1].url;
+          });
+        });
       });
     };
 
     // 초기화 코드
     initSketchbook();
-
-    $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
-      console.log("rooms 조회!!!!!!!!!!");
-      $scope.sketchbooks = response.data.sketchbooks;
-      console.log($scope.sketchbooks);
-    });
-
   });

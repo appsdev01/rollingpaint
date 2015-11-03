@@ -142,12 +142,21 @@ exports.update = function(req, res, next) {};
 // DELETE /skethbook/1/
 exports.delete = function(req, res, next) {};
 
-// 스케치북 삭제하기
-// DELETE /skethbook/1/
-exports.listPaper = function(req, res, next) {};
+// 스케치북 조회하기
+// GET /skethbook/1/
+exports.listPaper = function(req, res, next) {
+  Sketchbook.findOne({
+    _id: req.params.sketchbookId
+  }, function(err, results) {
+    if (!err) {
+      console.log("results : " + results);
+      res.send(results);
+    }
+  });
+};
 
 // 페이서 생성하기
-// DELETE /skethbook/1/
+// POST /skethbook/1/
 exports.createPaper = function(req, res) {
   console.log('createPaper In !!');
 
@@ -178,6 +187,7 @@ exports.createPaper = function(req, res) {
     }
     console.log('\n\n fileFullPath.filename = ' + fileFullPath.filename);
     console.log('\n\n saved = ' + saved);
+    res.send(saved);
   });
 
   var paperId = '';
@@ -207,7 +217,7 @@ exports.createPaper = function(req, res) {
       }, {
         $addToSet: {
           papers: {
-            paperId : paperId,
+            paperId: paperId,
             userId: req.body.userId,
             type: req.body.type,
             answer: req.body.answer,
