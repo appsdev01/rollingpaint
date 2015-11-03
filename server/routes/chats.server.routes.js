@@ -32,7 +32,7 @@ module.exports = function(app, server) {
     });
 
     socket.on('room:join', function(msg) {
-      console.log(msg);
+
       // msg = { "userId": "", "roomId": "" }
       sockets[socket.id] = msg;
 
@@ -100,6 +100,8 @@ module.exports = function(app, server) {
     });
 
     socket.on('room:changeDisplay', function(msg) {
+
+      console.log("changeDisplay!!!!!!!!!!!");
       var returnMsg = {
         userId: msg.userId,
         roomId: msg.roomId,

@@ -25,6 +25,7 @@ GET /skethbook/1/
 */
 
 var Sketchbook = require('../models/sketchbook.server.model');
+var Paper = require('../models/sketchbook.server.model');
 var Room = require('../models/room.server.model');
 var base64 = require('node-base64-image');
 fs = require('fs');
@@ -52,10 +53,9 @@ return res.sendStatus(500);
 });
 */
 
-// 턴 지정하기
-// POST /sketchbook/1(스케치북 id)/paper/1/
-
-exports.createSketchbook = function(req, res, next) {
+// 스케치북 생성하기
+// POST /sketchbook/1
+exports.create = function(req, res, next) {
 
   console.log("::::::::::::::: createSketchbook !!!!!!!!!!!!!!");
   var sketchbookId = "";
@@ -63,7 +63,7 @@ exports.createSketchbook = function(req, res, next) {
   async.series([
     function(callback) {
       var sketchbook = new Sketchbook({
-        ownerId: req.params.userId, // 스케치북 주인
+        ownerId: req.body.userId, // 스케치북 주인
       });
       sketchbook.save(function(err) {
         if (err) {
@@ -95,7 +95,9 @@ exports.createSketchbook = function(req, res, next) {
   });
 
 };
-/*
+
+// 턴 지정하기
+// POST /sketchbook/1(스케치북 id)/paper/1/
 exports.countTurn = function(req, res) {
 
   console.log(req.body);
@@ -117,11 +119,11 @@ exports.countTurn = function(req, res) {
     res.send(result);
   });
 };
-*/
+
 
 // 스케치북 조회하기
 // GET /skethbook/1/
-exports.getSketchbook = function(req, res, next) {
+exports.get = function(req, res, next) {
   Sketchbook.findOne({
     userId: req.params.userId
   }, function(err, results) {
@@ -131,42 +133,21 @@ exports.getSketchbook = function(req, res, next) {
     }
   });
 };
-/*
-exports.savePaperImage = function(req, res) {
-  console.log("savePaperImage in!");
-//  console.log(req.body.dataURL);
 
-  // 이미지 파일명 셋팅
-  var date = new Date();
-  var dateString = date.getFullYear() + "" + (date.getMonth()+1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
-  var staticPath = 'www/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
+// 스케치북 수정하기
+// PUT /skethbook/1/
+exports.update = function(req, res, next) {};
 
-  var tmp = req.body.dataURL;
-  var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
-  var imageData = new Buffer(replaceDataUrl, 'base64');
+// 스케치북 삭제하기
+// DELETE /skethbook/1/
+exports.delete = function(req, res, next) {};
 
-  var fileName = {filename: staticPath + dateString}; // 저장할경로/파일명.png
+// 스케치북 삭제하기
+// DELETE /skethbook/1/
+exports.listPaper = function(req, res, next) {};
 
-  var result;
-  base64.base64decoder(imageData, fileName, function(err, saved) {
-    if (err) {
-      console.log(err);
-    }
-    console.log('\n\n fileName.filename = ' + fileName.filename);
-    console.log('\n\n saved = ' + saved);
-    result = saved;
-  });
-  //  fs.writeFile('image.png', buf);
-  //  window.open('image.png');
-
-  if (!req.body) {
-    return res.sendStatus(400);
-  }
-
-  return result;
-
-};
-*/
+// 페이서 생성하기
+// DELETE /skethbook/1/
 exports.createPaper = function(req, res) {
   console.log('createPaper In !!');
 
@@ -179,16 +160,16 @@ exports.createPaper = function(req, res) {
   var dateString = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
   var staticPath = '/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
 
-  console.log(req.body);
-  console.log(req.param.dataURL);
-  var tmp = req.param.dataURL;
+  console.log(req.body.dataURL);
+
+  var tmp = req.body.dataURL;
   var replaceDataUrl = tmp.replace(/^data:image\/\w+;base64,/, "");
   var imageData = new Buffer(replaceDataUrl, 'base64');
 
   var fileFullPath = {
     path: 'www' + staticPath + dateString // 저장할경로/파일명.png
   };
-  var filePath = staticPath + dataString;
+  var filePath = staticPath + dateString;
 
   //로컬에 이미지 저장
   base64.base64decoder(imageData, fileFullPath, function(err, saved) {
@@ -213,9 +194,14 @@ exports.createPaper = function(req, res) {
   });
 };
 
-exports.get = function() {};
-exports.update = function() {};
-exports.delete = function() {};
-exports.listPaper = function() {};
-exports.updatePaper = function() {};
-exports.deletePaper = function() {};
+// 페이퍼 조회하기
+// get /skethbook/1/paper/1
+exports.getPaper = function(req, res, next) {};
+
+// 페이퍼 수정하기
+// put /skethbook/1/paper/1
+exports.updatePaper = function(req, res, next) {};
+
+// 페이퍼 삭제하기
+// DELETE /skethbook/1/paper/1
+exports.deletePaper = function(req, res, next) {};

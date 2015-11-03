@@ -22,7 +22,10 @@ angular.module('word', ['ionic'])
     $scope.words = response.data;
   });
 
-
+  // 스케치북으로 이동
+  $scope.goSketchbook = function(word) {
+    window.location.href = '#/sketch/' + $scope.sketchbookId;
+  };
 
   // 턴 지정하기
   // POST /sketchbook/1/paper/1/
@@ -30,7 +33,7 @@ angular.module('word', ['ionic'])
 
     $http({
       method: 'POST',
-      url: '/api/sketchbooks', // + $scope.sketchbookId + '/paper'
+      url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
       data: {
         "sketchbookId": $scope.sketchbookId,
         "word": word,
@@ -40,7 +43,7 @@ angular.module('word', ['ionic'])
     }).success(function(response) {
       if (response) {
         console.log('Create a sketchbook Paper Success !!!');
-        window.location.href = '#/sketch';
+        window.location.href = '#/sketch/' + $scope.sketchbookId;
       }
     });
   };

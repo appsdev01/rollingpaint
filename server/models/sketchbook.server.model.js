@@ -22,7 +22,7 @@ PaperSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
 };
 
-var sketchbookSchema = new mongoose.Schema({
+var SketchbookSchema = new mongoose.Schema({
   _id: ShortId,
   ownerId: String,
   papers: [PaperSchema],
@@ -33,13 +33,13 @@ var sketchbookSchema = new mongoose.Schema({
   }
 });
 
-if (!sketchbookSchema.options.toJSON) {
-  sketchbookSchema.options.toJSON = {};
+if (!SketchbookSchema.options.toJSON) {
+  SketchbookSchema.options.toJSON = {};
 }
-sketchbookSchema.options.toJSON.transform = function(doc, ret, options) {
+SketchbookSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
 };
 
-var Sketchbook = mongoose.model('Sketchbook', sketchbookSchema);
+var Sketchbook = mongoose.model('Sketchbook', SketchbookSchema);
 
 module.exports = Sketchbook;
