@@ -46,6 +46,7 @@ angular.module('room', ['ionic'])
           roomId: $scope.room.id
         });
 
+
         // 방 참가자 정보 조회
         var i = 1;
         angular.forEach($scope.room.players, function(player) {
@@ -67,6 +68,8 @@ angular.module('room', ['ionic'])
     }
 
     updateRoomInfo();
+
+
 
     $scope.data = {
       messages: [{
@@ -109,8 +112,9 @@ angular.module('room', ['ionic'])
           else nextUserId = $scope.room.players[$scope.players[user.userId].seq].userId;
           */
           console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
-          $http.post('/api/sketchbooks/' + user.userId, {
-            roomId: $scope.room.id
+          $http.post('/api/sketchbooks', {
+            roomId: $scope.room.id,
+            userId: user.userId
           }).then(function(response) {
             sketchbookId = response.data;
             $scope.sketchbooks[$scope.players[user.userId].seq - 1] = sketchbookId;
@@ -170,7 +174,7 @@ angular.module('room', ['ionic'])
 
     // 새로운 참가자 이벤트
     chatSocket.on('room:joined', function(msg) {
-      updateRoomInfo();
+      //updateRoomInfo();
 
       // 새로운 참가자 정보 조회
       $http.get('/users/' + msg.userId).then(function(response) {

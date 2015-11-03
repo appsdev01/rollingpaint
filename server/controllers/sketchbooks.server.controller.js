@@ -55,7 +55,7 @@ return res.sendStatus(500);
 // 턴 지정하기
 // POST /sketchbook/1(스케치북 id)/paper/1/
 
-exports.createSketchbook = function(req, res, next) {
+exports.create = function(req, res, next) {
 
   console.log("::::::::::::::: createSketchbook !!!!!!!!!!!!!!");
   var sketchbookId = "";
@@ -63,7 +63,7 @@ exports.createSketchbook = function(req, res, next) {
   async.series([
     function(callback) {
       var sketchbook = new Sketchbook({
-        ownerId: req.params.userId, // 스케치북 주인
+        ownerId: req.body.userId, // 스케치북 주인
       });
       sketchbook.save(function(err) {
         if (err) {
@@ -121,7 +121,7 @@ exports.countTurn = function(req, res) {
 
 // 스케치북 조회하기
 // GET /skethbook/1/
-exports.getSketchbook = function(req, res, next) {
+exports.get = function(req, res, next) {
   Sketchbook.findOne({
     userId: req.params.userId
   }, function(err, results) {
@@ -131,6 +131,42 @@ exports.getSketchbook = function(req, res, next) {
     }
   });
 };
+
+// 스케치북 수정하기
+// PUT /skethbook/1/
+exports.update = function(req, res, next) {
+};
+
+// 스케치북 삭제하기
+// DELETE /skethbook/1/
+exports.delete = function(req, res, next) {
+};
+
+// 스케치북 삭제하기
+// DELETE /skethbook/1/
+exports.listPaper = function(req, res, next) {
+};
+
+// 스케치북 삭제하기
+// DELETE /skethbook/1/
+exports.createPaper = function(req, res, next) {
+};
+
+// 페이퍼 조회하기
+// get /skethbook/1/paper/1
+exports.getPaper = function(req, res, next) {
+};
+
+// 페이퍼 수정하기
+// put /skethbook/1/paper/1
+exports.updatePaper = function(req, res, next) {
+};
+
+// 페이퍼 삭제하기
+// DELETE /skethbook/1/paper/1
+exports.deletePaper = function(req, res, next) {
+};
+
 
 exports.savePaperImage = function(req, res) {
   console.log("savePaperImage in!");

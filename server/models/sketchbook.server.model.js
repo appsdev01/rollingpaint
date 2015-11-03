@@ -15,10 +15,10 @@ var PaperSchema = new mongoose.Schema({
   }
 });
 
-if (!paperSchema.options.toJSON) {
-  paperSchema.options.toJSON = {};
+if (!PaperSchema.options.toJSON) {
+  PaperSchema.options.toJSON = {};
 }
-paperSchema.options.toJSON.transform = function(doc, ret, options) {
+PaperSchema.options.toJSON.transform = function(doc, ret, options) {
   delete ret._id;
 };
 

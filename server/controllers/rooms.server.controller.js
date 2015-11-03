@@ -133,8 +133,7 @@ exports.join = function(req, res) {
     },
     function(callback) {
       Room.update({
-        _id: req.params.roomId,
-        players: {userId: req.params.userId}
+        _id: req.params.roomId
       }, {
         $addToSet: {
           players: {
