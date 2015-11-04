@@ -2,13 +2,14 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch/:sketchbookId/roomId/:roomId/seqId/:seqId',
+        url: '/sketch/:sketchbookId/roomId/:roomId/userId/:userId/seqId/:seqId',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $stateParams, $http) {
+  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $stateParams, $http) {
 
+    $scope.userId = $stateParams.userId;
     $scope.roomId = $stateParams.roomId;
     $scope.seqId = $stateParams.seqId;
     $scope.sketchbookId = $stateParams.sketchbookId;
@@ -38,6 +39,23 @@ angular.module('sketch', ['ionic'])
     var paths = [];
     // 오래된 선들은 되돌리기 목록에서 제외하고 이미지로 저장 - 성능 이슈
     var imageData;
+
+    //단어입력 시간 카운트
+    $scope.timeCount = 5;
+    $interval(function() {
+      $scope.timeCount--;
+      if ($scope.timeCount === 0) {
+        console.log("hello");
+        $ionicBackdrop.retain();
+        $ionicPopup.show({
+          title: '시간 종료',
+          subTitle: '다음 단계로 이동합니다',
+        });
+        $timeout(function() {
+          //게임 다음 단계 페이지 호출!
+        }, 3000);
+      }
+    }, 1000, $scope.timeCount);
 
     function initSketchbook() {
       paths.length = 0;
@@ -188,7 +206,7 @@ angular.module('sketch', ['ionic'])
           console.log("rooms 조회!!!!!!!!!!");
           $scope.sketchbooks = response.data.sketchbooks;
           console.log($scope.sketchbooks);
-
+          // 내 바로 전사람의 스케치북 가져오기
           var preUserSeq = $scope.seqId === "1" ? $scope.sketchbooks.length - 1 : $scope.seqId - 2;
           var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
 
@@ -196,7 +214,16 @@ angular.module('sketch', ['ionic'])
             console.log("sketchbooks 조회!!!!!!!!!!");
             console.log(response.data.papers);
             console.log(response.data.papers[response.data.papers.length - 1]);
-            //window.location.href = response.data.papers[response.data.papers.length - 1].url;
+            //window.location.href = response.data.papers[response.data.papers.length - 1].picture;
+
+            // 04: 그림 그리기
+            $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
+              status: '04'
+            }).then(function(response) {
+              console.log(response.data);
+              //$scope.room = response.data;
+            });
+
           });
         });
       });

@@ -25,7 +25,15 @@ angular.module('word', ['ionic'])
 
   // 스케치북으로 이동
   $scope.goSketchbook = function(word) {
-    window.location.href = '#/sketch/' + $scope.sketchbookId + '/roomId/' + $scope.roomId + '/seqId/' + $scope.seqId;
+    // 03: 단어 선택
+    $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
+      status: '03'
+    }).then(function(response) {
+      console.log(response.data);
+      //$scope.room = response.data;
+    });
+
+    window.location.href = '#/sketch/' + $scope.sketchbookId + '/roomId/' + $scope.roomId + '/userId/' + $scope.userId + '/seqId/' + $scope.seqId;
   };
 
   // 턴 지정하기

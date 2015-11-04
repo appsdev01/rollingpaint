@@ -19,6 +19,11 @@ angular.module('room', ['ionic'])
     // 접속자 정보 조회
     $http.get('/users/me').then(function(response) {
       $scope.user = response.data;
+      // 방 정보 조회 후 참가 이벤트 소켓으로 전달
+      chatSocket.emit('room:join', {
+        userId: $scope.user._id,
+        roomId: $stateParams.roomId
+      });
     });
 
     function updateRoomInfo() {
@@ -39,13 +44,6 @@ angular.module('room', ['ionic'])
 
         $scope.room = response.data;
         $scope.room.status = '02';
-
-        // 방 정보 조회 후 참가 이벤트 소켓으로 전달
-        chatSocket.emit('room:join', {
-          userId: $scope.user._id,
-          roomId: $scope.room.id
-        });
-
 
         // 방 참가자 정보 조회
         var i = 1;
@@ -68,8 +66,6 @@ angular.module('room', ['ionic'])
     }
 
     updateRoomInfo();
-
-
 
     $scope.data = {
       messages: [{
@@ -174,7 +170,7 @@ angular.module('room', ['ionic'])
 
     // 새로운 참가자 이벤트
     chatSocket.on('room:joined', function(msg) {
-      //updateRoomInfo();
+      updateRoomInfo();
 
       // 새로운 참가자 정보 조회
       $http.get('/users/' + msg.userId).then(function(response) {
