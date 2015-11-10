@@ -18,10 +18,12 @@ module.exports = function(app, server) {
           _id: sockets[socket.id].roomId
         }, {
           $pull: {
-            users: sockets[socket.id].userId
+            players: {
+              userId: sockets[socket.id].userId
+            }
           }
         }, function(err, result) {
-
+          
         });
 
         socket.broadcast.to(sockets[socket.id].roomId).emit('room:lost', sockets[socket.id]);

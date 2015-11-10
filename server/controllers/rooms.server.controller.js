@@ -132,20 +132,45 @@ exports.join = function(req, res) {
       });
     },
     function(callback) {
-      Room.update({
-        _id: req.params.roomId
-      }, {
-        $addToSet: {
-          players: {
-            userId: req.body.userId,
-            username: req.body.username,
-            playStatus: "01"
+      Room.findOne({
+        _id:req.params.roomId
+      }, function (err, room) {
+      // }, {
+      //   _id:0, // _id 필드는 생략
+      //   players:1 // players 필드만 조회
+      // }, function (err, room) {
+        if (err) throw err;
+
+        var newPlayer = true;
+
+        console.log("req.body.userId : " + req.body.userId);
+        for (var i=0; i<room.players.length; i++) {
+          console.log("player Id : " + room.players[i].userId);
+          if (room.players[i].userId === req.body.userId) {
+            console.log("same");
+            newPlayer = !newPlayer;
           }
         }
-      }, {
-        upsert: true
-      }, function(err, result) {
-        res.send(result.WriteResult);
+
+        if (newPlayer) {
+          Room.update({
+            _id: req.params.roomId
+          }, {
+            $addToSet: {
+              players: {
+                userId: req.body.userId,
+                username: req.body.username,
+                playStatus: "01"
+              }
+            }
+          }, {
+            upsert: true
+          }, function(err, result) {
+            res.send(result.WriteResult);
+          });
+        }
+
+      res.send(room.WriteResult);
       });
     }
   ], function(err, result) {
