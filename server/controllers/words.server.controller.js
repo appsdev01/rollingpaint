@@ -95,7 +95,7 @@ exports.get = function(req, res) {
       }
     ],
     function(err, results) {
-      //console.log("results : " + results);
+      //console.log("WordSets results : " + results);
       if (!err) {
         res.send(results[0]);
       }

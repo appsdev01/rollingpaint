@@ -115,7 +115,7 @@ exports.countTurn = function(req, res) {
   }, {
     upsert: true
   }, function(err, result) {
-    console.log("result : " + result);
+    console.log("result papers : " + result.papers);
     res.send(result);
   });
 };
@@ -136,7 +136,17 @@ exports.get = function(req, res, next) {
 
 // 스케치북 수정하기
 // PUT /skethbook/1/
-exports.update = function(req, res, next) {};
+exports.update = function(req, res, next) {
+  console.log(req.params.sketchbookId + "에 단어 :" + req.body.word + " 선택");
+  Sketchbook.update({
+    _id: req.params.sketchbookId
+  }, {
+    word: req.body.word
+  }, function(err, result) {
+    res.send(result);
+  });
+
+};
 
 // 스케치북 삭제하기
 // DELETE /skethbook/1/
@@ -145,11 +155,12 @@ exports.delete = function(req, res, next) {};
 // 스케치북 조회하기
 // GET /skethbook/1/
 exports.listPaper = function(req, res, next) {
+  console.log("sketchbookId : " + req.params.sketchbookId);
   Sketchbook.findOne({
     _id: req.params.sketchbookId
   }, function(err, results) {
     if (!err) {
-      console.log("results : " + results);
+      console.log("results papers : " + results.papers);
       res.send(results);
     }
   });

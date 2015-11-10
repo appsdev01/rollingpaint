@@ -139,7 +139,7 @@ exports.join = function(req, res) {
           players: {
             userId: req.body.userId,
             username: req.body.username,
-            playStatus: "02"
+            playStatus: "01"
           }
         }
       }, {

@@ -7,7 +7,7 @@ angular.module('sketch', ['ionic'])
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $stateParams, $http) {
+  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http) {
 
     $scope.userId = $stateParams.userId;
     $scope.roomId = $stateParams.roomId;
@@ -15,6 +15,7 @@ angular.module('sketch', ['ionic'])
     $scope.sketchbookId = $stateParams.sketchbookId;
     $scope.sketchbooks = {};
     $scope.user = {};
+    $scope.clickSavePaperYn = false;
 
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -32,7 +33,7 @@ angular.module('sketch', ['ionic'])
 
     // 선 스타일 설정
     var ctx = canvas.getContext('2d');
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 10;
     ctx.lineJoin = ctx.lineCap = 'round';
 
     // 선들의 집합 - 되돌리기(undo) 기능을 위해 그려진 획을 저장
@@ -40,19 +41,26 @@ angular.module('sketch', ['ionic'])
     // 오래된 선들은 되돌리기 목록에서 제외하고 이미지로 저장 - 성능 이슈
     var imageData;
 
-    //단어입력 시간 카운트
-    $scope.timeCount = 5;
+    //그림입력 시간 카운트
+    $scope.timeCount = 8;
+    $ionicBackdrop.release();
+
     $interval(function() {
       $scope.timeCount--;
       if ($scope.timeCount === 0) {
-        console.log("hello");
         $ionicBackdrop.retain();
-        $ionicPopup.show({
+        var alertPopup = $ionicPopup.alert({
           title: '시간 종료',
           subTitle: '다음 단계로 이동합니다',
         });
         $timeout(function() {
-          //게임 다음 단계 페이지 호출!
+          $ionicBackdrop.release();
+          alertPopup.close();
+
+          if(!$scope.clickSavePaperYn){ // 저장 안 했을경우, 강제저장
+            $scope.savePaper();
+          }
+          $scope.changeDisplay();
         }, 3000);
       }
     }, 1000, $scope.timeCount);
@@ -191,6 +199,8 @@ angular.module('sketch', ['ionic'])
       var paperImage = document.getElementById("paper");
       var dataURL = paperImage.toDataURL('image/png');
 
+      $scope.clickSavePaperYn = true;
+
       $http({
         method: 'POST',
         url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
@@ -202,33 +212,35 @@ angular.module('sketch', ['ionic'])
           "score": 0
         }
       }).success(function(responseData) {
-        $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
-          console.log("rooms 조회!!!!!!!!!!");
-          $scope.sketchbooks = response.data.sketchbooks;
-          console.log($scope.sketchbooks);
-          // 내 바로 전사람의 스케치북 가져오기
-          var preUserSeq = $scope.seqId === "1" ? $scope.sketchbooks.length - 1 : $scope.seqId - 2;
-          var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
 
-          $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
-            console.log("sketchbooks 조회!!!!!!!!!!");
-            console.log(response.data.papers);
-            console.log(response.data.papers[response.data.papers.length - 1]);
-            //window.location.href = response.data.papers[response.data.papers.length - 1].picture;
-
-            // 04: 그림 그리기
-            $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
-              status: '04'
-            }).then(function(response) {
-              console.log(response.data);
-              //$scope.room = response.data;
-            });
-
-          });
+        // 04: 그림 그리기
+        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
+          status: '04'
+        }).then(function(response) {
+          console.log(response.data);
+          //$scope.room = response.data;
         });
       });
     };
 
+    $scope.changeDisplay = function() {
+      $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
+        console.log("rooms 조회!!!!!!!!!!");
+        $scope.sketchbooks = response.data.sketchbooks;
+        console.log($scope.sketchbooks);
+        // 내 바로 전사람의 스케치북 가져오기
+        var preUserSeq = $scope.seqId === "1" ? $scope.sketchbooks.length - 1 : $scope.seqId - 2;
+        var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
+
+        $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
+          console.log("sketchbooks 조회!!!!!!!!!!");
+          console.log(response.data.papers);
+          console.log(response.data.papers[response.data.papers.length - 1]);
+          window.location.href = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
+        });
+      });
+
+    };
     // 초기화 코드
     initSketchbook();
   });
