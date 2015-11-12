@@ -132,7 +132,7 @@ angular.module('room', ['ionic'])
           roomId: $scope.room.id,
           content: (readyStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
-        updateRoomInfo();
+        //updateRoomInfo();
       }
     };
 
@@ -154,6 +154,7 @@ angular.module('room', ['ionic'])
       console.log(msg);
       $scope.data.messages.push(msg);
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+      updateRoomInfo();
     });
 
     // 서버로부터 받은 메시지를 추가
