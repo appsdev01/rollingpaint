@@ -226,9 +226,7 @@ exports.userUpdate = function(req, res) {
     return res.sendStatus(400);
   }
   console.log("Room User status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId);
-  console.log("User Id : " + req.params.userId);
-  console.log("status Code : " + req.body.status);
+  console.log("Room Id : " + req.params.roomId + "  User Id : " + req.params.userId + " status Code : " + req.body.status);
 
   Room.update({
     'players.userId': req.params.userId
@@ -247,8 +245,7 @@ exports.update = function(req, res) {
     return res.sendStatus(400);
   }
   console.log("Room status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId);
-  console.log("status Code : " + req.body.status);
+  console.log("Room Id : " + req.params.roomId + "  status Code : " + req.body.status);
 
   Room.update({
     _id: req.params.roomId
