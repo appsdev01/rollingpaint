@@ -191,19 +191,20 @@ exports.createPaper = function(req, res) {
   };
   var filePath = staticPath + dateString;
 
-  //로컬에 이미지 저장
-  base64.base64decoder(imageData, fileFullPath, function(err, saved) {
-    if (err) {
-      console.log(err);
-    }
-    console.log('\n\n fileFullPath.filename = ' + fileFullPath.filename);
-    console.log('\n\n saved = ' + saved);
-    res.send(saved);
-  });
-
   var paperId = '';
   async.series([
     function(callback) {
+
+      //로컬에 이미지 저장
+      base64.base64decoder(imageData, fileFullPath, function(err, saved) {
+        if (err) {
+          console.log(err);
+        }
+        console.log('\n\n fileFullPath.filename = ' + fileFullPath.filename);
+        console.log('\n\n saved = ' + saved);
+        //res.send(saved);
+      });
+
       var paper = new Paper({
         userId: req.body.userId,
         type: req.body.type,
