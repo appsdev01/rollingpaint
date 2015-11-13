@@ -153,10 +153,11 @@ exports.join = function(req, res) {
         }
 
         if (newPlayer) {
+          console.log('newPlayer!');
           Room.update({
             _id: req.params.roomId
           }, {
-            $addToSet: {
+            '$addToSet': {
               players: {
                 userId: req.body.userId,
                 username: req.body.username,
@@ -216,7 +217,18 @@ exports.delegate = function(req, res) {
   }, {
     ownerId: req.body.userId
   }, function(err, result) {
-    res.send(result.WriteResult);
+    if (err) throw err;
+
+    // 방장 변경 성공 시 Player Status 02로 변경(방장)
+    Room.update({
+      'players.userId': req.body.userId
+    }, {
+      '$set': {
+        'players.$.playStatus': "02"
+      }
+    }, function(err, result) {
+      res.send(result.WriteResult);
+    });
   });
 };
 
@@ -226,7 +238,9 @@ exports.userUpdate = function(req, res) {
     return res.sendStatus(400);
   }
   console.log("Room User status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId + "  User Id : " + req.params.userId + " status Code : " + req.body.status);
+  console.log("Room Id : " + req.params.roomId);
+  console.log("User Id : " + req.params.userId);
+  console.log("status Code : " + req.body.status);
 
   Room.update({
     'players.userId': req.params.userId
@@ -245,7 +259,8 @@ exports.update = function(req, res) {
     return res.sendStatus(400);
   }
   console.log("Room status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId + "  status Code : " + req.body.status);
+  console.log("Room Id : " + req.params.roomId);
+  console.log("status Code : " + req.body.status);
 
   Room.update({
     _id: req.params.roomId

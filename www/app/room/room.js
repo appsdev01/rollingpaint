@@ -56,29 +56,6 @@ angular.module('room', ['ionic'])
           });
         });
 
-        // 방장 위임하기
-        // console.log('★★★★★★★★★★★★★★★★★★★★★★★★★★★');
-        // console.log($scope.user._id);
-        // console.log($scope.room.ownerId);
-        // console.log($scope.room.players.length);
-        // console.log($scope.room.id);
-        // console.log('★★★★★★★★★★★★★★★★★★★★★★★★★★★');
-
-        // 방에 한 명의 플레이어민 남은 경우
-        // if ($scope.room.players.length == 1) {
-        //   $http.delete('api/rooms/' + $stateParams.roomId).then(function(response) {
-        //     console.log(response.data);
-        //     console.log('room is deleted');
-        //   });
-        // }
-
-        // 방에 여러 명의 플레이어가 남은 경우
-        // if ($scope.room.players.length > 1) {
-        //   $http.post('api/rooms/' + $scope.room.id + '/owner').then(function(response) {
-        //     console.log(response);
-        //   });
-        // }
-
         $http.put('/api/rooms/' + $stateParams.roomId, {
           status: $scope.room.status
         }).then(function(response) {
@@ -170,27 +147,29 @@ angular.module('room', ['ionic'])
         });
       }
 
-      // 플레이어가 두 명 이상인 경우 방장 위임하기 (break 기능 필요)
-      // if (room.players.length > 1) {
-      //   var newOwnerId = "";
-      //
-      //   angular.forEach(room.players, function(player) {
-      //     console.log("랜덤으로 선택된 플레이어 : " + player.userId);
-      //     console.log("방장 : " + room.ownerId);
-      //     console.log("로그인한 유저 : " + $scope.user._id);
-      //
-      //     // 로그인 유저와 오너가 동일하고(방장퇴장) 다른 플레이어이면 새로운 오너로 지정
-      //     if ($scope.user._id === room.ownerId && room.ownerId !== player.userId) {
-      //       newOwnerId = player.userId;
-      //       $http.post('api/rooms/' + room.id + '/owner', {
-      //         userId: newOwnerId
-      //       }).then(function(response) {
-      //         console.log(response);
-      //         console.log('OwnerId is changed');
-      //       });
-      //     }
-      //   });
-      // }
+      //플레이어가 두 명 이상인 경우 방장 위임하기 (break 기능 필요)
+      if (room.players.length > 1) {
+        var newOwnerId = "";
+
+        angular.forEach(room.players, function(player) {
+          console.log("newOwnerId : " + newOwnerId);
+          console.log("랜덤으로 선택된 플레이어 : " + player.userId);
+          console.log("방장 : " + room.ownerId);
+          console.log("로그인한 유저 : " + $scope.user._id);
+
+          // 방장이 퇴장하려 할 때, 다른 플레이어로 새로운 방장 지정
+          if (newOwnerId === "" && $scope.user._id === room.ownerId && room.ownerId !== player.userId) {
+            newOwnerId = player.userId;
+            console.log("changed newOwnerId : " + newOwnerId);
+            $http.post('api/rooms/' + room.id + '/owner', {
+              userId: newOwnerId
+            }).then(function(response) {
+              console.log(response);
+              console.log('OwnerId is changed');
+            });
+          }
+        });
+      }
 
       window.location.href = '#/lobby';
     };
