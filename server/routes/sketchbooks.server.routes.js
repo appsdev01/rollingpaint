@@ -14,18 +14,6 @@ module.exports = function(app) {
     .put(sketchbooks.update)
     .delete(sketchbooks.delete);
 
-//  app.route('/api/sketchbooks/:sketchbookId/paper')
-//    .post(sketchbooks.countTurn);
-
-  app.route('/api/sketchbooks')
-    //.get(sketchbooks.list)
-    .post(sketchbooks.create);
-
-  app.route('/api/sketchbooks/:sketchbookId')
-    .get(sketchbooks.get)
-    .put(sketchbooks.update)
-    .delete(sketchbooks.delete);
-
   app.route('/api/sketchbooks/:sketchbookId/paper')
     .get(sketchbooks.listPaper)
     .post(sketchbooks.createPaper);

@@ -8,12 +8,32 @@ angular.module('word', ['ionic'])
       });
   })
 
-.controller('WordCtrl', function($scope, $stateParams, $http, $ionicModal) {
+.controller('WordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $ionicModal) {
 
   $scope.roomId = $stateParams.roomId;
   $scope.userId = $stateParams.userId;
   $scope.seqId = $stateParams.seqId;
   $scope.sketchbookId = $stateParams.sketchbookId;
+
+  //단어선택 시간 카운트
+  $scope.timeCount = 8;
+  $interval(function() {
+    $scope.timeCount--;
+    if ($scope.timeCount === 0) {
+      $ionicBackdrop.retain();
+      var alertPopup = $ionicPopup.alert({
+        title: '시간 종료',
+        subTitle: '다음 단계로 이동합니다',
+      });
+      $timeout(function() {
+        //게임 다음 단계 페이지 호출!
+        $scope.goSketchbook();
+        $ionicBackdrop.release();
+        alertPopup.close();
+        window.location.href = '#/sketch/' + $scope.sketchbookId + '/roomId/' + $scope.roomId + '/userId/' + $scope.userId + '/seqId/' + $scope.seqId;
+      }, 1000);
+    }
+  }, 1000, $scope.timeCount);
 
   // '/wordList/:roomNo/users/:userId'
   console.log("roomId : " + $stateParams.roomId);
@@ -25,6 +45,14 @@ angular.module('word', ['ionic'])
 
   // 스케치북으로 이동
   $scope.goSketchbook = function(word) {
+    // 시간 내 선택 못 했을 경우, 첫번째 단어세팅
+    if(word === undefined) word = $scope.words[0][0].value;
+    $http.put('/api/sketchbooks/' + $scope.sketchbookId, {
+      word: word
+    }).then(function(response) {
+      console.log(response.data);
+    });
+
     // 03: 단어 선택
     $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
       status: '03'
@@ -32,28 +60,6 @@ angular.module('word', ['ionic'])
       console.log(response.data);
       //$scope.room = response.data;
     });
-
-    window.location.href = '#/sketch/' + $scope.sketchbookId + '/roomId/' + $scope.roomId + '/userId/' + $scope.userId + '/seqId/' + $scope.seqId;
   };
 
-  // 턴 지정하기
-  // POST /sketchbook/1/paper/1/
-  $scope.createSketchbook = function(word) {
-
-    $http({
-      method: 'POST',
-      url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
-      data: {
-        "sketchbookId": $scope.sketchbookId,
-        "word": word,
-        "ownerId": $scope.userId,
-        "type": 'word'
-      }
-    }).success(function(response) {
-      if (response) {
-        console.log('Create a sketchbook Paper Success !!!');
-        window.location.href = '#/sketch/' + $scope.sketchbookId;
-      }
-    });
-  };
 });

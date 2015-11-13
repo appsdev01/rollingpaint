@@ -124,11 +124,6 @@ angular.module('room', ['ionic'])
 
         // 인원 수만큼 스케치북 생성
         angular.forEach($scope.room.players, function(user) {
-          /*
-          var nextUserId = "";
-          if($scope.players[user.userId].seq === $scope.room.players.length) nextUserId = $scope.room.players[0].userId;
-          else nextUserId = $scope.room.players[$scope.players[user.userId].seq].userId;
-          */
           console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
           $http.post('/api/sketchbooks', {
             roomId: $scope.room.id,
@@ -159,7 +154,7 @@ angular.module('room', ['ionic'])
           roomId: $scope.room.id,
           content: (readyStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
         });
-        updateRoomInfo();
+        //updateRoomInfo();
       }
     };
 
@@ -212,6 +207,7 @@ angular.module('room', ['ionic'])
       console.log(msg);
       $scope.data.messages.push(msg);
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
+      updateRoomInfo();
     });
 
     // 서버로부터 받은 메시지를 추가
