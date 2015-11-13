@@ -145,15 +145,15 @@ exports.join = function(req, res) {
 
         console.log("req.body.userId : " + req.body.userId);
         for (var i=0; i<room.players.length; i++) {
-          console.log("player Id : " + room.players[i].userId);
+          //console.log("player Id : " + room.players[i].userId);
           if (room.players[i].userId === req.body.userId) {
-            console.log("same");
+            //console.log("same");
             newPlayer = !newPlayer;
           }
         }
 
         if (newPlayer) {
-          console.log('newPlayer!');
+          //console.log('newPlayer!');
           Room.update({
             _id: req.params.roomId
           }, {

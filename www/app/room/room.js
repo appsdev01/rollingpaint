@@ -152,15 +152,15 @@ angular.module('room', ['ionic'])
         var newOwnerId = "";
 
         angular.forEach(room.players, function(player) {
-          console.log("newOwnerId : " + newOwnerId);
-          console.log("랜덤으로 선택된 플레이어 : " + player.userId);
-          console.log("방장 : " + room.ownerId);
-          console.log("로그인한 유저 : " + $scope.user._id);
+          // console.log("newOwnerId : " + newOwnerId);
+          // console.log("랜덤으로 선택된 플레이어 : " + player.userId);
+          // console.log("방장 : " + room.ownerId);
+          // console.log("로그인한 유저 : " + $scope.user._id);
 
           // 방장이 퇴장하려 할 때, 다른 플레이어로 새로운 방장 지정
           if (newOwnerId === "" && $scope.user._id === room.ownerId && room.ownerId !== player.userId) {
             newOwnerId = player.userId;
-            console.log("changed newOwnerId : " + newOwnerId);
+            //console.log("changed newOwnerId : " + newOwnerId);
             $http.post('api/rooms/' + room.id + '/owner', {
               userId: newOwnerId
             }).then(function(response) {
