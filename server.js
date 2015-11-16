@@ -18,7 +18,11 @@ mongoose.connection.on('error', function() {
 
 app.use(express.static('www'));
 app.use(cookieParser('your secret here'));
-app.use(session());
+app.use(session({
+  secret: 'rollingpatint secret',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json()); // for parsing application/json
