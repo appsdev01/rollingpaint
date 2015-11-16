@@ -1,29 +1,9 @@
-var router = require('express').Router();
-var User = require('../models/user.server.models');
+var users = require('../controllers/users.server.controller');
 
-// 내 정보 조회하기
-// GET /users/me
-router.get('/me', function(req, res) {
-  if (req.isAuthenticated()) {
-    console.log(req.user.email);
-    User.findOne({
-      email: req.user.email
-    }, function(err, user) {
-      res.send(user);
-    });
-  } else {
-    res.sendStatus(401);
-  }
-});
+module.exports = function(app) {
+  app.route('/api/users/me')
+    .get(users.me);
 
-// 사용자 조회
-// GET /user/{userid}
-router.get('/:id', function(req, res, next) {
-  User.findOne({
-    _id: req.params.id
-  }, function(err, user) {
-    res.send(user);
-  });
-});
-
-module.exports = router;
+  app.route('/api/users/:userId')
+    .get(users.get);
+};

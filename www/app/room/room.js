@@ -17,7 +17,7 @@ angular.module('room', ['ionic'])
     chatSocket.connect();
 
     // 접속자 정보 조회
-    $http.get('/users/me').then(function(response) {
+    $http.get('/api/users/me').then(function(response) {
       $scope.user = response.data;
       // 방 정보 조회 후 참가 이벤트 소켓으로 전달
       chatSocket.emit('room:join', {
@@ -49,7 +49,7 @@ angular.module('room', ['ionic'])
         var i = 1;
         angular.forEach($scope.room.players, function(player) {
           if (player.playStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
-          $http.get('/users/' + player.userId).then(function(response) {
+          $http.get('/api/users/' + player.userId).then(function(response) {
             $scope.players[response.data._id] = response.data;
             $scope.players[response.data._id].playStatus = player.playStatus;
             $scope.players[response.data._id].seq = i++;
@@ -201,7 +201,7 @@ angular.module('room', ['ionic'])
       updateRoomInfo();
 
       // 새로운 참가자 정보 조회
-      $http.get('/users/' + msg.userId).then(function(response) {
+      $http.get('/api/users/' + msg.userId).then(function(response) {
         $scope.players[response.data._id] = response.data;
         $scope.data.messages.push({
           userId: '',

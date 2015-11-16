@@ -10,7 +10,7 @@ angular.module('lobby', ['ionic'])
   .controller('LobbyCtrl', function($scope, $http, $ionicModal) {
     $scope.roomData = {};
 
-    $http.get('/users/me',{cache:false}).then(function(response) {
+    $http.get('/api/users/me',{cache:false}).then(function(response) {
       $scope.user = response.data;
     });
 

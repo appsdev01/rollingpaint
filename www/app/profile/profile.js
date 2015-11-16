@@ -11,7 +11,7 @@ angular.module('profile', ['ionic'])
   .controller('ProfileCtrl', function($scope, $http, $ionicModal) {
     $scope.editData = {};
     // get my profile
-    $http.get('/users/me').then(function(response) {
+    $http.get('/api/users/me').then(function(response) {
       $scope.user = response.data;
     });
 

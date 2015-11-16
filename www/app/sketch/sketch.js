@@ -187,7 +187,7 @@ angular.module('sketch', ['ionic'])
     });
 
     // 접속자 정보 조회
-    $http.get('/users/me', {
+    $http.get('/api/users/me', {
       cache: false
     }).then(function(response) {
       $scope.user = response.data;
