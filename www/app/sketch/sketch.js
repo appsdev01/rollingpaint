@@ -7,7 +7,7 @@ angular.module('sketch', ['ionic'])
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $location) {
+  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $location, $state) {
 
     $scope.userId = $stateParams.userId;
     $scope.roomId = $stateParams.roomId;
@@ -46,26 +46,32 @@ angular.module('sketch', ['ionic'])
     $ionicBackdrop.release();
 
     // 1초마다 반복
-    $interval(function() {
+    $interval(countdown, 1000, $scope.timeCount);
+
+    function countdown() {
       $scope.timeCount--;
       if ($scope.timeCount === 0) {
-        $ionicBackdrop.retain();
-        var alertPopup = $ionicPopup.alert({
-          title: '시간 종료',
-          subTitle: '다음 단계로 이동합니다',
-        });
-        // 3초 후 실행
-        $timeout(function() {
-          $ionicBackdrop.release();
-          alertPopup.close();
-
-          if(!$scope.clickSavePaperYn){ // 저장 안 했을경우, 강제저장
-            $scope.savePaper();
-          }
-          $scope.changeDisplay();
-        }, 3000);
+        finishSketch();
       }
-    }, 1000, $scope.timeCount);
+    }
+
+    function finishSketch() {
+      $ionicBackdrop.retain();
+      var alertPopup = $ionicPopup.alert({
+        title: '시간 종료',
+        subTitle: '다음 단계로 이동합니다',
+      });
+      // 3초 후 실행
+      $timeout(function() {
+        $ionicBackdrop.release();
+        alertPopup.close();
+
+        if(!$scope.clickSavePaperYn){ // 저장 안 했을경우, 강제저장
+          $scope.savePaper();
+        }
+        $scope.changeDisplay();
+      }, 3000);
+    }
 
     function initSketchbook() {
       paths.length = 0;
@@ -227,7 +233,6 @@ angular.module('sketch', ['ionic'])
 
     $scope.changeDisplay = function() {
       $http.get('/api/rooms/' + $scope.roomId).then(function(response) {
-        console.log("rooms 조회!!!!!!!!!!");
         $scope.sketchbooks = response.data.sketchbooks;
         console.log($scope.sketchbooks);
         // 내 바로 전사람의 스케치북 가져오기
@@ -235,13 +240,7 @@ angular.module('sketch', ['ionic'])
         var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
 
         $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
-          console.log("sketchbooks 조회!!!!!!!!!!");
-          console.log(response.data.papers);
-          console.log(response.data.papers[response.data.papers.length - 1]);
-          //window.location.href = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
-
-          $location.url('/guessword?sketchbookId=' + preUserSketchbookId);
-
+          $state.go('guessword', { sketchbookId: preUserSketchbookId });
         });
       });
 

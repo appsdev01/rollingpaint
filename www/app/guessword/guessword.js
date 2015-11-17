@@ -4,15 +4,15 @@ angular.module('guessword', ['ionic'])
       .state('guessword', {
         url: '/guessword',
         templateUrl: "app/guessword/guessword.html",
-        controller: 'GuesswordCtrl'
+        controller: 'GuesswordCtrl',
+        params: {
+          sketchbookId: null
+        }
       });
   })
 
-  .controller('GuesswordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $http, $location) {
-    param = $location.search();
-
-    $http.get('/api/sketchbooks/' + param.sketchbookId + '/paper').then(function(response) {
-      console.log("sketchbooks 조회!!!!!!!!!!");
+  .controller('GuesswordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $http, $stateParams) {
+    $http.get('/api/sketchbooks/' + $stateParams.sketchbookId + '/paper').then(function(response) {
       console.log(response.data.papers);
       console.log(response.data.papers[response.data.papers.length - 1]);
 

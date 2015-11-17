@@ -1,17 +1,22 @@
 <ion-pane view-title="chat">
+
   <ion-header-bar class="bar-frosted">
     <div class="buttons">
     <button class="button button-clear button-positive" ng-click="leaveRoom(room)">나가기</button>
     </div>
     <h1 class="title">{{room.title}} ({{room.players.length}}/{{room.capacity}})</h1>
-  </ion-header-bar>
-  <div class="bar bar-subheader">
-    <h2 class="title">({{room.players.length}}/{{room.capacity}})</h2>
-    <!--user._id === room.ownerId && room.status === '01'-->
     <button class="button button-positive" ng-click="sendStatusMessage()" ng-disabled="user._id === room.ownerId && room.status === '01'">
-      {{user._id === room.ownerId ? '시작' : (players[user._id].playStatus === '01' ? 'Ready' : 'unReady')}}
+      {{user._id === room.ownerId ? '시작' : (players[user._id].playStatus === '01' ? '준비 완료' : '준비 취소')}}
       <!--{{user._id === room.ownerId ? '시작' : '준비'}}-->
     </button>
+  </ion-header-bar>
+
+  <div class="bar bar-subheader">
+    <ion-scroll direction="x">
+      <button class="player-tag button button-outline button-{{player.playStatus === '01' ? 'stable' : 'balanced'}}" ng-repeat="player in room.players">
+        {{player.username}}
+      </button>
+    </ion-scroll>
   </div>
 
   <ion-content class="padding" id="chat-content" start-y="120" delegate-handle="messages-scroll">

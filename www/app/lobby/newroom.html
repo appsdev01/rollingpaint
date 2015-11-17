@@ -29,11 +29,7 @@
           <div class="input-label">
             인원
           </div>
-          <select ng-model="roomData.capacity">
-            <option>5</option>
-            <option selected>6</option>
-            <option>7</option>
-            <option>8</option>
+          <select name="room-capacity" ng-model="room.capacity" ng-options="option.name for option in room.capacityOptions track by option.id">
           </select>
         </label>
 

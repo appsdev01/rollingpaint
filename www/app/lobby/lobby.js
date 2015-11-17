@@ -10,6 +10,16 @@ angular.module('lobby', ['ionic'])
   .controller('LobbyCtrl', function($scope, $http, $ionicModal) {
     $scope.roomData = {};
 
+    $scope.room = {
+      capacityOptions: [
+        {id: '5', name: '5'},
+        {id: '6', name: '6'},
+        {id: '7', name: '7'},
+        {id: '8', name: '8'}
+      ],
+      capacity: {id: '5', name: '5'}
+    };
+
     $http.get('/api/users/me',{cache:false}).then(function(response) {
       $scope.user = response.data;
     });
@@ -59,7 +69,7 @@ angular.module('lobby', ['ionic'])
       } else if ($scope.roomData.lock && ($scope.roomData.password === undefined || $scope.roomData.password === "")) {
         $scope.roomData.passwordAlert = true;
         return;
-      } else if ($scope.roomData.capacity === undefined) {
+      } else if ($scope.room.capacity.id === undefined) {
         $scope.roomData.capacityAlert = true;
         return;
       }
@@ -70,7 +80,7 @@ angular.module('lobby', ['ionic'])
         data: {
           "title": $scope.roomData.title,
           "password": $scope.roomData.password,
-          "capacity": parseInt($scope.roomData.capacity),
+          "capacity": parseInt($scope.room.capacity.id),
           "ownerId": $scope.user._id,
           "wordseed": Math.floor(Math.random() * 1000) + 1,
           "users": [{
