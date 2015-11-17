@@ -7,7 +7,7 @@ angular.module('sketch', ['ionic'])
         controller: 'SketchCtrl'
       });
   })
-  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http) {
+  .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $location) {
 
     $scope.userId = $stateParams.userId;
     $scope.roomId = $stateParams.roomId;
@@ -45,6 +45,7 @@ angular.module('sketch', ['ionic'])
     $scope.timeCount = 8;
     $ionicBackdrop.release();
 
+    // 1초마다 반복
     $interval(function() {
       $scope.timeCount--;
       if ($scope.timeCount === 0) {
@@ -53,6 +54,7 @@ angular.module('sketch', ['ionic'])
           title: '시간 종료',
           subTitle: '다음 단계로 이동합니다',
         });
+        // 3초 후 실행
         $timeout(function() {
           $ionicBackdrop.release();
           alertPopup.close();
@@ -236,7 +238,10 @@ angular.module('sketch', ['ionic'])
           console.log("sketchbooks 조회!!!!!!!!!!");
           console.log(response.data.papers);
           console.log(response.data.papers[response.data.papers.length - 1]);
-          window.location.href = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
+          //window.location.href = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
+
+          $location.url('/guessword?sketchbookId=' + preUserSketchbookId);
+
         });
       });
 

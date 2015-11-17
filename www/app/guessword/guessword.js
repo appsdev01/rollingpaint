@@ -8,7 +8,19 @@ angular.module('guessword', ['ionic'])
       });
   })
 
-  .controller('GuesswordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout) {
+  .controller('GuesswordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $http, $location) {
+    param = $location.search();
+
+    $http.get('/api/sketchbooks/' + param.sketchbookId + '/paper').then(function(response) {
+      console.log("sketchbooks 조회!!!!!!!!!!");
+      console.log(response.data.papers);
+      console.log(response.data.papers[response.data.papers.length - 1]);
+
+      $scope.paperImage = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
+      //window.location.href = response.data.papers[response.data.papers.length - 1].picture + ".jpg";
+    });
+
+
     //단어입력 시간 카운트
     $scope.timeCount = 5;
     $interval(function() {
@@ -26,5 +38,7 @@ angular.module('guessword', ['ionic'])
       }
     }, 1000, $scope.timeCount);
     //입력 단어 저장 및 채점
+
+
 
   });
