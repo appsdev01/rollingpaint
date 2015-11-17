@@ -157,7 +157,7 @@ exports.join = function(req, res) {
           Room.update({
             _id: req.params.roomId
           }, {
-            '$addToSet': {
+            $addToSet: {
               players: {
                 userId: req.body.userId,
                 username: req.body.username,
@@ -213,22 +213,16 @@ exports.delegate = function(req, res) {
   }
 
   Room.update({
-    _id: req.params.roomId
+    _id: req.params.roomId,
+    'players.userId': req.body.userId
   }, {
-    ownerId: req.body.userId
+    '$set': {
+      'ownerId': req.body.userId,
+      'players.$.playStatus': '02'
+    }
   }, function(err, result) {
     if (err) throw err;
-
-    // 방장 변경 성공 시 Player Status 02로 변경(방장)
-    Room.update({
-      'players.userId': req.body.userId
-    }, {
-      '$set': {
-        'players.$.playStatus': "02"
-      }
-    }, function(err, result) {
-      res.send(result.WriteResult);
-    });
+    res.send(result.WriteResult);
   });
 };
 
