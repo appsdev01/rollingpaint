@@ -2,18 +2,25 @@ angular.module('word', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('word', {
-        url: '/word/:roomId/user/:userId/seq/:seqId/sketchbook/:sketchbookId',
+        url: '/word',
         templateUrl: "app/word/word.html",
-        controller: 'WordCtrl'
+        controller: 'WordCtrl',
+        params: {
+          roomId: null,
+          seqId: null,
+          playerId: null,
+          nextPlayerId: null,
+          sketchbookId: null
+        }
       });
   })
 
 .controller('WordCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $ionicModal) {
-
   $scope.roomId = $stateParams.roomId;
-  $scope.userId = $stateParams.userId;
-  $scope.seqId = $stateParams.seqId;
+  $scope.userId = $stateParams.playerId;
+  $scope.nextPlayerId = $stateParams.nextPlayerId;
   $scope.sketchbookId = $stateParams.sketchbookId;
+  $scope.seqId = $stateParams.seqId;
 
   //단어선택 시간 카운트
   $scope.timeCount = 8;
@@ -41,25 +48,27 @@ angular.module('word', ['ionic'])
 
   $http.get('/api/words/wordList/' + $stateParams.roomId + '/seq/' + $stateParams.seqId).then(function(response) {
     $scope.words = response.data;
+
+    // 스케치북으로 이동
+    $scope.goSketchbook = function(word) {
+      // 시간 내 선택 못 했을 경우, 첫번째 단어세팅
+      if(word === undefined) word = $scope.words[0][0].value;
+      $http.put('/api/sketchbooks/' + $scope.sketchbookId, {
+        word: word
+      }).then(function(response) {
+        console.log(response.data);
+      });
+
+      // 03: 단어 선택
+      $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
+        status: '03'
+      }).then(function(response) {
+        console.log(response.data);
+        //$scope.room = response.data;
+      });
+    };
   });
 
-  // 스케치북으로 이동
-  $scope.goSketchbook = function(word) {
-    // 시간 내 선택 못 했을 경우, 첫번째 단어세팅
-    if(word === undefined) word = $scope.words[0][0].value;
-    $http.put('/api/sketchbooks/' + $scope.sketchbookId, {
-      word: word
-    }).then(function(response) {
-      console.log(response.data);
-    });
 
-    // 03: 단어 선택
-    $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.userId, {
-      status: '03'
-    }).then(function(response) {
-      console.log(response.data);
-      //$scope.room = response.data;
-    });
-  };
 
 });

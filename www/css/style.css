@@ -50,6 +50,11 @@ body {
   font-weight:bold;
 }
 
+.messages li.message-notice {
+  max-width: 100%;
+	text-align:center;
+}
+
 .messages p.message-sender {
   margin-bottom: 2px;
 }
@@ -65,6 +70,16 @@ body {
 	padding:.6875rem;
 	margin:0;
 	font-size:.875rem;
+}
+
+.messages li.message-notice .message-content {
+	border-radius:.75rem;
+	background:#e6e5eb;
+	color:#383641;
+	padding:0;
+	margin:0;
+  font-size: .75rem;
+  font-weight: bold;
 }
 
 .messages li.message-self .message-content {

@@ -23,7 +23,7 @@ module.exports = function(app, server) {
             }
           }
         }, function(err, result) {
-          
+
         });
 
         socket.broadcast.to(sockets[socket.id].roomId).emit('room:lost', sockets[socket.id]);
@@ -57,19 +57,19 @@ module.exports = function(app, server) {
     });
 
     socket.on('room:message', function(msg) {
-      console.log(msg);
-      // msg = { "userId": "", "roomId": "", "content": "" }
-
-      var returnMsg = {
+      // 특정 방의 참가자에게 메시지 브로드캐스팅
+      io.of('/chat').in(msg.roomId).emit('room:message', {
         userId: msg.userId,
         content: msg.content
-      };
+      });
+    });
 
-      console.log(msg.roomId);
-      console.log(returnMsg);
+    socket.on('room:ready', function(msg) {
+      io.of('/chat').in(msg.roomId).emit('room:ready');
+    });
 
-      // 특정 방의 참가자에게 메시지 브로드캐스팅
-      io.of('/chat').in(msg.roomId).emit('room:message', returnMsg);
+    socket.on('room:start', function(msg) {
+      io.of('/chat').in(msg.roomId).emit('room:start', msg);
     });
 
     socket.on('room:sendReadyMessage', function(msg) {

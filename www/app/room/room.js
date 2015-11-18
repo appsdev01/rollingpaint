@@ -7,7 +7,7 @@ angular.module('room', ['ionic'])
         controller: 'RoomCtrl'
       });
   })
-  .controller('RoomCtrl', function($scope, $stateParams, $http, chatSocket, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
+  .controller('RoomCtrl', function($scope, $state, $stateParams, $http, chatSocket, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
     console.log('start RoomCtrl');
     $scope.room = {};
     $scope.user = {};
@@ -88,52 +88,70 @@ angular.module('room', ['ionic'])
       $scope.data.message = '';
     };
 
-    // 서버로 메시지 전송
-    $scope.sendStatusMessage = function() {
+    // 준비상태 토클
+    $scope.toggleReady = function() {
+      var isReady = $scope.players[$scope.user._id].playStatus === '02';
+      var status = isReady ? '01' : '02';
 
-      var sketchbookId = "";
-      if ($scope.user._id === $scope.room.ownerId) {
-        chatSocket.emit('room:sendStartMessage', {
-          userId: '',
+      // 준비 상태 저장
+      $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
+        status: status
+      }).then(function(response) {
+        // 준비 상태 저장이 정상적으로 완료되면
+
+        // 서버 소켓으로 플레이 상태 변경 메시지 전달
+        chatSocket.emit('room:message', {
           roomId: $scope.room.id,
-          content: '게임 시작합니다!!!'
+          content: isReady ? $scope.user.username + '님이 준비를 취소하였습니다.' : $scope.user.username + '님이 준비되었습니다.'
         });
 
-        // 인원 수만큼 스케치북 생성
-        angular.forEach($scope.room.players, function(user) {
-          console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
-          $http.post('/api/sketchbooks', {
+        // 서버 소켓으로 플레이 상태 변경 업데이트 전달
+        chatSocket.emit('room:ready', {
+          roomId: $scope.room.id
+        });
+      });
+    };
+
+    // [Server -> Client] 참가자 준비 상태 변경 이벤트
+    chatSocket.on('room:ready', function(msg) {
+      updateRoomInfo();
+    });
+
+    // 게임 시작 버튼에 연결
+    $scope.startGame = function() {
+      // [Client -> Server] 게임 시작 메시지
+      chatSocket.emit('room:message', {
+        roomId: $scope.room.id,
+        content: '게임을 시작합니다.'
+      });
+
+      // 참가자 수만큼 스케치북 생성
+      angular.forEach($scope.room.players, function(player) {
+        $http.post('/api/sketchbooks', {
+          roomId: $scope.room.id,
+          userId: player.userId
+        }).then(function(response) {
+          sketchbookId = response.data;
+
+          var playerSeq = $scope.players[player.userId].seq;
+          var totalPlayers = $scope.room.players.length;
+          chatSocket.emit('room:start', {
             roomId: $scope.room.id,
-            userId: user.userId
-          }).then(function(response) {
-            sketchbookId = response.data;
-            $scope.sketchbooks[$scope.players[user.userId].seq - 1] = sketchbookId;
-            var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/' + $scope.players[user.userId].seq + '/sketchbook/' + sketchbookId;
-            chatSocket.emit('room:changeDisplay', {
-              userId: user.userId,
-              roomId: $scope.room.id,
-              url: url
-            });
+            seqId: playerSeq,
+            playerId: player.userId,
+            nextPlayerId: $scope.room.players[(playerSeq + 1) % totalPlayers].userId,
+            sketchbookId: sketchbookId
           });
         });
-
-      } else {
-        var readyStatus = $scope.players[$scope.user._id].playStatus === '01' ? '02' : '01';
-        $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
-          status: readyStatus
-        }).then(function(response) {
-          console.log(response.data);
-          //$scope.room = response.data;
-        });
-
-        chatSocket.emit('room:sendReadyMessage', {
-          userId: '',
-          roomId: $scope.room.id,
-          content: (readyStatus === '02' ? $scope.players[$scope.user._id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user._id].username + '님이 준비를 취소하였습니다.')
-        });
-        //updateRoomInfo();
-      }
+      });
     };
+
+    // [Server -> Client] 게임 시작 이벤트
+    chatSocket.on('room:start', function(msg) {
+      if (msg.playerId === $scope.user._id) {
+        $state.go('word', msg);
+      }
+    });
 
     // 방에서 나가기
     $scope.leaveRoom = function(room) {
