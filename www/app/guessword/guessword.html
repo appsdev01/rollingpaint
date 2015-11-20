@@ -3,27 +3,27 @@
     <ion-content>
       <div class="card">
         <div class="item item-text-wrap">
-          그림을 보고 유추한 단어를 입력하세요!
+          그림을 보고 유추되는 단어를 영어로 입력하세요!
           <span class="item-note">
-            남은시간
-            {{timeCount}}초&nbsp;&nbsp;
+            남은시간 {{timeCount}}초&nbsp;&nbsp;
           </span>
         </div>
       </div>
       <div class="list list-inset">
-        <label class="item item-input">
-          <input placeholder="ex) 백설공주" type="text">
-        </label>
+          <div class="list">
+            <div class="item item-input-inset">
+              <label class="item-input-wrapper">
+                <input name ="paperanswer" id="paperanswer"type="text" ng-model="inputanswer" placeholder="ㅣ">
+              </label>
+              <button class="button button-small" ng-click="savePaper()">완료</button>
+            </div>
+          </div>
       </div>
       <div class="item item-image">
         <!-- <img ngsrc="http://blog.yourstage.com/attach/4328/1354245596.jpg"> -->
         <img ng-src="{{paperImage}}">
       </div>
       <br/>
-      <span style="float:right">
-        <button class="button button-balanced" ng-click="">완료!
-        </button>
-      </span>
     </ion-content>
   </ion-pane>
 </ion-view>

@@ -160,7 +160,7 @@ exports.listPaper = function(req, res, next) {
     _id: req.params.sketchbookId
   }, function(err, results) {
     if (!err) {
-      console.log("results papers : " + results.papers);
+      console.log("results papers : " + results);
       res.send(results);
     }
   });

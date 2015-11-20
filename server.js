@@ -50,5 +50,6 @@ require('./server/routes/rooms.server.routes')(app);
 require('./server/routes/chats.server.routes')(app, server);
 require('./server/routes/auth.server.routes')(app);
 require('./server/routes/sketchbooks.server.routes')(app);
+require('./server/routes/guesswords.server.routes')(app);
 require('./server/routes/scores.server.routes')(app);
 require('./server/routes/words.server.routes')(app);

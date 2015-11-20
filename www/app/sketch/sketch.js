@@ -4,7 +4,12 @@ angular.module('sketch', ['ionic'])
       .state('sketch', {
         url: '/sketch/:sketchbookId/roomId/:roomId/userId/:userId/seqId/:seqId',
         templateUrl: "app/sketch/sketch.html",
-        controller: 'SketchCtrl'
+        controller: 'SketchCtrl',
+        params: {
+        sketchbookId: null,
+        userId:null,
+        roomId:null
+         }
       });
   })
   .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $location, $state) {
@@ -16,6 +21,12 @@ angular.module('sketch', ['ionic'])
     $scope.sketchbooks = {};
     $scope.user = {};
     $scope.clickSavePaperYn = false;
+
+    $http.get('/api/sketchbooks/'+$scope.sketchbookId+'/paper').then(function(response) {
+      $scope.currentword = response.data;
+      console.log($scope.currentword);
+    });
+
 
     var canvas = document.getElementById('paper');
     var ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -240,7 +251,7 @@ angular.module('sketch', ['ionic'])
         var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
 
         $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
-          $state.go('guessword', { sketchbookId: preUserSketchbookId });
+          $state.go('guessword', { sketchbookId: preUserSketchbookId, userId: $scope.userId, roomId: $scope.roomId});
         });
       });
 
