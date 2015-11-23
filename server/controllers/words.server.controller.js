@@ -12,18 +12,16 @@ exports.create = function(req, res) {
     return res.sendStatus(400);
   }
 
-  console.log(req.body);
   var seqNo = 0;
   var word = new Word({
     value: req.body.value
   });
-  console.log("word : " + word);
+
   word.save(function(err) {
     if (err) {
       return res.sendStatus(500);
     }
     Word.find(function(err, results) {
-      console.log("results : " + results);
       seqNo = results.length;
       Word.update(word, {
         seq: seqNo
@@ -71,7 +69,7 @@ exports.get = function(req, res) {
       function(callback) {
         Room.findById(roomNum, function(err, doc) {
 
-          console.log("\n\n\n\n\n\nroomNum : " + roomNum);
+          //console.log("\n\n\n\n\n\nroomNum : " + roomNum);
           //console.log("doc.wordseed : " + doc.wordseed);
           if (err) return handleError(err);
           wordseed = doc.wordseed;

@@ -42,7 +42,7 @@ angular.module('lobby', ['ionic'])
       console.log(room);
 
       $http.post('/api/rooms/' + room.id + '/users', {
-          userId: $scope.user._id,
+          userId: $scope.user.id,
           username: $scope.user.username,
           password: room.password
         })
@@ -81,10 +81,10 @@ angular.module('lobby', ['ionic'])
           "title": $scope.roomData.title,
           "password": $scope.roomData.password,
           "capacity": parseInt($scope.room.capacity.id),
-          "ownerId": $scope.user._id,
+          "ownerId": $scope.user.id,
           "wordseed": Math.floor(Math.random() * 1000) + 1,
           "users": [{
-            userId: $scope.user._id,
+            userId: $scope.user.id,
             username: $scope.user.username
           }]
         }

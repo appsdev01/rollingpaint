@@ -2,22 +2,23 @@
 
   <ion-header-bar class="bar-calm">
     <div class="buttons">
-      <button class="button button-clear" ng-click="leaveRoom(room)" ng-disabled="user._id !== room.ownerId && players[user._id].playStatus === '02'">나가기</button>
+      <button class="button button-clear" ng-click="leaveRoom(room)" ng-disabled="user.id !== room.ownerId && players[user.id].playStatus === '02'">나가기</button>
     </div>
     <h1 class="title">{{room.title}} ({{room.players.length}}/{{room.capacity}})</h1>
     <!-- 방장인 경우 -->
-    <button class="button button-clear" ng-click="startGame()" ng-if="user._id === room.ownerId">
+    <button class="button button-clear" ng-click="startGame()" ng-if="user.id === room.ownerId">
       시작
     </button>
     <!-- 참가자인 경우 -->
-    <button class="button button-clear" ng-click="toggleReady()" ng-if="user._id !== room.ownerId">
-      {{players[user._id].playStatus === '01' ? '준비' : '대기'}}
+    <button class="button button-clear" ng-click="toggleReady()" ng-if="user.id !== room.ownerId">
+      {{players[user.id].playStatus === '01' ? '준비' : '대기'}}
     </button>
   </ion-header-bar>
 
   <ion-header-bar class="bar bar-subheader bar-stable">
-    <ion-scroll direction="x">
-      <button class="player-tag button button-outline button-{{player.playStatus === '01' ? 'stable' : 'balanced'}}" ng-repeat="player in players">
+    <ion-scroll class="player-tag" direction="x">
+      <button class="button button-{{player.playStatus === '01' ? 'stable' : 'balanced'}}" ng-repeat="player in room.players">
+        <i class="icon ion-ios-paw" ng-if="player.userId === room.ownerId"></i>
         {{player.username}}
       </button>
     </ion-scroll>
@@ -25,7 +26,7 @@
 
   <ion-content class="padding" id="chat-content" start-y="120" delegate-handle="messages-scroll">
     <ol class="messages">
-      <li class="{{message.userId ? (user._id === message.userId ? 'message-self' : 'message-others') : 'message-notice'}}" ng-repeat="message in data.messages track by $index">
+      <li class="{{message.userId ? (user.id === message.userId ? 'message-self' : 'message-others') : 'message-notice'}}" ng-repeat="message in data.messages track by $index">
         <p class="message-sender" ng-if="message.userId">{{players[message.userId].username}}</p>
         <p class="message-content">{{message.content}}</p>
       </li>

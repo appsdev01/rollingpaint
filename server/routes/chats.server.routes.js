@@ -1,4 +1,5 @@
 var Room = require('../models/room.server.model');
+var _ = require('underscore') ;
 
 module.exports = function(app, server) {
   var io = require('socket.io')(server);
@@ -68,8 +69,10 @@ module.exports = function(app, server) {
       io.of('/chat').in(msg.roomId).emit('room:ready');
     });
 
-    socket.on('room:start', function(msg) {
-      io.of('/chat').in(msg.roomId).emit('room:start', msg);
+    socket.on('game:start', function(msg) {
+      console.log('# game:start');
+      console.log(msg);
+      io.of('/chat').in(msg.room.id).emit('game:start', msg);
     });
 
     socket.on('room:sendReadyMessage', function(msg) {
@@ -114,6 +117,24 @@ module.exports = function(app, server) {
 
       // 특정 방의 참가자에게 메시지 브로드캐스팅
       io.of('/chat').in(msg.roomId).emit('room:changeDisplay', returnMsg);
+    });
+
+    socket.on('word:ready', function(msg) {
+      Room.findById(msg.roomId, function(err, doc) {
+        if (err || !doc) {
+          return;
+        }
+
+        var room = doc.toJSON();
+        console.log(room);
+
+        var allReady = !room.players.some(player => player.playStatus != '03');
+        console.log('room ' + room.id + ' is all ready? '+ allReady);
+        if (allReady) {
+          // 참가자 전원 단어 선택이 완료된 경우
+          io.of('/chat').in(room.id).emit('word:done', room);
+        }
+      });
     });
 
   });

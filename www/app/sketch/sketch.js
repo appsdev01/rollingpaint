@@ -2,14 +2,15 @@ angular.module('sketch', ['ionic'])
   .config(function($stateProvider) {
     $stateProvider
       .state('sketch', {
-        url: '/sketch/:sketchbookId/roomId/:roomId/userId/:userId/seqId/:seqId',
+        url: '/sketch',
         templateUrl: "app/sketch/sketch.html",
         controller: 'SketchCtrl',
         params: {
-        sketchbookId: null,
-        userId:null,
-        roomId:null
-         }
+          sketchbookId: null,
+          userId: null,
+          roomId: null,
+          seqId: null
+        }
       });
   })
   .controller('SketchCtrl', function($scope, $interval, $ionicPopup, $ionicBackdrop, $timeout, $stateParams, $http, $location, $state) {
@@ -22,7 +23,7 @@ angular.module('sketch', ['ionic'])
     $scope.user = {};
     $scope.clickSavePaperYn = false;
 
-    $http.get('/api/sketchbooks/'+$scope.sketchbookId+'/paper').then(function(response) {
+    $http.get('/api/sketchbooks/' + $scope.sketchbookId + '/paper').then(function(response) {
       $scope.currentword = response.data;
       console.log($scope.currentword);
     });
@@ -77,7 +78,7 @@ angular.module('sketch', ['ionic'])
         $ionicBackdrop.release();
         alertPopup.close();
 
-        if(!$scope.clickSavePaperYn){ // 저장 안 했을경우, 강제저장
+        if (!$scope.clickSavePaperYn) { // 저장 안 했을경우, 강제저장
           $scope.savePaper();
         }
         $scope.changeDisplay();
@@ -224,7 +225,7 @@ angular.module('sketch', ['ionic'])
         method: 'POST',
         url: '/api/sketchbooks/' + $scope.sketchbookId + '/paper',
         data: {
-          "userId": $scope.user._id,
+          "userId": $scope.user.id,
           "type": 'picture',
           "answer": '',
           "picture": dataURL,
@@ -251,7 +252,11 @@ angular.module('sketch', ['ionic'])
         var preUserSketchbookId = $scope.sketchbooks[preUserSeq];
 
         $http.get('/api/sketchbooks/' + preUserSketchbookId + '/paper').then(function(response) {
-          $state.go('guessword', { sketchbookId: preUserSketchbookId, userId: $scope.userId, roomId: $scope.roomId});
+          $state.go('guessword', {
+            sketchbookId: preUserSketchbookId,
+            userId: $scope.userId,
+            roomId: $scope.roomId
+          });
         });
       });
 

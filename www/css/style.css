@@ -140,5 +140,9 @@ body {
 }
 
 .player-tag {
+  width: 600px;
+}
+
+.player-tag button {
   margin: 0 5px;
 }

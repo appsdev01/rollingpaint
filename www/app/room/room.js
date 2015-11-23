@@ -7,8 +7,7 @@ angular.module('room', ['ionic'])
         controller: 'RoomCtrl'
       });
   })
-  .controller('RoomCtrl', function($scope, $state, $stateParams, $http, chatSocket, $ionicFrostedDelegate, $ionicScrollDelegate, $rootScope) {
-    console.log('start RoomCtrl');
+  .controller('RoomCtrl', function($scope, $state, $stateParams, $http, $q, chatSocket, $ionicFrostedDelegate, $ionicScrollDelegate, $ionicHistory, $rootScope) {
     $scope.room = {};
     $scope.user = {};
     $scope.players = {};
@@ -20,8 +19,9 @@ angular.module('room', ['ionic'])
     $http.get('/api/users/me').then(function(response) {
       $scope.user = response.data;
       // 방 정보 조회 후 참가 이벤트 소켓으로 전달
+      $rootScope.me = response.data;
       chatSocket.emit('room:join', {
-        userId: $scope.user._id,
+        userId: $scope.user.id,
         roomId: $stateParams.roomId
       });
     });
@@ -33,7 +33,7 @@ angular.module('room', ['ionic'])
 
         var isparticipant = false;
         angular.forEach(response.data.players, function(player) {
-          if (player.userId === $scope.user._id)
+          if (player.userId === $scope.user.id)
             isparticipant = true;
         });
 
@@ -50,9 +50,9 @@ angular.module('room', ['ionic'])
         angular.forEach($scope.room.players, function(player) {
           if (player.playStatus === '01') $scope.room.status = '01'; // 한 명이라도 ready 상태가 아니면 '01'
           $http.get('/api/users/' + player.userId).then(function(response) {
-            $scope.players[response.data._id] = response.data;
-            $scope.players[response.data._id].playStatus = player.playStatus;
-            $scope.players[response.data._id].seq = i++;
+            $scope.players[response.data.id] = response.data;
+            $scope.players[response.data.id].playStatus = player.playStatus;
+            $scope.players[response.data.id].seq = i++;
           });
         });
 
@@ -81,7 +81,7 @@ angular.module('room', ['ionic'])
       }
 
       chatSocket.emit('room:message', {
-        userId: $scope.user._id,
+        userId: $scope.user.id,
         roomId: $scope.room.id,
         content: $scope.data.message
       });
@@ -90,11 +90,11 @@ angular.module('room', ['ionic'])
 
     // 준비상태 토클
     $scope.toggleReady = function() {
-      var isReady = $scope.players[$scope.user._id].playStatus === '02';
+      var isReady = $scope.players[$scope.user.id].playStatus === '02';
       var status = isReady ? '01' : '02';
 
       // 준비 상태 저장
-      $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user._id, {
+      $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user.id, {
         status: status
       }).then(function(response) {
         // 준비 상태 저장이 정상적으로 완료되면
@@ -125,33 +125,103 @@ angular.module('room', ['ionic'])
         content: '게임을 시작합니다.'
       });
 
-      // 참가자 수만큼 스케치북 생성
-      angular.forEach($scope.room.players, function(player) {
-        $http.post('/api/sketchbooks', {
+      // 플레이어 수만큼 스케치북 생성 요청
+      var promises = $scope.room.players.map(function(player) {
+        console.log(player);
+        return $http.post('/api/sketchbooks', {
           roomId: $scope.room.id,
           userId: player.userId
-        }).then(function(response) {
-          sketchbookId = response.data;
+        });
+      });
 
-          var playerSeq = $scope.players[player.userId].seq;
-          var totalPlayers = $scope.room.players.length;
-          chatSocket.emit('room:start', {
-            roomId: $scope.room.id,
-            seqId: playerSeq,
-            playerId: player.userId,
-            nextPlayerId: $scope.room.players[(playerSeq + 1) % totalPlayers].userId,
-            sketchbookId: sketchbookId
+      $q.all(promises).then(function() {
+        // 모든 스케치북이 생성 완료된 시점
+
+        // 스케치북이 추가된 새로운 방 정보를 업데이트
+        $http.get('/api/rooms/' + $scope.room.id).then(function success(response) {
+          // 서버 소켓으로 게임 시작 이벤트 전송
+          chatSocket.emit('game:start', {
+            room: response.data
           });
         });
       });
+
+      // 참가자 수만큼 스케치북 생성
+      // angular.forEach($scope.room.players, function(player) {
+      //   $http.post('/api/sketchbooks', {
+      //     roomId: $scope.room.id,
+      //     userId: player.userId
+      //   }).then(function(response) {
+      //     sketchbookId = response.data;
+      //
+      //     var playerSeq = $scope.players[player.userId].seq;
+      //     var totalPlayers = $scope.room.players.length;
+      //     chatSocket.emit('room:start', {
+      //       roomId: $scope.room.id,
+      //       seqId: playerSeq,
+      //       playerId: player.userId,
+      //       nextPlayerId: $scope.room.players[(playerSeq + 1) % totalPlayers].userId,
+      //       sketchbookId: sketchbookId
+      //     });
+      //   });
+      // });
     };
 
     // [Server -> Client] 게임 시작 이벤트
-    chatSocket.on('room:start', function(msg) {
-      if (msg.playerId === $scope.user._id) {
+    chatSocket.on('game:start', function(msg) {
+      console.log('Game Start ');
+      console.log(msg);
+      $ionicHistory.clearCache().then(function(){
         $state.go('word', msg);
-      }
+      });
     });
+
+    // 서버로 메시지 전송
+    // $scope.sendStatusMessage = function() {
+    //
+    //   var sketchbookId = "";
+    //   if ($scope.user.id === $scope.room.ownerId) {
+    //     chatSocket.emit('room:sendStartMessage', {
+    //       userId: '',
+    //       roomId: $scope.room.id,
+    //       content: '게임 시작합니다!!!'
+    //     });
+    //
+    //     // 인원 수만큼 스케치북 생성
+    //     angular.forEach($scope.room.players, function(user) {
+    //       console.log(user.username + "의 스케치북 생성!!!!!!!!!!!!!");
+    //       $http.post('/api/sketchbooks', {
+    //         roomId: $scope.room.id,
+    //         userId: user.userId
+    //       }).then(function(response) {
+    //         sketchbookId = response.data;
+    //         $scope.sketchbooks[$scope.players[user.userId].seq - 1] = sketchbookId;
+    //         var url = '#/word/' + $scope.room.id + '/user/' + user.userId + '/seq/' + $scope.players[user.userId].seq + '/sketchbook/' + sketchbookId;
+    //         chatSocket.emit('room:changeDisplay', {
+    //           userId: user.userId,
+    //           roomId: $scope.room.id,
+    //           url: url
+    //         });
+    //       });
+    //     });
+    //
+    //   } else {
+    //     var readyStatus = $scope.players[$scope.user.id].playStatus === '01' ? '02' : '01';
+    //     $http.put('/api/rooms/' + $stateParams.roomId + '/users/' + $scope.user.id, {
+    //       status: readyStatus
+    //     }).then(function(response) {
+    //       console.log(response.data);
+    //       //$scope.room = response.data;
+    //     });
+    //
+    //     chatSocket.emit('room:sendReadyMessage', {
+    //       userId: '',
+    //       roomId: $scope.room.id,
+    //       content: (readyStatus === '02' ? $scope.players[$scope.user.id].username + '님이 준비가 됐습니다.' : $scope.players[$scope.user.id].username + '님이 준비를 취소하였습니다.')
+    //     });
+    //     //updateRoomInfo();
+    //   }
+    // };
 
     // 방에서 나가기
     $scope.leaveRoom = function(room) {
@@ -173,10 +243,10 @@ angular.module('room', ['ionic'])
           // console.log("newOwnerId : " + newOwnerId);
           // console.log("랜덤으로 선택된 플레이어 : " + player.userId);
           // console.log("방장 : " + room.ownerId);
-          // console.log("로그인한 유저 : " + $scope.user._id);
+          // console.log("로그인한 유저 : " + $scope.user.id);
 
           // 방장이 퇴장하려 할 때, 다른 플레이어로 새로운 방장 지정
-          if (newOwnerId === "" && $scope.user._id === room.ownerId && room.ownerId !== player.userId) {
+          if (newOwnerId === "" && $scope.user.id === room.ownerId && room.ownerId !== player.userId) {
             newOwnerId = player.userId;
             //console.log("changed newOwnerId : " + newOwnerId);
             $http.post('api/rooms/' + room.id + '/owner', {
@@ -220,7 +290,7 @@ angular.module('room', ['ionic'])
 
       // 새로운 참가자 정보 조회
       $http.get('/api/users/' + msg.userId).then(function(response) {
-        $scope.players[response.data._id] = response.data;
+        $scope.players[response.data.id] = response.data;
         $scope.data.messages.push({
           userId: '',
           content: response.data.username + '님이 참가하셨습니다.'
@@ -257,7 +327,7 @@ angular.module('room', ['ionic'])
     // 게임시작 후, 사용자별 화면 전환
     chatSocket.on('room:changeDisplay', function(msg) {
       console.log(msg);
-      if (msg.userId === $scope.user._id) {
+      if (msg.userId === $scope.user.id) {
         window.location.href = msg.url;
       }
       $ionicScrollDelegate.$getByHandle('messages-scroll').scrollBottom(true);
@@ -266,16 +336,16 @@ angular.module('room', ['ionic'])
     $scope.$on('$destroy', function() {
       console.log('RoomCtrl destroy');
 
-      $http.delete('/api/rooms/' + $scope.room.id + '/users/' + $scope.user._id)
-        .then(function(response) {
-          // DB 업데이트 완료 후 소켓 room 퇴장
-          chatSocket.emit('room:leave', {
-            userId: $scope.user._id,
-            roomId: $scope.room.id
-          });
-
-          chatSocket.disconnect();
-        });
+      // $http.delete('/api/rooms/' + $scope.room.id + '/users/' + $scope.user.id)
+      //   .then(function(response) {
+      //     // DB 업데이트 완료 후 소켓 room 퇴장
+      //     chatSocket.emit('room:leave', {
+      //       userId: $scope.user.id,
+      //       roomId: $scope.room.id
+      //     });
+      //
+      //     chatSocket.disconnect();
+      //   });
     });
 
     // Update the scroll area and tell the frosted glass to redraw itself

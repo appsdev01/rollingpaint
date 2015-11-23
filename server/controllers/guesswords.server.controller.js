@@ -21,8 +21,6 @@ var async = require('async');
 // 입력단어 저장하기
 // PUT /guessword/1/
 exports.createPaper = function(req, res) {
-  console.log('createPaper In !!');
-
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -74,7 +72,6 @@ exports.createPaper = function(req, res) {
       });
     }
   ], function(err, result) {
-    console.log("paperId : " + paperId);
     res.send(result.papers);
   });
 };

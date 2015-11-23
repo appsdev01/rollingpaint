@@ -31,33 +31,9 @@ var base64 = require('node-base64-image');
 fs = require('fs');
 var async = require('async');
 
-// Create a sketchbook
-/*
-router.post('/:userId', function(req, res, next) {
-if (!req.body) {
-return res.sendStatus(400);
-}
-console.log(req.body);
-var sketchbook = new Sketchbook({
-userId: req.params.userId,
-word : req.body.word,
-paper : req.body.paper,
-type : req.body.type
-});
-
-sketchbook.save(function (err) {
-if (err) {
-return res.sendStatus(500);
-}
-});
-});
-*/
-
 // 스케치북 생성하기
 // POST /sketchbook/1
 exports.create = function(req, res, next) {
-
-  console.log("::::::::::::::: createSketchbook !!!!!!!!!!!!!!");
   var sketchbookId = "";
 
   async.series([
@@ -88,9 +64,24 @@ exports.create = function(req, res, next) {
       }, function(err, result) {
         callback(null, result);
       });
+    },
+    function(callback) {
+      Room.findById(req.body.roomId, function(err, room) {
+        if (err) return handleError(err);
+
+        room.players.map(function(player) {
+          if (player.userId === req.body.userId) {
+            player.sketchbook = sketchbookId;
+          }
+        });
+
+        room.save(function (err) {
+          if (err) return handleError(err);
+          callback(null, room);
+        });
+      });
     }
   ], function(err, result) {
-    console.log("sketchbookId : " + sketchbookId);
     res.send(sketchbookId);
   });
 
@@ -99,9 +90,6 @@ exports.create = function(req, res, next) {
 // 턴 지정하기
 // POST /sketchbook/1(스케치북 id)/paper/1/
 exports.countTurn = function(req, res) {
-
-  console.log(req.body);
-
   Sketchbook.update({
     _id: req.params.sketchbookId
   }, {
@@ -115,7 +103,6 @@ exports.countTurn = function(req, res) {
   }, {
     upsert: true
   }, function(err, result) {
-    console.log("result papers : " + result.papers);
     res.send(result);
   });
 };
@@ -128,7 +115,6 @@ exports.get = function(req, res, next) {
     userId: req.params.userId
   }, function(err, results) {
     if (!err) {
-      console.log("results : " + results);
       res.send(results);
     }
   });
@@ -137,7 +123,6 @@ exports.get = function(req, res, next) {
 // 스케치북 수정하기
 // PUT /skethbook/1/
 exports.update = function(req, res, next) {
-  console.log(req.params.sketchbookId + "에 단어 :" + req.body.word + " 선택");
   Sketchbook.update({
     _id: req.params.sketchbookId
   }, {
@@ -155,12 +140,10 @@ exports.delete = function(req, res, next) {};
 // 스케치북 조회하기
 // GET /skethbook/1/
 exports.listPaper = function(req, res, next) {
-  console.log("sketchbookId : " + req.params.sketchbookId);
   Sketchbook.findOne({
     _id: req.params.sketchbookId
   }, function(err, results) {
     if (!err) {
-      console.log("results papers : " + results);
       res.send(results);
     }
   });
@@ -169,8 +152,6 @@ exports.listPaper = function(req, res, next) {
 // 페이서 생성하기
 // POST /skethbook/1/
 exports.createPaper = function(req, res) {
-  console.log('createPaper In !!');
-
   if (!req.body) {
     return res.sendStatus(400);
   }
@@ -179,9 +160,6 @@ exports.createPaper = function(req, res) {
   var date = new Date();
   var dateString = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds() + "" + date.getMilliseconds();
   var staticPath = '/tempSketchbookImage/sketchbook_'; // sketchbook_timestamp.png
-
-  //console.log(req.body.picture);
-
   var imgUrl = req.body.picture;
   var replaceDataUrl = imgUrl.replace(/^data:image\/\w+;base64,/, "");
   var imageData = new Buffer(replaceDataUrl, 'base64');
@@ -244,7 +222,6 @@ exports.createPaper = function(req, res) {
       });
     }
   ], function(err, result) {
-    console.log("paperId : " + paperId);
     res.send(result.papers);
   });
 };

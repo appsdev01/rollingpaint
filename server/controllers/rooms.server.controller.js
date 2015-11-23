@@ -34,8 +34,20 @@ exports.list = function(req, res) {
 
 // 방ID로 방 정보 조회
 exports.get = function(req, res) {
+  if (!req.params.roomId)
+    return res.status(400).send({
+      error: 'no required parameter'
+    });
+
   Room.findById(req.params.roomId, function(err, doc) {
     if (err) return handleError(err);
+
+    if (!doc) return res.status(404).send({
+      error: 'not exist room'
+    });
+
+    var room = doc.toJSON();
+    var notAllReady = room.players.some(player => player.playStatus != '02');
     res.send(doc);
   });
 };
@@ -93,12 +105,6 @@ exports.join = function(req, res) {
     return res.sendStatus(400);
   }
 
-  console.log('# Room Join');
-  console.log('- Params');
-  console.log(req.params);
-  console.log('- Body');
-  console.log(req.body);
-
   async.series([
     function(callback) {
       // 비밀방인 경우 패스워드 확인
@@ -106,6 +112,11 @@ exports.join = function(req, res) {
         _id: req.params.roomId
       }, function(err, room) {
         if (err) throw err;
+
+        if (!room) {
+          callback('NOT_EXIST_ROOM', room);
+          return;
+        }
 
         // 비밀방이 아닌 경우(패스워드가 없는 경우) 무시
         if (!room.password) {
@@ -133,27 +144,23 @@ exports.join = function(req, res) {
     },
     function(callback) {
       Room.findOne({
-        _id:req.params.roomId
-      }, function (err, room) {
-      // }, {
-      //   _id:0, // _id 필드는 생략
-      //   players:1 // players 필드만 조회
-      // }, function (err, room) {
+        _id: req.params.roomId
+      }, function(err, room) {
+        // }, {
+        //   _id:0, // _id 필드는 생략
+        //   players:1 // players 필드만 조회
+        // }, function (err, room) {
         if (err) throw err;
 
         var newPlayer = true;
 
-        console.log("req.body.userId : " + req.body.userId);
-        for (var i=0; i<room.players.length; i++) {
-          //console.log("player Id : " + room.players[i].userId);
+        for (var i = 0; i < room.players.length; i++) {
           if (room.players[i].userId === req.body.userId) {
-            //console.log("same");
             newPlayer = !newPlayer;
           }
         }
 
         if (newPlayer) {
-          //console.log('newPlayer!');
           Room.update({
             _id: req.params.roomId
           }, {
@@ -171,7 +178,7 @@ exports.join = function(req, res) {
           });
         }
 
-      res.send(room.WriteResult);
+        res.send(room.WriteResult);
       });
     }
   ], function(err, result) {
@@ -182,6 +189,10 @@ exports.join = function(req, res) {
     } else if (err === 'MISSING_PASSWORD') {
       res.status(403).send({
         error: 'missing password'
+      });
+    } else if (err === 'NOT_EXIST_ROOM') {
+      res.status(404).send({
+        error: 'not exist room'
       });
     }
   });
@@ -228,22 +239,30 @@ exports.delegate = function(req, res) {
 
 // User Status Update
 exports.userUpdate = function(req, res) {
-  if (!req.body) {
-    return res.sendStatus(400);
-  }
-  console.log("Room User status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId);
-  console.log("User Id : " + req.params.userId);
-  console.log("status Code : " + req.body.status);
+  if (!req.body) return res.status(400).send({
+    error: 'body empty'
+  });
 
-  Room.update({
+  Room.findOne({
+    _id: req.params.roomId,
     'players.userId': req.params.userId
-  }, {
-    '$set': {
-      'players.$.playStatus': req.body.status
-    }
-  }, function(err, result) {
-    res.send(result.WriteResult);
+  }, function(err, doc) {
+    if (err) return res.status(400).send(err);
+
+    if (!doc) return res.status(404).send({
+      error: 'not exist room'
+    });
+
+    doc.players.map(function(player) {
+      if (player.userId === req.params.userId) {
+        player.playStatus = req.body.status;
+      }
+    });
+
+    doc.save(function(err, result) {
+      if (err) return res.status(400).send(err);
+      res.send(result);
+    });
   });
 };
 
@@ -252,9 +271,6 @@ exports.update = function(req, res) {
   if (!req.body) {
     return res.sendStatus(400);
   }
-  console.log("Room status change!!!!!!!!!!!!!");
-  console.log("Room Id : " + req.params.roomId);
-  console.log("status Code : " + req.body.status);
 
   Room.update({
     _id: req.params.roomId

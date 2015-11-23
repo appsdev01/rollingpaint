@@ -78,7 +78,7 @@ angular.module('guessword', ['ionic'])
         method: 'POST',
         url: '/api/guesswords/' + $scope.sketchbookId + '/paper',
         data: {
-          "userId": $scope.user._id,
+          "userId": $scope.user.id,
           "type": 'word',
           "answer": inputAnswer,
           "picture": '',

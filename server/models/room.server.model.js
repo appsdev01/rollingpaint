@@ -8,6 +8,7 @@ var PlayerSchema = new Schema({
   userId: ShortId,
   username: String,
   playStatus: String,
+  sketchbook: ShortId,
   joinedAt: {
     type: Date,
     default: Date.now

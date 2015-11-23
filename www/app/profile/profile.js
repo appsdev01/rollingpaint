@@ -42,7 +42,7 @@ angular.module('profile', ['ionic'])
         url: 'editprofile',
         data: {
           username: $scope.editData.username,
-          userId: $scope.user._id
+          userId: $scope.user.id
         }
       }).success(function(response) {
         if (response) {
